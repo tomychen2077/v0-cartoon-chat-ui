@@ -255,10 +255,10 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
     <div className="h-screen flex flex-col bg-background">
       {/* Header - Mobile responsive */}
       <header className="border-b border-border sticky top-0 z-40 bg-background/95 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 sm:py-4 flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
+        <div className="max-w-6xl mx-auto px-2 sm:px-4 py-2 sm:py-4 flex items-center justify-between gap-1.5 sm:gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-4 min-w-0 flex-1">
             <Link href="/" className="hover:opacity-70 transition-opacity flex-shrink-0">
-              <h1 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              <h1 className="text-base sm:text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 ChatBloom
               </h1>
             </Link>
@@ -272,36 +272,36 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
               </div>
             </div>
             {/* Mobile room info */}
-            <div className="sm:hidden flex items-center gap-2 min-w-0 flex-1">
-              <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center text-base flex-shrink-0">
+            <div className="sm:hidden flex items-center gap-1.5 min-w-0 flex-1">
+              <div className="w-7 h-7 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center text-sm flex-shrink-0">
                 {room.emoji || '💬'}
               </div>
               <div className="min-w-0">
-                <h2 className="font-bold text-sm truncate">{room.name}</h2>
+                <h2 className="font-bold text-xs truncate">{room.name}</h2>
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+          <div className="flex items-center gap-0.5 sm:gap-2 flex-shrink-0">
             <ThemeToggle />
-            <Button variant="ghost" size="icon" className="rounded-full hidden sm:flex">
+            <Button variant="ghost" size="icon" className="rounded-full hidden sm:flex h-9 w-9 sm:h-10 sm:w-10">
               <Users className="w-5 h-5" />
             </Button>
-            <Button variant="ghost" size="icon" className="rounded-full hidden sm:flex">
+            <Button variant="ghost" size="icon" className="rounded-full hidden sm:flex h-9 w-9 sm:h-10 sm:w-10">
               <Info className="w-5 h-5" />
             </Button>
-            <Button variant="ghost" size="icon" className="rounded-full">
-              <MoreVertical className="w-4 h-4 sm:w-5 sm:h-5" />
+            <Button variant="ghost" size="icon" className="rounded-full h-8 w-8 sm:h-10 sm:w-10">
+              <MoreVertical className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
             </Button>
           </div>
         </div>
       </header>
 
       {/* Messages Container - Mobile responsive */}
-      <div className="flex-1 overflow-y-auto p-2 sm:p-4 md:p-6 space-y-3 sm:space-y-4">
+      <div className="flex-1 overflow-y-auto p-1.5 sm:p-4 md:p-6 space-y-1 sm:space-y-4">
         <div className="max-w-4xl mx-auto">
           {messages.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-foreground/60">No messages yet. Be the first to say something!</p>
+            <div className="text-center py-8 sm:py-12">
+              <p className="text-foreground/60 text-sm sm:text-base">No messages yet. Be the first to say something!</p>
             </div>
           ) : (
             messages.map((msg) => (
@@ -324,19 +324,19 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
 
       {/* Input Section - Mobile responsive */}
       {!currentUser ? (
-        <div className="border-t border-border bg-background p-3 sm:p-4 text-center">
-          <p className="text-foreground/60 mb-2 text-sm sm:text-base">Please sign in to send messages</p>
+        <div className="border-t border-border bg-background p-2 sm:p-4 text-center">
+          <p className="text-foreground/60 mb-1.5 sm:mb-2 text-xs sm:text-base">Please sign in to send messages</p>
           <Link href="/auth">
-            <Button size="sm" className="text-sm">Sign In</Button>
+            <Button size="sm" className="text-xs sm:text-sm h-7 sm:h-9">Sign In</Button>
           </Link>
         </div>
       ) : (
-        <div className="border-t border-border bg-background sticky bottom-0 p-3 sm:p-4 md:p-6">
+        <div className="border-t border-border bg-background sticky bottom-0 p-2 sm:p-4 md:p-6">
           <div className="max-w-4xl mx-auto">
             {/* Emoji Picker */}
             {showEmojiPicker && (
-              <Card className="mb-4 p-4 bg-card">
-                <div className="grid grid-cols-5 gap-2">
+              <Card className="mb-2 sm:mb-4 p-2 sm:p-4 bg-card">
+                <div className="grid grid-cols-6 sm:grid-cols-5 gap-1.5 sm:gap-2">
                   {emojis.map((emoji) => (
                     <button
                       key={emoji}
@@ -344,7 +344,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
                         setInputValue(inputValue + emoji)
                         setShowEmojiPicker(false)
                       }}
-                      className="text-2xl hover:scale-125 transition-transform p-2"
+                      className="text-xl sm:text-2xl hover:scale-125 transition-transform p-1 sm:p-2"
                     >
                       {emoji}
                     </button>
@@ -358,33 +358,33 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
               <Button
                 variant="ghost"
                 size="icon"
-                className="rounded-full h-9 w-9 sm:h-10 sm:w-10"
+                className="rounded-full h-8 w-8 sm:h-10 sm:w-10"
                 onClick={() => setShowEmojiPicker(!showEmojiPicker)}
               >
-                <Smile className="w-4 h-4 sm:w-5 sm:h-5" />
+                <Smile className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
-                className="rounded-full h-9 w-9 sm:h-10 sm:w-10"
+                className="rounded-full h-8 w-8 sm:h-10 sm:w-10"
               >
-                <Paperclip className="w-4 h-4 sm:w-5 sm:h-5" />
+                <Paperclip className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
               </Button>
               <Input
                 placeholder="Type a message..."
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
-                className="rounded-full px-4 sm:px-6 py-2 text-sm sm:text-base flex-1 min-w-0"
+                className="rounded-full px-3 sm:px-6 py-1.5 sm:py-2 text-xs sm:text-base flex-1 min-w-0 h-8 sm:h-10"
                 disabled={sending}
               />
               <Button
                 onClick={handleSendMessage}
-                className="bg-primary hover:bg-primary/90 rounded-full h-9 w-9 sm:h-10 sm:w-10 flex-shrink-0"
+                className="bg-primary hover:bg-primary/90 rounded-full h-8 w-8 sm:h-10 sm:w-10 flex-shrink-0"
                 size="icon"
                 disabled={sending || !inputValue.trim()}
               >
-                <SendHorizontal className="w-4 h-4 sm:w-5 sm:h-5" />
+                <SendHorizontal className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
               </Button>
             </div>
           </div>
@@ -392,12 +392,12 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
       )}
 
       {/* Floating Action Button */}
-      <div className="fixed bottom-20 right-6 flex flex-col gap-2 md:hidden">
+      <div className="fixed bottom-16 sm:bottom-20 right-4 sm:right-6 flex flex-col gap-2 md:hidden">
         <Button
           size="icon"
-          className="w-14 h-14 rounded-full bg-primary hover:bg-primary/90 shadow-lg"
+          className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-primary hover:bg-primary/90 shadow-lg"
         >
-          <Heart className="w-6 h-6" />
+          <Heart className="w-5 h-5 sm:w-6 sm:h-6" />
         </Button>
       </div>
     </div>
