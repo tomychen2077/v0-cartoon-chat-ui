@@ -1,15 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
   },
   images: {
     unoptimized: true,
   },
-  output: 'standalone',
+  // Remove output: 'standalone' - Netlify Next.js plugin handles deployment automatically
 }
 
 export default nextConfig
