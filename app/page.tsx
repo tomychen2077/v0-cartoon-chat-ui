@@ -118,8 +118,8 @@ export default function Home() {
               {/* Stats */}
               <div className="grid grid-cols-2 gap-4 pt-4">
                 <div className="bg-primary/10 dark:bg-primary/20 rounded-2xl p-4">
-                  <p className="text-2xl font-bold text-primary">45K+</p>
-                  <p className="text-sm text-foreground/70">Active Users</p>
+                  <p className="text-2xl font-bold text-primary">Hello  </p>
+                  <p className="text-sm text-foreground/70">Users</p>
                 </div>
                 <div className="bg-accent/10 dark:bg-accent/20 rounded-2xl p-4">
                   <p className="text-2xl font-bold text-accent">{publicRooms.length}+</p>
