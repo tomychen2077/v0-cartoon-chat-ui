@@ -17,8 +17,7 @@ export async function GET(request: NextRequest) {
       .from('messages')
       .select(`
         *,
-        profiles (username, avatar_url),
-        reactions (emoji)
+        profiles (username, avatar_url)
       `)
       .eq('room_id', roomId)
       .order('created_at', { ascending: true })
