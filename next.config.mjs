@@ -6,7 +6,6 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // Remove output: 'standalone' - Netlify Next.js plugin handles deployment automatically
 }
 
 export default nextConfig
