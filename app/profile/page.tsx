@@ -1,12 +1,5 @@
-'use client'
-
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Heart, Star, Trophy, Crown, Edit2, LogOut, MessageCircle, UserPlus } from 'lucide-react'
-import Link from 'next/link'
 import ProfileClient from '@/components/profile-client'
 
 export default async function UserProfile() {
