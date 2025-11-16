@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic'
-
 'use client'
 
 import { useState } from 'react'
@@ -8,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
 import { Globe, Lock, Key, Sparkles, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function CreateRoom() {
   const [formData, setFormData] = useState({
@@ -20,6 +19,9 @@ export default function CreateRoom() {
 
   const [step, setStep] = useState(1)
   const [showPreview, setShowPreview] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
 
   const languages = ['English', 'Spanish', 'French', 'German', 'Japanese', 'Korean', 'Chinese', 'Portuguese']
   
@@ -73,9 +75,57 @@ export default function CreateRoom() {
     }))
   }
 
-  const handleCreate = () => {
-    console.log('Creating room:', formData)
-    // Handle room creation
+  const handleCreate = async () => {
+    if (!isFormValid) return
+
+    setLoading(true)
+    setError(null)
+
+    try {
+      // Get emoji from selected topic
+      const selectedTopic = topics.find(t => t.name === formData.topic)
+      const emoji = selectedTopic?.emoji || '💬'
+
+      // Map privacy to is_public and is_private booleans
+      const is_public = formData.privacy === 'public'
+      const is_private = formData.privacy === 'private' || formData.privacy === 'invite'
+
+      const response = await fetch('/api/rooms/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          description: formData.description.trim(),
+          topic: formData.topic,
+          emoji,
+          is_public,
+          is_private,
+          language: formData.language,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          // User not authenticated, redirect to auth page
+          router.push('/auth')
+          return
+        }
+        throw new Error(data.error || 'Failed to create room')
+      }
+
+      // Redirect to the created room
+      router.push(`/room/${data.id}`)
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to create room'
+      setError(message)
+      console.error('Error creating room:', err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const isFormValid = formData.name.trim() && formData.topic
@@ -291,6 +341,12 @@ export default function CreateRoom() {
               <Card className="p-8 animate-in fade-in">
                 <h2 className="text-2xl font-bold mb-8">Ready to create?</h2>
 
+                {error && (
+                  <div className="mb-6 p-4 bg-destructive/10 border border-destructive/20 rounded-xl text-destructive text-sm">
+                    {error}
+                  </div>
+                )}
+
                 <div className="space-y-6 mb-8">
                   <div className="bg-primary/5 dark:bg-primary/10 rounded-2xl p-6 border border-primary/20">
                     <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
@@ -341,10 +397,10 @@ export default function CreateRoom() {
                   <Button 
                     className="flex-1 bg-gradient-to-r from-primary to-accent hover:opacity-90 rounded-full"
                     onClick={handleCreate}
-                    disabled={!isFormValid}
+                    disabled={!isFormValid || loading}
                   >
                     <Sparkles className="w-4 h-4 mr-2" />
-                    Create Room
+                    {loading ? 'Creating...' : 'Create Room'}
                   </Button>
                 </div>
               </Card>

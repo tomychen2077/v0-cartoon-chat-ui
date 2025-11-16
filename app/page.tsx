@@ -1,13 +1,13 @@
-export const dynamic = 'force-dynamic'
-
 'use client'
 
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Heart, Users, Sparkles, MessageCircle } from 'lucide-react'
+import { Heart, Users, Sparkles, MessageCircle, LogOut, User } from 'lucide-react'
 import { ThemeToggle } from '@/components/theme-toggle'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 
 interface Room {
   id: string
@@ -20,16 +20,16 @@ interface Room {
 }
 
 export default function Home() {
-  const [isSignIn, setIsSignIn] = useState(false)
   const [publicRooms, setPublicRooms] = useState<Room[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [user, setUser] = useState<any>(null)
+  const router = useRouter()
 
   useEffect(() => {
+    const supabase = createClient()
+
     const fetchRooms = async () => {
       try {
-        const { createClient } = await import('@/lib/supabase/client')
-        const supabase = createClient()
-        
         const { data, error } = await supabase
           .from('rooms')
           .select('*')
@@ -54,8 +54,35 @@ export default function Home() {
       }
     }
 
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      setUser(user)
+    }
+
     fetchRooms()
+    checkUser()
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+    })
+
+    return () => {
+      subscription.unsubscribe()
+    }
   }, [])
+
+  const handleSignOut = async () => {
+    try {
+      const supabase = createClient()
+      const { error } = await supabase.auth.signOut()
+      if (error) throw error
+      router.push('/')
+      router.refresh()
+    } catch (err) {
+      console.error('Failed to sign out:', err)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 dark:from-background dark:via-background dark:to-primary/10">
@@ -72,9 +99,26 @@ export default function Home() {
           </div>
           <div className="flex gap-3 items-center">
             <ThemeToggle />
-            <Button variant="outline" size="sm" onClick={() => setIsSignIn(!isSignIn)} className="rounded-full">
-              {isSignIn ? 'Sign Up' : 'Sign In'}
-            </Button>
+            {user ? (
+              <>
+                <Link href="/profile">
+                  <Button variant="outline" size="sm" className="rounded-full">
+                    <User className="w-4 h-4 mr-2" />
+                    Profile
+                  </Button>
+                </Link>
+                <Button variant="outline" size="sm" onClick={handleSignOut} className="rounded-full">
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Sign Out
+                </Button>
+              </>
+            ) : (
+              <Link href="/auth">
+                <Button variant="outline" size="sm" className="rounded-full">
+                  Sign In
+                </Button>
+              </Link>
+            )}
             <Link href="/create-room">
               <Button size="sm" className="bg-accent hover:bg-accent/90 rounded-full">
                 Create Room

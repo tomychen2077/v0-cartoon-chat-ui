@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { name, description, topic, emoji, is_public, language } = await request.json()
+    const { name, description, topic, emoji, is_public, is_private, language } = await request.json()
 
     if (!name) {
       return NextResponse.json(
@@ -29,7 +29,8 @@ export async function POST(request: NextRequest) {
         description,
         topic,
         emoji,
-        is_public,
+        is_public: is_public ?? true,
+        is_private: is_private ?? false,
         language,
         created_by: user.id,
       })
