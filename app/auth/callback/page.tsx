@@ -1,11 +1,13 @@
 'use client'
 
+import { Suspense } from 'react'
 import { useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Card } from '@/components/ui/card'
+import AuthCallbackLoading from './loading'
 
-export default function AuthCallbackPage() {
+function AuthCallbackContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const supabase = createClient()
@@ -20,7 +22,6 @@ export default function AuthCallbackPage() {
           if (error) throw error
         }
 
-        // Check if user is authenticated
         const { data: { user } } = await supabase.auth.getUser()
         
         if (user) {
@@ -44,5 +45,13 @@ export default function AuthCallbackPage() {
         <p className="text-foreground/60">Verifying your email...</p>
       </Card>
     </div>
+  )
+}
+
+export default function AuthCallbackPage() {
+  return (
+    <Suspense fallback={<AuthCallbackLoading />}>
+      <AuthCallbackContent />
+    </Suspense>
   )
 }
