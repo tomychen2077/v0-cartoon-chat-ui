@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Heart, Users, Sparkles, MessageCircle } from 'lucide-react'
@@ -22,11 +21,13 @@ export default function Home() {
   const [isSignIn, setIsSignIn] = useState(false)
   const [publicRooms, setPublicRooms] = useState<Room[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const supabase = createClient()
 
   useEffect(() => {
     const fetchRooms = async () => {
       try {
+        const { createClient } = await import('@/lib/supabase/client')
+        const supabase = createClient()
+        
         const { data, error } = await supabase
           .from('rooms')
           .select('*')
