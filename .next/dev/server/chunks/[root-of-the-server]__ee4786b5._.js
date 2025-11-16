@@ -93,7 +93,7 @@ async function POST(request) {
                 status: 401
             });
         }
-        const { name, description, topic, emoji, is_public, is_private, language } = await request.json();
+        const { name, description, topic, emoji, is_public, is_private, language, max_members } = await request.json();
         if (!name) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                 error: 'Room name is required'
@@ -109,6 +109,7 @@ async function POST(request) {
             is_public: is_public ?? true,
             is_private: is_private ?? false,
             language,
+            max_members: max_members || null,
             created_by: user.id
         }).select().single();
         if (error) throw error;

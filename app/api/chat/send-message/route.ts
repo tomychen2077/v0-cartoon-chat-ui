@@ -13,9 +13,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { room_id, content } = await request.json()
+    const { room_id, content, media_url, media_type } = await request.json()
 
-    if (!room_id || !content) {
+    if (!room_id || (!content && !media_url)) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -27,7 +27,9 @@ export async function POST(request: NextRequest) {
       .insert({
         room_id,
         user_id: user.id,
-        content,
+        content: content || '',
+        media_url: media_url || null,
+        media_type: media_type || null,
       })
       .select()
       .single()

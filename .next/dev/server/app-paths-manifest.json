@@ -1,3 +1,6 @@
 {
-  "/page": "app/page.js"
+  "/api/friends/get/route": "app/api/friends/get/route.js",
+  "/create-room/page": "app/create-room/page.js",
+  "/page": "app/page.js",
+  "/profile/page": "app/profile/page.js"
 }

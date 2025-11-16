@@ -15,6 +15,7 @@ export default function CreateRoom() {
     topic: '',
     language: 'English',
     privacy: 'public' as 'public' | 'private' | 'invite',
+    maxMembers: '',
   })
 
   const [step, setStep] = useState(1)
@@ -103,6 +104,7 @@ export default function CreateRoom() {
           is_public,
           is_private,
           language: formData.language,
+          max_members: formData.maxMembers ? Number(formData.maxMembers) : null,
         }),
       })
 
@@ -128,7 +130,7 @@ export default function CreateRoom() {
     }
   }
 
-  const isFormValid = formData.name.trim() && formData.topic
+  const isFormValid = formData.name.trim() && formData.topic && formData.maxMembers && Number(formData.maxMembers) >= 2 && Number(formData.maxMembers) <= 8
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 dark:from-background dark:via-background dark:to-primary/10">
@@ -254,6 +256,23 @@ export default function CreateRoom() {
                       className="w-full px-4 py-2 rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary resize-none"
                     />
                     <p className="text-xs text-foreground/50 mt-2">{formData.description.length}/200 characters</p>
+                  </div>
+
+                  {/* Max Members */}
+                  <div>
+                    <label className="block text-sm font-semibold mb-3">Max Members (Required)</label>
+                    <Input
+                      name="maxMembers"
+                      type="number"
+                      placeholder="2-8 people"
+                      value={formData.maxMembers}
+                      onChange={handleInputChange}
+                      min="2"
+                      max="8"
+                      required
+                      className="rounded-xl"
+                    />
+                    <p className="text-xs text-foreground/50 mt-2">Set how many people can join (minimum 2, maximum 8).</p>
                   </div>
 
                   {/* Navigation */}

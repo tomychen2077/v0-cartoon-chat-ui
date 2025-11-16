@@ -1,0 +1,3 @@
+{
+  "/api/chat/upload-media/route": "app/api/chat/upload-media/route.js"
+}

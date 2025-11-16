@@ -9,14 +9,23 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
+interface RoomMember {
+  id: string
+  username: string
+  display_name?: string
+  avatar_url?: string
+}
+
 interface Room {
   id: string
   name: string
-  description: string
+  description?: string
   topic: string
   emoji: string
   is_public: boolean
   member_count: number
+  max_members?: number
+  members?: RoomMember[]
 }
 
 export default function Home() {
@@ -30,24 +39,42 @@ export default function Home() {
 
     const fetchRooms = async () => {
       try {
-        const { data, error } = await supabase
+        const { data: rooms, error } = await supabase
           .from('rooms')
-          .select('*')
+          .select(`
+            *,
+            room_members (
+              user_id,
+              profiles (
+                id,
+                username,
+                display_name,
+                avatar_url
+              )
+            )
+          `)
           .eq('is_public', true)
           .limit(6)
 
         if (error) throw error
-        setPublicRooms(data || [])
+        
+        // Transform rooms to include member info
+        const roomsWithMembers = (rooms || []).map((room: any) => ({
+          ...room,
+          members: room.room_members?.slice(0, 4).map((rm: any) => rm.profiles).filter(Boolean) || []
+        }))
+        
+        setPublicRooms(roomsWithMembers)
       } catch (err) {
         console.error('Failed to fetch rooms:', err)
         // Fall back to demo rooms if database is empty
         setPublicRooms([
-          { id: '1', name: 'General Chat', description: '', topic: 'General Discussion', emoji: '💬', is_public: true, member_count: 2543 },
-          { id: '2', name: 'Gaming Hub', description: '', topic: 'Video Games', emoji: '🎮', is_public: true, member_count: 1843 },
-          { id: '3', name: 'Creative Corner', description: '', topic: 'Art & Design', emoji: '🎨', is_public: true, member_count: 892 },
-          { id: '4', name: 'Tech Talk', description: '', topic: 'Technology', emoji: '💻', is_public: true, member_count: 1234 },
-          { id: '5', name: 'Music Vibes', description: '', topic: 'Music & Podcasts', emoji: '🎵', is_public: true, member_count: 567 },
-          { id: '6', name: 'Study Squad', description: '', topic: 'Learning Together', emoji: '📚', is_public: true, member_count: 3421 },
+          { id: '1', name: 'General Chat', description: '', topic: 'General Discussion', emoji: '💬', is_public: true, member_count: 2543, max_members: 8, members: [] },
+          { id: '2', name: 'Gaming Hub', description: '', topic: 'Video Games', emoji: '🎮', is_public: true, member_count: 1843, max_members: 8, members: [] },
+          { id: '3', name: 'Creative Corner', description: '', topic: 'Art & Design', emoji: '🎨', is_public: true, member_count: 892, max_members: 8, members: [] },
+          { id: '4', name: 'Tech Talk', description: '', topic: 'Technology', emoji: '💻', is_public: true, member_count: 1234, max_members: 8, members: [] },
+          { id: '5', name: 'Music Vibes', description: '', topic: 'Music & Podcasts', emoji: '🎵', is_public: true, member_count: 567, max_members: 8, members: [] },
+          { id: '6', name: 'Study Squad', description: '', topic: 'Learning Together', emoji: '📚', is_public: true, member_count: 3421, max_members: 8, members: [] },
         ])
       } finally {
         setIsLoading(false)
@@ -208,19 +235,52 @@ export default function Home() {
               <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin mx-auto" />
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {publicRooms.map((room) => (
                 <Link key={room.id} href={`/room/${room.id}`}>
-                  <Card className="p-6 hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 cursor-pointer group border-border/50 hover:border-primary/50 h-full">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="text-5xl">{room.emoji}</div>
-                      <div className="bg-primary/10 dark:bg-primary/20 text-primary rounded-full px-3 py-1 text-sm font-semibold group-hover:scale-110 transition-transform">
-                        {room.member_count.toLocaleString()}
+                  <Card className="p-4 sm:p-6 hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 cursor-pointer group border-border/50 hover:border-primary/50 h-full">
+                    <div className="flex items-start justify-between mb-3 sm:mb-4">
+                      <div className="text-3xl sm:text-5xl">{room.emoji}</div>
+                      <div className="bg-primary/10 dark:bg-primary/20 text-primary rounded-full px-2 sm:px-3 py-1 text-xs sm:text-sm font-semibold group-hover:scale-110 transition-transform">
+                        {room.member_count || 0}/{room.max_members || '∞'}
                       </div>
                     </div>
-                    <h4 className="text-xl font-bold mb-1 text-balance group-hover:text-primary transition-colors">{room.name}</h4>
-                    <p className="text-sm text-foreground/60 mb-4">{room.topic}</p>
-                    <Button size="sm" className="w-full bg-primary hover:bg-primary/90 rounded-full">
+                    <h4 className="text-lg sm:text-xl font-bold mb-1 text-balance group-hover:text-primary transition-colors">{room.name}</h4>
+                    <p className="text-xs sm:text-sm text-foreground/60 mb-3 sm:mb-4">{room.topic}</p>
+                    
+                    {/* Member Avatars */}
+                    {room.members && room.members.length > 0 && (
+                      <div className="flex items-center gap-2 mb-3 sm:mb-4">
+                        <div className="flex -space-x-2">
+                          {room.members.slice(0, 4).map((member, idx) => (
+                            <div
+                              key={member.id || idx}
+                              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-background overflow-hidden bg-accent/20 flex items-center justify-center"
+                              title={member.display_name || member.username}
+                            >
+                              {member.avatar_url ? (
+                                <img
+                                  src={member.avatar_url}
+                                  alt={member.display_name || member.username}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <span className="text-xs sm:text-sm font-semibold text-foreground/70">
+                                  {(member.display_name || member.username || '?').charAt(0).toUpperCase()}
+                                </span>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                        {room.member_count > 4 && (
+                          <span className="text-xs sm:text-sm text-foreground/60">
+                            +{room.member_count - 4} more
+                          </span>
+                        )}
+                      </div>
+                    )}
+                    
+                    <Button size="sm" className="w-full bg-primary hover:bg-primary/90 rounded-full text-xs sm:text-sm">
                       Join Now
                     </Button>
                   </Card>

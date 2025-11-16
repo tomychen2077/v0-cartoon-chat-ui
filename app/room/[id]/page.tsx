@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
 import { ChatBubble } from '@/components/chat-bubble'
 import { ThemeToggle } from '@/components/theme-toggle'
-import { Heart, SendHorizontal, Smile, Paperclip, Users, Info, MoreVertical } from 'lucide-react'
+import { SendHorizontal, Smile, Paperclip, MoreVertical, Edit, Trash2, X } from 'lucide-react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
@@ -16,6 +16,8 @@ interface Message {
   content: string
   created_at: string
   user_id: string
+  media_url?: string
+  media_type?: string
   profiles?: {
     username: string
     avatar_url?: string
@@ -29,6 +31,7 @@ interface Room {
   topic: string
   description?: string
   member_count?: number
+  created_by?: string
 }
 
 export default function ChatRoom({ params }: { params: Promise<{ id: string }> | { id: string } }) {
@@ -40,7 +43,11 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
   const [sending, setSending] = useState(false)
   const [currentUser, setCurrentUser] = useState<any>(null)
   const [roomId, setRoomId] = useState<string>('')
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [uploadingMedia, setUploadingMedia] = useState(false)
+  const [showRoomMenu, setShowRoomMenu] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const supabase = createClient()
   const router = useRouter()
 
@@ -154,11 +161,57 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
     scrollToBottom()
   }, [messages])
 
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+    if (!validTypes.includes(file.type)) {
+      alert('Please select an image file (JPEG, PNG, GIF, or WebP)')
+      return
+    }
+
+    // Validate file size (max 5MB)
+    const maxSize = 5 * 1024 * 1024
+    if (file.size > maxSize) {
+      alert('File size must be less than 5MB')
+      return
+    }
+
+    setSelectedFile(file)
+  }
+
   const handleSendMessage = async () => {
-    if (!inputValue.trim() || !currentUser || sending) return
+    if ((!inputValue.trim() && !selectedFile) || !currentUser || sending) return
 
     setSending(true)
+    setUploadingMedia(true)
+    let mediaUrl: string | null = null
+    let mediaType: string | null = null
+
     try {
+      // Upload file if selected
+      if (selectedFile) {
+        const formData = new FormData()
+        formData.append('file', selectedFile)
+        formData.append('room_id', roomId)
+
+        const uploadResponse = await fetch('/api/chat/upload-media', {
+          method: 'POST',
+          body: formData,
+        })
+
+        if (!uploadResponse.ok) {
+          throw new Error('Failed to upload media')
+        }
+
+        const uploadData = await uploadResponse.json()
+        mediaUrl = uploadData.media_url
+        mediaType = uploadData.media_type
+      }
+
+      // Send message
       const response = await fetch('/api/chat/send-message', {
         method: 'POST',
         headers: {
@@ -166,7 +219,9 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
         },
         body: JSON.stringify({
           room_id: roomId,
-          content: inputValue.trim(),
+          content: inputValue.trim() || (selectedFile ? '📷 Photo' : ''),
+          media_url: mediaUrl,
+          media_type: mediaType,
         }),
       })
 
@@ -176,13 +231,41 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
       }
 
       setInputValue('')
+      setSelectedFile(null)
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
     } catch (err) {
       console.error('Error sending message:', err)
       alert('Failed to send message. Please try again.')
     } finally {
       setSending(false)
+      setUploadingMedia(false)
     }
   }
+
+  const handleDeleteRoom = async () => {
+    if (!confirm('Are you sure you want to delete this room? This action cannot be undone.')) {
+      return
+    }
+
+    try {
+      const response = await fetch(`/api/rooms/delete?id=${roomId}`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to delete room')
+      }
+
+      router.push('/')
+    } catch (err) {
+      console.error('Error deleting room:', err)
+      alert('Failed to delete room. Please try again.')
+    }
+  }
+
+  const isRoomOwner = currentUser && room && room.created_by === currentUser.id
 
   const handleDeleteMessage = async (messageId: string) => {
     try {
@@ -283,15 +366,42 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
           </div>
           <div className="flex items-center gap-0.5 sm:gap-2 flex-shrink-0">
             <ThemeToggle />
-            <Button variant="ghost" size="icon" className="rounded-full hidden sm:flex h-9 w-9 sm:h-10 sm:w-10">
-              <Users className="w-5 h-5" />
-            </Button>
-            <Button variant="ghost" size="icon" className="rounded-full hidden sm:flex h-9 w-9 sm:h-10 sm:w-10">
-              <Info className="w-5 h-5" />
-            </Button>
-            <Button variant="ghost" size="icon" className="rounded-full h-8 w-8 sm:h-10 sm:w-10">
-              <MoreVertical className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
-            </Button>
+            <div className="relative">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="rounded-full h-8 w-8 sm:h-10 sm:w-10"
+                onClick={() => setShowRoomMenu(!showRoomMenu)}
+              >
+                <MoreVertical className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
+              </Button>
+              {showRoomMenu && isRoomOwner && (
+                <>
+                  <div 
+                    className="fixed inset-0 z-[5]"
+                    onClick={() => setShowRoomMenu(false)}
+                  />
+                  <div className="absolute right-0 top-12 bg-card border border-border rounded-lg shadow-lg p-1 z-10 min-w-[140px]">
+                    <Link href={`/room/${roomId}/edit`}>
+                      <button className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent active:bg-accent/80 rounded-md transition-colors">
+                        <Edit className="w-4 h-4" />
+                        Edit Room
+                      </button>
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setShowRoomMenu(false)
+                        handleDeleteRoom()
+                      }}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-destructive/10 active:bg-destructive/20 text-destructive rounded-md transition-colors"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Delete Room
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </header>
@@ -315,6 +425,8 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
                 reactions={[]}
                 messageId={msg.id}
                 onDelete={handleDeleteMessage}
+                mediaUrl={msg.media_url}
+                mediaType={msg.media_type}
               />
             ))
           )}
@@ -353,8 +465,37 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
               </Card>
             )}
 
+            {/* Selected File Preview */}
+            {selectedFile && (
+              <div className="mb-2 relative inline-block">
+                <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden border border-border">
+                  <img
+                    src={URL.createObjectURL(selectedFile)}
+                    alt="Preview"
+                    className="w-full h-full object-cover"
+                  />
+                  <button
+                    onClick={() => {
+                      setSelectedFile(null)
+                      if (fileInputRef.current) fileInputRef.current.value = ''
+                    }}
+                    className="absolute top-1 right-1 bg-destructive text-destructive-foreground rounded-full p-1 hover:bg-destructive/90"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* Input Field - Mobile responsive */}
             <div className="flex gap-1 sm:gap-2 items-end">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleFileSelect}
+                className="hidden"
+              />
               <Button
                 variant="ghost"
                 size="icon"
@@ -367,6 +508,8 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
                 variant="ghost"
                 size="icon"
                 className="rounded-full h-8 w-8 sm:h-10 sm:w-10"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploadingMedia}
               >
                 <Paperclip className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
               </Button>
@@ -376,30 +519,25 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
                 className="rounded-full px-3 sm:px-6 py-1.5 sm:py-2 text-xs sm:text-base flex-1 min-w-0 h-8 sm:h-10"
-                disabled={sending}
+                disabled={sending || uploadingMedia}
               />
               <Button
                 onClick={handleSendMessage}
                 className="bg-primary hover:bg-primary/90 rounded-full h-8 w-8 sm:h-10 sm:w-10 flex-shrink-0"
                 size="icon"
-                disabled={sending || !inputValue.trim()}
+                disabled={sending || uploadingMedia || (!inputValue.trim() && !selectedFile)}
               >
-                <SendHorizontal className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
+                {uploadingMedia ? (
+                  <div className="w-3.5 h-3.5 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <SendHorizontal className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
+                )}
               </Button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Floating Action Button */}
-      <div className="fixed bottom-16 sm:bottom-20 right-4 sm:right-6 flex flex-col gap-2 md:hidden">
-        <Button
-          size="icon"
-          className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-primary hover:bg-primary/90 shadow-lg"
-        >
-          <Heart className="w-5 h-5 sm:w-6 sm:h-6" />
-        </Button>
-      </div>
     </div>
   )
 }

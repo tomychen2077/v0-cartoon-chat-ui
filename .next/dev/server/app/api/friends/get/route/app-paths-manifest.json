@@ -1,0 +1,3 @@
+{
+  "/api/friends/get/route": "app/api/friends/get/route.js"
+}

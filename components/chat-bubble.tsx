@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Copy, Share2, Trash2, MoreVertical } from 'lucide-react'
+import { Copy, Share2, Trash2, MoreVertical, Image as ImageIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 interface ChatBubbleProps {
@@ -13,6 +13,8 @@ interface ChatBubbleProps {
   reactions?: { emoji: string; count: number }[]
   messageId?: string
   onDelete?: (messageId: string) => void
+  mediaUrl?: string
+  mediaType?: string
 }
 
 export function ChatBubble({
@@ -24,6 +26,8 @@ export function ChatBubble({
   reactions = [],
   messageId,
   onDelete,
+  mediaUrl,
+  mediaType,
 }: ChatBubbleProps) {
   const [showMenu, setShowMenu] = useState(false)
 
@@ -72,97 +76,62 @@ export function ChatBubble({
         }`}>
           <p className="break-words text-xs sm:text-base leading-relaxed">{message}</p>
           
-          {/* Mobile: Always visible menu button */}
-          <div className="md:hidden absolute -top-6 right-0">
+          {/* Media Display */}
+          {mediaUrl && mediaType?.startsWith('image/') && (
+            <div className="mt-2 rounded-lg overflow-hidden max-w-full">
+              <img
+                src={mediaUrl}
+                alt="Shared image"
+                className="max-w-full h-auto rounded-lg cursor-pointer"
+                onClick={() => window.open(mediaUrl, '_blank')}
+              />
+            </div>
+          )}
+          {mediaUrl && !mediaType?.startsWith('image/') && (
+            <div className="mt-2">
+              <a
+                href={mediaUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs sm:text-sm text-primary hover:underline flex items-center gap-1"
+              >
+                <ImageIcon className="w-3 h-3 sm:w-4 sm:h-4" />
+                View attachment
+              </a>
+            </div>
+          )}
+          
+          {/* Menu button - Always visible on mobile, visible on hover for desktop */}
+          <div className={`absolute ${isOwn ? 'left-0' : 'right-0'} -top-7 z-10`}>
             <Button
               variant="ghost"
               size="icon"
-              className="h-5 w-5 rounded-full opacity-60 hover:opacity-100"
+              className="h-6 w-6 sm:h-7 sm:w-7 rounded-full bg-background/90 backdrop-blur-sm border border-border/50 opacity-100 md:opacity-70 md:group-hover:opacity-100 hover:opacity-100 transition-opacity shadow-sm"
               onClick={(e) => {
                 e.stopPropagation()
                 setShowMenu(!showMenu)
               }}
             >
-              <MoreVertical className="w-3 h-3" />
+              <MoreVertical className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </Button>
           </div>
           
-          {/* Message Options Menu */}
-          <div className={`hidden md:block absolute ${isOwn ? 'left-0' : 'right-0'} -top-8 opacity-0 group-hover:opacity-100 transition-opacity`}>
-            <div className="relative">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-7 w-7 rounded-full"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setShowMenu(!showMenu)
-                }}
-              >
-                <MoreVertical className="w-4 h-4" />
-              </Button>
-              
-              {showMenu && (
-                <>
-                  <div 
-                    className="fixed inset-0 z-[5]"
-                    onClick={() => setShowMenu(false)}
-                  />
-                  <div className={`absolute ${isOwn ? 'left-0' : 'right-0'} top-8 bg-card border border-border rounded-lg shadow-lg p-1 z-10 min-w-[120px]`}>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        handleCopy()
-                      }}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent active:bg-accent/80 rounded-md transition-colors"
-                    >
-                      <Copy className="w-4 h-4" />
-                      Copy
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        handleShare()
-                      }}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent active:bg-accent/80 rounded-md transition-colors"
-                    >
-                      <Share2 className="w-4 h-4" />
-                      Share
-                    </button>
-                    {isOwn && onDelete && (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleDelete()
-                        }}
-                        className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-destructive/10 active:bg-destructive/20 text-destructive rounded-md transition-colors"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                        Delete
-                      </button>
-                    )}
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-          
-          {/* Mobile Menu Dropdown */}
+          {/* Menu Dropdown - Works for both mobile and desktop */}
           {showMenu && (
             <>
               <div 
-                className="fixed inset-0 z-[5] md:hidden"
+                className="fixed inset-0 z-[5]"
                 onClick={() => setShowMenu(false)}
               />
-              <div className={`md:hidden absolute ${isOwn ? 'left-0' : 'right-0'} top-8 bg-card border border-border rounded-lg shadow-lg p-1 z-10 min-w-[100px]`}>
+              <div className={`absolute ${isOwn ? 'left-0' : 'right-0'} top-8 bg-card border border-border rounded-lg shadow-lg p-1 z-20 min-w-[120px]`}>
                 <button
                   onClick={(e) => {
                     e.stopPropagation()
                     handleCopy()
                   }}
-                  className="w-full flex items-center gap-1.5 px-2.5 py-1.5 text-xs hover:bg-accent active:bg-accent/80 rounded-md transition-colors"
+                  className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent active:bg-accent/80 rounded-md transition-colors"
                 >
-                  <Copy className="w-3.5 h-3.5" />
+                  <Copy className="w-4 h-4" />
                   Copy
                 </button>
                 <button
@@ -170,9 +139,9 @@ export function ChatBubble({
                     e.stopPropagation()
                     handleShare()
                   }}
-                  className="w-full flex items-center gap-1.5 px-2.5 py-1.5 text-xs hover:bg-accent active:bg-accent/80 rounded-md transition-colors"
+                  className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent active:bg-accent/80 rounded-md transition-colors"
                 >
-                  <Share2 className="w-3.5 h-3.5" />
+                  <Share2 className="w-4 h-4" />
                   Share
                 </button>
                 {isOwn && onDelete && (
@@ -181,9 +150,9 @@ export function ChatBubble({
                       e.stopPropagation()
                       handleDelete()
                     }}
-                    className="w-full flex items-center gap-1.5 px-2.5 py-1.5 text-xs hover:bg-destructive/10 active:bg-destructive/20 text-destructive rounded-md transition-colors"
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-destructive/10 active:bg-destructive/20 text-destructive rounded-md transition-colors"
                   >
-                    <Trash2 className="w-3.5 h-3.5" />
+                    <Trash2 className="w-4 h-4" />
                     Delete
                   </button>
                 )}
