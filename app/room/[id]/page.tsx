@@ -184,6 +184,23 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
     }
   }
 
+  const handleDeleteMessage = async (messageId: string) => {
+    try {
+      const response = await fetch(`/api/chat/delete-message?id=${messageId}`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to delete message')
+      }
+
+      setMessages((prev) => prev.filter((msg) => msg.id !== messageId))
+    } catch (err) {
+      console.error('Error deleting message:', err)
+      alert('Failed to delete message. Please try again.')
+    }
+  }
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
@@ -236,42 +253,51 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
 
   return (
     <div className="h-screen flex flex-col bg-background">
-      {/* Header */}
+      {/* Header - Mobile responsive */}
       <header className="border-b border-border sticky top-0 z-40 bg-background/95 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/" className="hover:opacity-70 transition-opacity">
-              <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 sm:py-4 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
+            <Link href="/" className="hover:opacity-70 transition-opacity flex-shrink-0">
+              <h1 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 ChatBloom
               </h1>
             </Link>
-            <div className="hidden md:flex items-center gap-2 pl-4 border-l border-border">
-              <div className="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center text-xl">
+            <div className="hidden sm:flex items-center gap-2 pl-4 border-l border-border">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center text-lg sm:text-xl flex-shrink-0">
                 {room.emoji || '💬'}
               </div>
-              <div>
-                <h2 className="font-bold text-lg">{room.name}</h2>
-                <p className="text-xs text-foreground/60">{room.topic}</p>
+              <div className="min-w-0">
+                <h2 className="font-bold text-base sm:text-lg truncate">{room.name}</h2>
+                <p className="text-xs text-foreground/60 truncate">{room.topic}</p>
+              </div>
+            </div>
+            {/* Mobile room info */}
+            <div className="sm:hidden flex items-center gap-2 min-w-0 flex-1">
+              <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center text-base flex-shrink-0">
+                {room.emoji || '💬'}
+              </div>
+              <div className="min-w-0">
+                <h2 className="font-bold text-sm truncate">{room.name}</h2>
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
             <ThemeToggle />
-            <Button variant="ghost" size="icon" className="rounded-full">
+            <Button variant="ghost" size="icon" className="rounded-full hidden sm:flex">
               <Users className="w-5 h-5" />
             </Button>
-            <Button variant="ghost" size="icon" className="rounded-full">
+            <Button variant="ghost" size="icon" className="rounded-full hidden sm:flex">
               <Info className="w-5 h-5" />
             </Button>
             <Button variant="ghost" size="icon" className="rounded-full">
-              <MoreVertical className="w-5 h-5" />
+              <MoreVertical className="w-4 h-4 sm:w-5 sm:h-5" />
             </Button>
           </div>
         </div>
       </header>
 
-      {/* Messages Container */}
-      <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
+      {/* Messages Container - Mobile responsive */}
+      <div className="flex-1 overflow-y-auto p-2 sm:p-4 md:p-6 space-y-3 sm:space-y-4">
         <div className="max-w-4xl mx-auto">
           {messages.length === 0 ? (
             <div className="text-center py-12">
@@ -287,6 +313,8 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
                 isOwn={currentUser?.id === msg.user_id}
                 timestamp={formatTimestamp(msg.created_at)}
                 reactions={[]}
+                messageId={msg.id}
+                onDelete={handleDeleteMessage}
               />
             ))
           )}
@@ -294,16 +322,16 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
         </div>
       </div>
 
-      {/* Input Section */}
+      {/* Input Section - Mobile responsive */}
       {!currentUser ? (
-        <div className="border-t border-border bg-background p-4 text-center">
-          <p className="text-foreground/60 mb-2">Please sign in to send messages</p>
+        <div className="border-t border-border bg-background p-3 sm:p-4 text-center">
+          <p className="text-foreground/60 mb-2 text-sm sm:text-base">Please sign in to send messages</p>
           <Link href="/auth">
-            <Button size="sm">Sign In</Button>
+            <Button size="sm" className="text-sm">Sign In</Button>
           </Link>
         </div>
       ) : (
-        <div className="border-t border-border bg-background sticky bottom-0 p-4 md:p-6">
+        <div className="border-t border-border bg-background sticky bottom-0 p-3 sm:p-4 md:p-6">
           <div className="max-w-4xl mx-auto">
             {/* Emoji Picker */}
             {showEmojiPicker && (
@@ -325,38 +353,38 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
               </Card>
             )}
 
-            {/* Input Field */}
-            <div className="flex gap-2 items-end">
+            {/* Input Field - Mobile responsive */}
+            <div className="flex gap-1 sm:gap-2 items-end">
               <Button
                 variant="ghost"
                 size="icon"
-                className="rounded-full"
+                className="rounded-full h-9 w-9 sm:h-10 sm:w-10"
                 onClick={() => setShowEmojiPicker(!showEmojiPicker)}
               >
-                <Smile className="w-5 h-5" />
+                <Smile className="w-4 h-4 sm:w-5 sm:h-5" />
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
-                className="rounded-full"
+                className="rounded-full h-9 w-9 sm:h-10 sm:w-10"
               >
-                <Paperclip className="w-5 h-5" />
+                <Paperclip className="w-4 h-4 sm:w-5 sm:h-5" />
               </Button>
               <Input
                 placeholder="Type a message..."
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
-                className="rounded-full px-6 py-2 flex-1"
+                className="rounded-full px-4 sm:px-6 py-2 text-sm sm:text-base flex-1 min-w-0"
                 disabled={sending}
               />
               <Button
                 onClick={handleSendMessage}
-                className="bg-primary hover:bg-primary/90 rounded-full"
+                className="bg-primary hover:bg-primary/90 rounded-full h-9 w-9 sm:h-10 sm:w-10 flex-shrink-0"
                 size="icon"
                 disabled={sending || !inputValue.trim()}
               >
-                <SendHorizontal className="w-5 h-5" />
+                <SendHorizontal className="w-4 h-4 sm:w-5 sm:h-5" />
               </Button>
             </div>
           </div>
