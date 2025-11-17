@@ -463,7 +463,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
               {showRoomMenu && isRoomOwner && (
                 <>
                   <div 
-                    className="fixed inset-0 z-[5]"
+                    className="fixed inset-0 z-[5] bg-background/20"
                     onClick={() => setShowRoomMenu(false)}
                   />
                   <div className="absolute right-0 top-12 bg-card border border-border rounded-lg shadow-lg p-1 z-10 min-w-[140px]">

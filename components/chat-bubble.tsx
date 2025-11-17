@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, memo } from 'react'
+import { useState, useEffect, useRef, memo } from 'react'
+import { createPortal } from 'react-dom'
 import { Copy, Share2, Trash2, MoreVertical, Image as ImageIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -30,6 +31,11 @@ function ChatBubbleComponent({
   mediaType,
 }: ChatBubbleProps) {
   const [showMenu, setShowMenu] = useState(false)
+  const [menuUp, setMenuUp] = useState(false)
+  const [menuLeft, setMenuLeft] = useState(0)
+  const [menuTop, setMenuTop] = useState(0)
+  const anchorRectRef = useRef<DOMRect | null>(null)
+  const menuRef = useRef<HTMLDivElement | null>(null)
 
   const handleCopy = () => {
     navigator.clipboard.writeText(message)
@@ -60,10 +66,18 @@ function ChatBubbleComponent({
     }
   }
 
+  useEffect(() => {
+    if (showMenu && menuUp && anchorRectRef.current && menuRef.current) {
+      const h = menuRef.current.getBoundingClientRect().height
+      const top = anchorRectRef.current.top - 8 - h
+      setMenuTop(Math.max(8, top))
+    }
+  }, [showMenu, menuUp])
+
   return (
     <div
       className={`flex gap-1.5 sm:gap-3 mb-2 sm:mb-4 group ${isOwn ? 'flex-row-reverse' : ''}`}
-      style={{ contentVisibility: 'auto', containIntrinsicSize: '160px', willChange: 'transform' }}
+      style={{ contentVisibility: 'auto', containIntrinsicSize: '160px' }}
       data-message-id={messageId}
     >
       <img
@@ -72,10 +86,8 @@ function ChatBubbleComponent({
         className="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex-shrink-0"
       />
       <div className={`flex flex-col ${isOwn ? 'items-end' : 'items-start'} flex-1 min-w-0`}>
-        {!isOwn && (
-          <p className="text-[10px] sm:text-xs text-foreground/50 px-1.5 sm:px-3 mb-0.5 sm:mb-1">{sender}</p>
-        )}
-        <div className={`relative overflow-visible max-w-[80%] sm:max-w-xs md:max-w-md px-2.5 sm:px-4 py-1.5 sm:py-3 rounded-2xl sm:rounded-3xl ${
+        <p className="text-[10px] sm:text-xs text-foreground/50 px-1.5 sm:px-3 mb-0.5 sm:mb-1">{sender}</p>
+        <div className={`relative max-w-[80%] sm:max-w-xs md:max-w-md px-2.5 sm:px-4 py-1.5 sm:py-3 rounded-2xl sm:rounded-3xl ${
           isOwn
             ? 'bg-primary text-primary-foreground rounded-br-sm'
             : 'bg-secondary text-secondary-foreground rounded-bl-sm'
@@ -107,15 +119,25 @@ function ChatBubbleComponent({
             </div>
           )}
           
-          {/* Menu button - Always visible on mobile, visible on hover for desktop */}
-          <div className={`absolute ${isOwn ? 'left-[-10px]' : 'right-[-10px]'} top-0 -translate-y-full z-20`}>
+          {/* Menu button - positioned inside bubble */}
+          <div className={`absolute ${isOwn ? '-top-3 -right-3' : '-top-3 -left-3'} z-10`}>
             <Button
               variant="ghost"
               size="icon"
-              className="h-6 w-6 sm:h-7 sm:w-7 rounded-full bg-transparent border border-border/50 opacity-100 md:opacity-70 md:group-hover:opacity-100 hover:opacity-100 transition-opacity shadow-sm"
+              className={`h-6 w-6 sm:h-7 sm:w-7 rounded-full ${isOwn ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground'} shadow-md border border-border/40 hover:brightness-110`}
               onClick={(e) => {
                 e.stopPropagation()
-                setShowMenu(!showMenu)
+                try {
+                  const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+                  anchorRectRef.current = rect
+                  const spaceBelow = window.innerHeight - rect.bottom
+                  setMenuUp(spaceBelow < 160)
+                  const left = Math.min(Math.max(8, rect.left), window.innerWidth - 168)
+                  const top = rect.bottom + 8
+                  setMenuLeft(left)
+                  setMenuTop(top)
+                } catch {}
+                setShowMenu((v) => !v)
               }}
             >
               <MoreVertical className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -123,13 +145,17 @@ function ChatBubbleComponent({
           </div>
           
           {/* Menu Dropdown - Works for both mobile and desktop */}
-          {showMenu && (
+          {showMenu && createPortal((
             <>
               <div 
-                className="fixed inset-0 z-[5]"
+                className="fixed inset-0 z-[60] bg-background/30 backdrop-blur-[1px]"
                 onClick={() => setShowMenu(false)}
               />
-              <div className={`absolute ${isOwn ? 'left-0' : 'right-0'} top-0 -translate-y-full bg-card/95 backdrop-blur-sm border border-border rounded-lg shadow-lg p-1 z-30 min-w-[120px]`}>
+              <div
+                ref={menuRef}
+                className={`fixed bg-card border border-border rounded-lg shadow-lg p-1 z-[70] min-w-[160px]`}
+                style={{ left: menuLeft, top: menuTop }}
+              >
                 <button
                   onClick={(e) => {
                     e.stopPropagation()
@@ -137,7 +163,7 @@ function ChatBubbleComponent({
                   }}
                   data-action="copy"
                   data-message-id={messageId}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent active:bg-accent/80 rounded-md transition-colors"
+                  className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent active:bg-accent/80 rounded-md transition-colors text-foreground"
                 >
                   <Copy className="w-4 h-4" />
                   Copy
@@ -149,7 +175,7 @@ function ChatBubbleComponent({
                   }}
                   data-action="share"
                   data-message-id={messageId}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent active:bg-accent/80 rounded-md transition-colors"
+                  className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent active:bg-accent/80 rounded-md transition-colors text-foreground"
                 >
                   <Share2 className="w-4 h-4" />
                   Share
@@ -170,7 +196,7 @@ function ChatBubbleComponent({
                 )}
               </div>
             </>
-          )}
+          ), document.body)}
         </div>
         <div className="flex gap-1 mt-0.5 sm:mt-2 px-1.5 sm:px-2 flex-wrap justify-center">
           {reactions.map((r, i) => (
