@@ -35,6 +35,7 @@ export default function Home() {
   const [user, setUser] = useState<any>(null)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
   const router = useRouter()
+  const supabaseDirect = createClient()
 
   useEffect(() => {
     const supabase = createClient()
@@ -403,7 +404,15 @@ export default function Home() {
                       </div>
                     )}
                     
-                    <Button size="sm" className="w-full bg-primary hover:bg-primary/90 rounded-full text-xs sm:text-sm">
+                    <Button
+                      size="sm"
+                      className="w-full bg-primary hover:bg-primary/90 rounded-full text-xs sm:text-sm"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        router.push(`/room/${room.id}`)
+                      }}
+                    >
                       Join Now
                     </Button>
                   </Card>

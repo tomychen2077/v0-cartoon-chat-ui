@@ -56,6 +56,20 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
   const supabase = createClient()
   const router = useRouter()
 
+  const handleLeaveRoom = async () => {
+    try {
+      if (!currentUser?.id || !roomId) { router.push('/'); return }
+      await supabase
+        .from('room_members')
+        .delete()
+        .eq('room_id', roomId)
+        .eq('user_id', currentUser.id)
+      router.push('/')
+    } catch (e) {
+      router.push('/')
+    }
+  }
+
   // Handle async params for Next.js 16
   useEffect(() => {
     const getRoomId = async () => {
@@ -488,6 +502,11 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
               >
                 <MoreVertical className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
               </Button>
+              {currentUser && (
+                <Button variant="outline" size="sm" className="rounded-full ml-1" onClick={handleLeaveRoom}>
+                  Leave
+                </Button>
+              )}
               {showRoomMenu && isRoomOwner && (
                 <>
                   <div 

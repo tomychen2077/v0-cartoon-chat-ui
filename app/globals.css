@@ -152,4 +152,62 @@
   .animate-bounce-soft {
     animation: bounce-soft 2s ease-in-out infinite;
   }
+  /* Loading Animations */
+  :root {
+    --la-duration: 1s;
+    --la-easing: ease-in-out;
+  }
+  @keyframes la-spin {
+    to { transform: rotate(360deg); }
+  }
+  @keyframes la-indeterminate {
+    0% { left: -40%; width: 40%; }
+    50% { left: 20%; width: 60%; }
+    100% { left: 100%; width: 40%; }
+  }
+  @keyframes la-shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .la-spinner {
+    inline-size: 2rem;
+    block-size: 2rem;
+    border-radius: 9999px;
+    border: 3px solid color-mix(in oklch, var(--primary), transparent 75%);
+    border-top-color: var(--primary);
+    animation: la-spin var(--la-duration, 1s) var(--la-easing, ease-in-out) infinite;
+  }
+  .la-progress {
+    inline-size: 100%;
+    block-size: 0.5rem;
+    border-radius: var(--radius-md);
+    background: var(--input);
+    position: relative;
+    overflow: hidden;
+  }
+  .la-progress__bar {
+    position: absolute;
+    inset-block: 0;
+    inline-size: 0%;
+    background: var(--primary);
+    border-radius: var(--radius-md);
+    transition: inline-size var(--la-duration, 1s) var(--la-easing, ease-in-out);
+  }
+  .la-progress--indeterminate .la-progress__bar {
+    inline-size: 40%;
+    animation: la-indeterminate var(--la-duration, 1s) var(--la-easing, ease-in-out) infinite;
+  }
+  .la-skeleton {
+    background: linear-gradient(90deg,
+      color-mix(in oklch, var(--muted), transparent 30%) 25%,
+      color-mix(in oklch, var(--muted), transparent 10%) 37%,
+      color-mix(in oklch, var(--muted), transparent 30%) 63%);
+    background-size: 200% 100%;
+    border-radius: var(--radius-md);
+    animation: la-shimmer calc(var(--la-duration, 1s) * 1.2) var(--la-easing, ease-in-out) infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .la-spinner, .la-progress__bar, .la-skeleton { animation: none !important; }
+    .la-progress__bar { transition: none !important; }
+  }
 }

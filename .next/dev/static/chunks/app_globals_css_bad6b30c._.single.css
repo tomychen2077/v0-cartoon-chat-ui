@@ -66,6 +66,7 @@
       --tw-backdrop-saturate: initial;
       --tw-backdrop-sepia: initial;
       --tw-duration: initial;
+      --tw-ease: initial;
       --tw-animation-delay: 0s;
       --tw-animation-direction: normal;
       --tw-animation-duration: initial;
@@ -139,8 +140,10 @@
     --font-weight-bold: 700;
     --leading-tight: 1.25;
     --leading-relaxed: 1.625;
+    --radius-md: calc(var(--radius)  - 2px);
     --radius-2xl: 1rem;
     --radius-3xl: 1.5rem;
+    --ease-in-out: cubic-bezier(.4, 0, .2, 1);
     --animate-spin: spin 1s linear infinite;
     --animate-bounce: bounce 1s infinite;
     --blur-sm: 8px;
@@ -675,6 +678,10 @@
 
   .mb-12 {
     margin-bottom: calc(var(--spacing) * 12);
+  }
+
+  .ml-1 {
+    margin-left: calc(var(--spacing) * 1);
   }
 
   .ml-2 {
@@ -2320,6 +2327,11 @@
     transition-duration: .3s;
   }
 
+  .ease-in-out {
+    --tw-ease: var(--ease-in-out);
+    transition-timing-function: var(--ease-in-out);
+  }
+
   .outline-none {
     --tw-outline-style: none;
     outline-style: none;
@@ -3416,6 +3428,111 @@
   .animate-bounce-soft {
     animation: 2s ease-in-out infinite bounce-soft;
   }
+
+  :root {
+    --la-duration: 1s;
+    --la-easing: ease-in-out;
+  }
+
+  @keyframes la-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes la-indeterminate {
+    0% {
+      width: 40%;
+      left: -40%;
+    }
+
+    50% {
+      width: 60%;
+      left: 20%;
+    }
+
+    100% {
+      width: 40%;
+      left: 100%;
+    }
+  }
+
+  @keyframes la-shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  .la-spinner {
+    border: 3px solid var(--primary);
+    border-radius: 9999px;
+    block-size: 2rem;
+    inline-size: 2rem;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .la-spinner {
+      border: 3px solid color-mix(in oklch, var(--primary), transparent 75%);
+    }
+  }
+
+  .la-spinner {
+    border-top-color: var(--primary);
+    animation: la-spin var(--la-duration, 1s) var(--la-easing, ease-in-out) infinite;
+  }
+
+  .la-progress {
+    border-radius: var(--radius-md);
+    background: var(--input);
+    block-size: .5rem;
+    inline-size: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .la-progress__bar {
+    background: var(--primary);
+    border-radius: var(--radius-md);
+    inline-size: 0%;
+    transition: inline-size var(--la-duration, 1s) var(--la-easing, ease-in-out);
+    position: absolute;
+    inset-block: 0;
+  }
+
+  .la-progress--indeterminate .la-progress__bar {
+    inline-size: 40%;
+    animation: la-indeterminate var(--la-duration, 1s) var(--la-easing, ease-in-out) infinite;
+  }
+
+  .la-skeleton {
+    background: linear-gradient(90deg, var(--muted) 25%, var(--muted) 37%, var(--muted) 63%);
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .la-skeleton {
+      background: linear-gradient(90deg, color-mix(in oklch, var(--muted), transparent 30%) 25%, color-mix(in oklch, var(--muted), transparent 10%) 37%, color-mix(in oklch, var(--muted), transparent 30%) 63%);
+    }
+  }
+
+  .la-skeleton {
+    border-radius: var(--radius-md);
+    animation: la-shimmer calc(var(--la-duration, 1s) * 1.2) var(--la-easing, ease-in-out) infinite;
+    background-size: 200% 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .la-spinner, .la-progress__bar, .la-skeleton {
+      animation: none !important;
+    }
+
+    .la-progress__bar {
+      transition: none !important;
+    }
+  }
 }
 
 @property --tw-animation-delay {
@@ -3995,6 +4112,11 @@
 }
 
 @property --tw-duration {
+  syntax: "*";
+  inherits: false
+}
+
+@property --tw-ease {
   syntax: "*";
   inherits: false
 }
