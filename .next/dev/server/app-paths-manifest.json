@@ -1,8 +1,6 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
-  "/api/chat/delete-message/route": "app/api/chat/delete-message/route.js",
   "/api/chat/get-messages/route": "app/api/chat/get-messages/route.js",
-  "/api/chat/send-batch/route": "app/api/chat/send-batch/route.js",
   "/page": "app/page.js",
   "/room/[id]/page": "app/room/[id]/page.js"
 }

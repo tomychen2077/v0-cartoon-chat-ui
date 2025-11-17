@@ -103,6 +103,34 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
     getUser()
   }, [supabase])
 
+  // Join/leave membership tracking
+  useEffect(() => {
+    let joined = false
+    const join = async () => {
+      if (!roomId || !currentUser?.id) return
+      try {
+        const { error } = await supabase
+          .from('room_members')
+          .insert({ room_id: roomId, user_id: currentUser.id })
+        if (!error) joined = true
+      } catch (err: any) {
+        // Ignore unique violations
+      }
+    }
+    join()
+    return () => {
+      if (!roomId || !currentUser?.id) return
+      if (!joined) return
+      supabase
+        .from('room_members')
+        .delete()
+        .eq('room_id', roomId)
+        .eq('user_id', currentUser.id)
+        .then(() => {})
+        .catch(() => {})
+    }
+  }, [roomId, currentUser, supabase])
+
   // Fetch initial messages
   useEffect(() => {
     const fetchMessages = async () => {
