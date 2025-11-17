@@ -157,12 +157,12 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 py-20 md:py-32">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className="max-w-7xl mx-auto px-4 py-12 md:py-24">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             {/* Left Content */}
             <div className="space-y-8">
               <div className="space-y-4">
-                <h2 className="text-5xl md:text-6xl font-bold leading-tight">
+                <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight">
                   <span className="text-balance">Connect, Chat &</span>
                   <span className="block bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
                     Celebrate Together
@@ -189,7 +189,7 @@ export default function Home() {
               </div>
 
               {/* Stats */}
-              <div className="grid grid-cols-2 gap-4 pt-4">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-4">
                 <div className="bg-primary/10 dark:bg-primary/20 rounded-2xl p-4">
                   <p className="text-2xl font-bold text-primary">Hello  </p>
                   <p className="text-sm text-foreground/70">Users</p>
@@ -201,14 +201,14 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Right Hero Illustration */}
-            <div className="relative h-96 md:h-full">
+            {/* Right Hero Illustration - hidden on mobile */}
+            <div className="relative h-72 md:h-full hidden md:block">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded-3xl blur-2xl" />
               <div className="relative flex items-center justify-center h-full">
-                <div className="w-64 h-64 bg-gradient-to-br from-primary via-secondary to-accent rounded-3xl shadow-2xl flex items-center justify-center animate-float">
+                <div className="w-56 h-56 md:w-64 md:h-64 bg-gradient-to-br from-primary via-secondary to-accent rounded-3xl shadow-2xl flex items-center justify-center animate-float">
                   <div className="text-center">
-                    <p className="text-6xl mb-4">💬</p>
-                    <p className="text-white font-bold text-lg">Chat Magic</p>
+                    <p className="text-5xl md:text-6xl mb-2 md:mb-4">💬</p>
+                    <p className="text-white font-bold text-base md:text-lg">Chat Magic</p>
                   </div>
                 </div>
               </div>
@@ -216,10 +216,10 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Floating bubbles */}
-        <div className="absolute top-20 left-10 w-20 h-20 bg-primary/20 rounded-full blur-xl animate-float" style={{ animationDelay: '0s' }} />
-        <div className="absolute bottom-20 right-10 w-32 h-32 bg-accent/20 rounded-full blur-xl animate-float" style={{ animationDelay: '1s' }} />
-        <div className="absolute top-1/2 right-1/4 w-24 h-24 bg-secondary/20 rounded-full blur-xl animate-float" style={{ animationDelay: '2s' }} />
+        {/* Floating bubbles - hidden on mobile */}
+        <div className="hidden md:block absolute top-20 left-10 w-20 h-20 bg-primary/20 rounded-full blur-xl animate-float" style={{ animationDelay: '0s' }} />
+        <div className="hidden md:block absolute bottom-20 right-10 w-32 h-32 bg-accent/20 rounded-full blur-xl animate-float" style={{ animationDelay: '1s' }} />
+        <div className="hidden md:block absolute top-1/2 right-1/4 w-24 h-24 bg-secondary/20 rounded-full blur-xl animate-float" style={{ animationDelay: '2s' }} />
       </section>
 
       {/* Public Rooms Section */}
@@ -291,8 +291,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 bg-primary/5 dark:bg-primary/10 border-t border-border">
+      {/* Features Section - hidden on mobile */}
+      <section className="py-12 md:py-20 bg-primary/5 dark:bg-primary/10 border-t border-border hidden md:block">
         <div className="max-w-7xl mx-auto px-4">
           <h3 className="text-3xl md:text-4xl font-bold mb-12 text-center">Why ChatBloom?</h3>
           
@@ -313,10 +313,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20">
+      {/* CTA Section - hidden on mobile */}
+      <section className="py-12 md:py-20 hidden md:block">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-gradient-to-br from-primary to-accent rounded-3xl p-12 text-center text-white">
+          <div className="bg-gradient-to-br from-primary to-accent rounded-3xl p-6 md:p-12 text-center text-white">
             <h3 className="text-3xl md:text-4xl font-bold mb-4">Ready to Join the Conversation?</h3>
             <p className="text-lg opacity-90 mb-8">Start chatting now, no credit card required</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

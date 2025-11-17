@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, memo } from 'react'
 import { Copy, Share2, Trash2, MoreVertical, Image as ImageIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -17,7 +17,7 @@ interface ChatBubbleProps {
   mediaType?: string
 }
 
-export function ChatBubble({
+function ChatBubbleComponent({
   message,
   sender,
   avatar,
@@ -61,15 +61,21 @@ export function ChatBubble({
   }
 
   return (
-    <div className={`flex gap-1.5 sm:gap-3 mb-2 sm:mb-4 group ${isOwn ? 'flex-row-reverse' : ''}`}>
+    <div
+      className={`flex gap-1.5 sm:gap-3 mb-2 sm:mb-4 group ${isOwn ? 'flex-row-reverse' : ''}`}
+      style={{ contentVisibility: 'auto', containIntrinsicSize: '160px', willChange: 'transform' }}
+      data-message-id={messageId}
+    >
       <img
         src={avatar || "/placeholder.svg"}
         alt={sender}
         className="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex-shrink-0"
       />
       <div className={`flex flex-col ${isOwn ? 'items-end' : 'items-start'} flex-1 min-w-0`}>
-        <p className="text-[10px] sm:text-xs text-foreground/50 px-1.5 sm:px-3 mb-0.5 sm:mb-1">{sender}</p>
-        <div className={`relative max-w-[80%] sm:max-w-xs md:max-w-md px-2.5 sm:px-4 py-1.5 sm:py-3 rounded-2xl sm:rounded-3xl ${
+        {!isOwn && (
+          <p className="text-[10px] sm:text-xs text-foreground/50 px-1.5 sm:px-3 mb-0.5 sm:mb-1">{sender}</p>
+        )}
+        <div className={`relative overflow-visible max-w-[80%] sm:max-w-xs md:max-w-md px-2.5 sm:px-4 py-1.5 sm:py-3 rounded-2xl sm:rounded-3xl ${
           isOwn
             ? 'bg-primary text-primary-foreground rounded-br-sm'
             : 'bg-secondary text-secondary-foreground rounded-bl-sm'
@@ -102,11 +108,11 @@ export function ChatBubble({
           )}
           
           {/* Menu button - Always visible on mobile, visible on hover for desktop */}
-          <div className={`absolute ${isOwn ? 'left-0' : 'right-0'} -top-7 z-10`}>
+          <div className={`absolute ${isOwn ? 'left-[-10px]' : 'right-[-10px]'} top-0 -translate-y-full z-20`}>
             <Button
               variant="ghost"
               size="icon"
-              className="h-6 w-6 sm:h-7 sm:w-7 rounded-full bg-background/90 backdrop-blur-sm border border-border/50 opacity-100 md:opacity-70 md:group-hover:opacity-100 hover:opacity-100 transition-opacity shadow-sm"
+              className="h-6 w-6 sm:h-7 sm:w-7 rounded-full bg-transparent border border-border/50 opacity-100 md:opacity-70 md:group-hover:opacity-100 hover:opacity-100 transition-opacity shadow-sm"
               onClick={(e) => {
                 e.stopPropagation()
                 setShowMenu(!showMenu)
@@ -123,12 +129,14 @@ export function ChatBubble({
                 className="fixed inset-0 z-[5]"
                 onClick={() => setShowMenu(false)}
               />
-              <div className={`absolute ${isOwn ? 'left-0' : 'right-0'} top-8 bg-card border border-border rounded-lg shadow-lg p-1 z-20 min-w-[120px]`}>
+              <div className={`absolute ${isOwn ? 'left-0' : 'right-0'} top-0 -translate-y-full bg-card/95 backdrop-blur-sm border border-border rounded-lg shadow-lg p-1 z-30 min-w-[120px]`}>
                 <button
                   onClick={(e) => {
                     e.stopPropagation()
                     handleCopy()
                   }}
+                  data-action="copy"
+                  data-message-id={messageId}
                   className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent active:bg-accent/80 rounded-md transition-colors"
                 >
                   <Copy className="w-4 h-4" />
@@ -139,6 +147,8 @@ export function ChatBubble({
                     e.stopPropagation()
                     handleShare()
                   }}
+                  data-action="share"
+                  data-message-id={messageId}
                   className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent active:bg-accent/80 rounded-md transition-colors"
                 >
                   <Share2 className="w-4 h-4" />
@@ -150,6 +160,8 @@ export function ChatBubble({
                       e.stopPropagation()
                       handleDelete()
                     }}
+                    data-action="delete"
+                    data-message-id={messageId}
                     className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-destructive/10 active:bg-destructive/20 text-destructive rounded-md transition-colors"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -172,3 +184,5 @@ export function ChatBubble({
     </div>
   )
 }
+
+export const ChatBubble = memo(ChatBubbleComponent)

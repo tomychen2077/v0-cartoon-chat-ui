@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../../app/signup/page.tsx"],"sourcesContent":["'use client'\r\n\r\nimport { redirect } from 'next/navigation'\r\n\r\nexport default function SignUp() {\r\n  // Redirect to unified auth page\r\n  redirect('/auth?mode=signup')\r\n}\r\n"],"names":[],"mappings":"uCAEA,IAAA,EAAA,EAAA,CAAA,CAAA,OAEe,SAAS,IAEtB,CAAA,EAAA,EAAA,QAAA,AAAQ,EAAC,oBACX"}

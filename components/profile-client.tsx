@@ -43,6 +43,7 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
   const [pendingRequests, setPendingRequests] = useState<Friend[]>([])
   const [showFriends, setShowFriends] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const friendsRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const supabase = createClient()
 
@@ -91,6 +92,12 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
       console.error('Error loading pending requests:', err)
     }
   }
+
+  useEffect(() => {
+    if (showFriends) {
+      friendsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [showFriends])
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -379,6 +386,20 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
                   <div>
                     <h2 className="text-4xl font-bold mb-2">{profile.display_name || profile.username}</h2>
                     <p className="text-foreground/70 mb-4">{profile.bio || 'No bio yet'}</p>
+                    <div className="flex flex-wrap items-center gap-2 mb-4">
+                      <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-xs font-semibold">
+                        <Crown className="w-3 h-3" />
+                        <span>Level {profile.level || 1}</span>
+                      </div>
+                      <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-accent/10 text-xs font-semibold">
+                        <Star className="w-3 h-3" />
+                        <span>{(profile.xp_points || 0).toLocaleString()} XP</span>
+                      </div>
+                      <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-secondary/10 text-xs font-semibold">
+                        <Trophy className="w-3 h-3" />
+                        <span>{badges.length} Achievements</span>
+                      </div>
+                    </div>
                     <div className="flex gap-2">
                       <Button
                         size="sm"
@@ -405,42 +426,10 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
           </Card>
         </div>
 
-        {/* Stats */}
-        <div className="grid md:grid-cols-3 gap-6 mb-12">
-          {[
-            { label: 'Level', value: profile.level || 1, icon: Crown, color: 'from-primary to-accent' },
-            { label: 'XP', value: (profile.xp_points || 0).toLocaleString(), icon: Star, color: 'from-accent to-primary' },
-            { label: 'Messages', value: '0', icon: MessageCircle, color: 'from-secondary to-accent' },
-          ].map((stat, i) => {
-            const Icon = stat.icon
-            return (
-              <Card key={i} className="p-6 hover:shadow-lg transition-shadow">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-foreground/70">{stat.label}</h3>
-                  <Icon className={`w-5 h-5 text-transparent bg-gradient-to-r ${stat.color} bg-clip-text`} />
-                </div>
-                <p className="text-3xl font-bold">{stat.value}</p>
-              </Card>
-            )
-          })}
-        </div>
-
-        {/* Badges Section */}
-        <div className="mb-12">
-          <h3 className="text-2xl font-bold mb-6">Achievements</h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {badges.map((badge) => (
-              <Card key={badge.id} className="p-6 text-center hover:shadow-lg hover:scale-105 transition-all cursor-pointer">
-                <div className="text-5xl mb-3 inline-block">{badge.icon}</div>
-                <h4 className="font-bold mb-1">{badge.name}</h4>
-                <p className="text-xs text-foreground/60">{badge.desc}</p>
-              </Card>
-            ))}
-          </div>
-        </div>
+        
 
         {/* Friends Section */}
-        <div className="mb-12">
+        <div ref={friendsRef} className="mb-12">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-2xl font-bold">Friends</h3>
             <Button

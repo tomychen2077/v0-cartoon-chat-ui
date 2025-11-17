@@ -1,0 +1,219 @@
+{
+  "version": 3,
+  "pages404": true,
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "priority": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/profile/[id]",
+      "regex": "^/profile/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/profile/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/room/[id]",
+      "regex": "^/room/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/room/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/room/[id]/edit",
+      "regex": "^/room/([^/]+?)/edit(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/room/(?<nxtPid>[^/]+?)/edit(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_global-error",
+      "regex": "^/_global\\-error(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_global\\-error(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/api/chat/delete-message",
+      "regex": "^/api/chat/delete\\-message(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/chat/delete\\-message(?:/)?$"
+    },
+    {
+      "page": "/api/chat/get-messages",
+      "regex": "^/api/chat/get\\-messages(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/chat/get\\-messages(?:/)?$"
+    },
+    {
+      "page": "/api/chat/send-batch",
+      "regex": "^/api/chat/send\\-batch(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/chat/send\\-batch(?:/)?$"
+    },
+    {
+      "page": "/api/chat/send-message",
+      "regex": "^/api/chat/send\\-message(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/chat/send\\-message(?:/)?$"
+    },
+    {
+      "page": "/api/chat/upload-media",
+      "regex": "^/api/chat/upload\\-media(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/chat/upload\\-media(?:/)?$"
+    },
+    {
+      "page": "/api/friends/accept",
+      "regex": "^/api/friends/accept(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/friends/accept(?:/)?$"
+    },
+    {
+      "page": "/api/friends/add",
+      "regex": "^/api/friends/add(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/friends/add(?:/)?$"
+    },
+    {
+      "page": "/api/friends/get",
+      "regex": "^/api/friends/get(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/friends/get(?:/)?$"
+    },
+    {
+      "page": "/api/friends/remove",
+      "regex": "^/api/friends/remove(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/friends/remove(?:/)?$"
+    },
+    {
+      "page": "/api/profile/upload-avatar",
+      "regex": "^/api/profile/upload\\-avatar(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/profile/upload\\-avatar(?:/)?$"
+    },
+    {
+      "page": "/api/rooms/create",
+      "regex": "^/api/rooms/create(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/rooms/create(?:/)?$"
+    },
+    {
+      "page": "/api/rooms/delete",
+      "regex": "^/api/rooms/delete(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/rooms/delete(?:/)?$"
+    },
+    {
+      "page": "/api/rooms/update",
+      "regex": "^/api/rooms/update(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/rooms/update(?:/)?$"
+    },
+    {
+      "page": "/auth",
+      "regex": "^/auth(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/auth(?:/)?$"
+    },
+    {
+      "page": "/auth/callback",
+      "regex": "^/auth/callback(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/auth/callback(?:/)?$"
+    },
+    {
+      "page": "/auth/check-email",
+      "regex": "^/auth/check\\-email(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/auth/check\\-email(?:/)?$"
+    },
+    {
+      "page": "/create-room",
+      "regex": "^/create\\-room(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/create\\-room(?:/)?$"
+    },
+    {
+      "page": "/guest",
+      "regex": "^/guest(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/guest(?:/)?$"
+    },
+    {
+      "page": "/profile",
+      "regex": "^/profile(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/profile(?:/)?$"
+    },
+    {
+      "page": "/protected",
+      "regex": "^/protected(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/protected(?:/)?$"
+    },
+    {
+      "page": "/signin",
+      "regex": "^/signin(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/signin(?:/)?$"
+    },
+    {
+      "page": "/signup",
+      "regex": "^/signup(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/signup(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSuffix": ".prefetch.rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments",
+    "clientParamParsing": false,
+    "dynamicRSCPrerender": false
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}

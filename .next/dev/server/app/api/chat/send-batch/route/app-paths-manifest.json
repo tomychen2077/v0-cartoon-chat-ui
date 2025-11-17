@@ -1,0 +1,3 @@
+{
+  "/api/chat/send-batch/route": "app/api/chat/send-batch/route.js"
+}

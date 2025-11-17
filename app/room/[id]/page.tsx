@@ -36,6 +36,7 @@ interface Room {
 
 export default function ChatRoom({ params }: { params: Promise<{ id: string }> | { id: string } }) {
   const [messages, setMessages] = useState<Message[]>([])
+  const [visibleCount, setVisibleCount] = useState<number>(200)
   const [room, setRoom] = useState<Room | null>(null)
   const [inputValue, setInputValue] = useState('')
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
@@ -47,6 +48,10 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
   const [uploadingMedia, setUploadingMedia] = useState(false)
   const [showRoomMenu, setShowRoomMenu] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const messagesContainerRef = useRef<HTMLDivElement>(null)
+  const sendQueueRef = useRef<any[]>([])
+  const flushTimerRef = useRef<number | null>(null)
+  const lastInputEventTimeRef = useRef<number | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const supabase = createClient()
   const router = useRouter()
@@ -61,7 +66,9 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
   }, [params])
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    requestAnimationFrame(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    })
   }
 
   // Fetch room information
@@ -104,8 +111,13 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
         if (!response.ok) throw new Error('Failed to fetch messages')
         
         const data = await response.json()
+        performance.mark('messages_fetch_start')
         setMessages(data || [])
         setLoading(false)
+        requestAnimationFrame(() => {
+          performance.mark('messages_render_end')
+          performance.measure('messages_initial_render', 'messages_fetch_start', 'messages_render_end')
+        })
         setTimeout(scrollToBottom, 100)
       } catch (err) {
         console.error('Error fetching messages:', err)
@@ -144,7 +156,12 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
             .single()
 
           if (newMessage) {
+            performance.mark('message_append_start')
             setMessages((prev) => [...prev, newMessage])
+            requestAnimationFrame(() => {
+              performance.mark('message_append_end')
+              performance.measure('message_append_render', 'message_append_start', 'message_append_end')
+            })
             setTimeout(scrollToBottom, 100)
           }
         }
@@ -160,6 +177,69 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
   useEffect(() => {
     scrollToBottom()
   }, [messages])
+
+  useEffect(() => {
+    const el = messagesContainerRef.current
+    if (!el) return
+    let ticking = false
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true
+        requestAnimationFrame(() => {
+          ticking = false
+        })
+      }
+    }
+    el.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      el.removeEventListener('scroll', onScroll as any)
+    }
+  }, [])
+
+  const tryGzip = async (data: any) => {
+    try {
+      // @ts-ignore
+      if (typeof CompressionStream !== 'undefined') {
+        // @ts-ignore
+        const cs = new CompressionStream('gzip')
+        const blob = new Blob([JSON.stringify(data)], { type: 'application/json' })
+        const stream = blob.stream().pipeThrough(cs)
+        const compressed = await new Response(stream).arrayBuffer()
+        return new Uint8Array(compressed)
+      }
+    } catch {}
+    return null
+  }
+
+  const flushQueue = async () => {
+    if (!sendQueueRef.current.length) return
+    const batch = sendQueueRef.current.splice(0, sendQueueRef.current.length)
+    const gz = await tryGzip({ room_id: roomId, messages: batch })
+    const response = await fetch('/api/chat/send-batch', {
+      method: 'POST',
+      headers: gz ? { 'Content-Encoding': 'gzip' } : { 'Content-Type': 'application/json' },
+      body: gz ? (gz as any) : JSON.stringify({ room_id: roomId, messages: batch }),
+    })
+    if (!response.ok) {
+      try {
+        const err = await response.json()
+        console.error('Batch send error:', err)
+      } catch {}
+    }
+  }
+
+  const scheduleFlush = () => {
+    if (flushTimerRef.current) return
+    flushTimerRef.current = setTimeout(() => {
+      flushTimerRef.current = null
+      flushQueue()
+    }, 200) as unknown as number
+  }
+
+  const enqueueMessage = (payload: { content: string; media_url?: string | null; media_type?: string | null }) => {
+    sendQueueRef.current.push(payload)
+    scheduleFlush()
+  }
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -211,24 +291,16 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
         mediaType = uploadData.media_type
       }
 
-      // Send message
-      const response = await fetch('/api/chat/send-message', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          room_id: roomId,
-          content: inputValue.trim() || (selectedFile ? '📷 Photo' : ''),
-          media_url: mediaUrl,
-          media_type: mediaType,
-        }),
-      })
-
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error || 'Failed to send message')
+      const content = inputValue.trim() || (selectedFile ? '📷 Photo' : '')
+      if (lastInputEventTimeRef.current) {
+        const latency = performance.now() - lastInputEventTimeRef.current
+        try { console.log('input_latency_ms', Math.round(latency)) } catch {}
       }
+      enqueueMessage({
+        content,
+        media_url: mediaUrl,
+        media_type: mediaType,
+      })
 
       setInputValue('')
       setSelectedFile(null)
@@ -287,6 +359,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
+      lastInputEventTimeRef.current = performance.now()
       handleSendMessage()
     }
   }
@@ -295,6 +368,18 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
     const date = new Date(timestamp)
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   }
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      const mem: any = (performance as any).memory
+      if (mem) {
+        try {
+          console.log('memory_mb', Math.round(mem.usedJSHeapSize / 1048576))
+        } catch {}
+      }
+    }, 5000)
+    return () => clearInterval(id)
+  }, [])
 
   const getAvatar = (message: Message) => {
     if (message.profiles?.avatar_url) {
@@ -407,28 +492,56 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
       </header>
 
       {/* Messages Container - Mobile responsive */}
-      <div className="flex-1 overflow-y-auto p-1.5 sm:p-4 md:p-6 space-y-1 sm:space-y-4">
-        <div className="max-w-4xl mx-auto">
+      <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-1.5 sm:p-4 md:p-6 space-y-1 sm:space-y-4">
+        <div
+          className="max-w-4xl mx-auto"
+          onClick={(e) => {
+            const target = e.target as HTMLElement
+            const actionEl = target.closest('[data-action]') as HTMLElement | null
+            if (actionEl) {
+              const action = actionEl.getAttribute('data-action')
+              const id = actionEl.getAttribute('data-message-id')
+              if (action === 'delete' && id) {
+                handleDeleteMessage(id)
+              }
+            }
+          }}
+        >
           {messages.length === 0 ? (
             <div className="text-center py-8 sm:py-12">
               <p className="text-foreground/60 text-sm sm:text-base">No messages yet. Be the first to say something!</p>
             </div>
           ) : (
-            messages.map((msg) => (
-              <ChatBubble
-                key={msg.id}
-                message={msg.content}
-                sender={getSenderName(msg)}
-                avatar={getAvatar(msg)}
-                isOwn={currentUser?.id === msg.user_id}
-                timestamp={formatTimestamp(msg.created_at)}
-                reactions={[]}
-                messageId={msg.id}
-                onDelete={handleDeleteMessage}
-                mediaUrl={msg.media_url}
-                mediaType={msg.media_type}
-              />
-            ))
+            (() => {
+              const start = Math.max(0, messages.length - visibleCount)
+              const visible = messages.slice(start)
+              return (
+                <>
+                  {start > 0 && (
+                    <div className="flex justify-center py-2">
+                      <Button variant="outline" size="sm" className="rounded-full" onClick={() => setVisibleCount((c) => c + 200)}>
+                        Load older messages
+                      </Button>
+                    </div>
+                  )}
+                  {visible.map((msg) => (
+                    <ChatBubble
+                      key={msg.id}
+                      message={msg.content}
+                      sender={getSenderName(msg)}
+                      avatar={getAvatar(msg)}
+                      isOwn={currentUser?.id === msg.user_id}
+                      timestamp={formatTimestamp(msg.created_at)}
+                      reactions={[]}
+                      messageId={msg.id}
+                      onDelete={handleDeleteMessage}
+                      mediaUrl={msg.media_url}
+                      mediaType={msg.media_type}
+                    />
+                  ))}
+                </>
+              )
+            })()
           )}
           <div ref={messagesEndRef} />
         </div>
@@ -522,7 +635,10 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
                 disabled={sending || uploadingMedia}
               />
               <Button
-                onClick={handleSendMessage}
+                onClick={() => {
+                  lastInputEventTimeRef.current = performance.now()
+                  handleSendMessage()
+                }}
                 className="bg-primary hover:bg-primary/90 rounded-full h-8 w-8 sm:h-10 sm:w-10 flex-shrink-0"
                 size="icon"
                 disabled={sending || uploadingMedia || (!inputValue.trim() && !selectedFile)}
