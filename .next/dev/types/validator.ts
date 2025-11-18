@@ -155,6 +155,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../../app/api/chat/cleanup/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/chat/cleanup">> = Specific
+  const handler = {} as typeof import("../../../app/api/chat/cleanup/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../app/api/chat/delete-message/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/chat/delete-message">> = Specific
@@ -240,6 +249,33 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/profile/upload-avatar">> = Specific
   const handler = {} as typeof import("../../../app/api/profile/upload-avatar/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/api/room-members/cleanup/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/room-members/cleanup">> = Specific
+  const handler = {} as typeof import("../../../app/api/room-members/cleanup/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/api/room-members/heartbeat/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/room-members/heartbeat">> = Specific
+  const handler = {} as typeof import("../../../app/api/room-members/heartbeat/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/api/room-members/leave/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/room-members/leave">> = Specific
+  const handler = {} as typeof import("../../../app/api/room-members/leave/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

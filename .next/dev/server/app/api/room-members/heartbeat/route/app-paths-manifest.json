@@ -1,0 +1,3 @@
+{
+  "/api/room-members/heartbeat/route": "app/api/room-members/heartbeat/route.js"
+}

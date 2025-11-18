@@ -81,6 +81,10 @@ export default async function FriendProfile({ params }: { params: Promise<{ id: 
                 <h2 className="text-3xl sm:text-4xl font-bold mb-2">{friendProfile.display_name || friendProfile.username}</h2>
                 <p className="text-foreground/70 mb-4">@{friendProfile.username}</p>
                 <p className="text-foreground/70 mb-4">{friendProfile.bio || 'No bio yet'}</p>
+                <div className="flex gap-4 text-sm text-foreground/70 mb-4">
+                  {friendProfile.gender && <span>Gender: {friendProfile.gender}</span>}
+                  {typeof friendProfile.age === 'number' && <span>Age: {friendProfile.age}</span>}
+                </div>
                 <div className="flex gap-2">
                   {friendship?.status === 'accepted' ? (
                     <Button size="sm" variant="outline" className="rounded-full" disabled>

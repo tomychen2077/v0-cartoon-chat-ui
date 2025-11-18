@@ -101,6 +101,17 @@ async function POST(request) {
                 status: 401
             });
         }
+        // Ensure a profile row exists for this user (guest or member)
+        const { data: profile } = await supabase.from('profiles').select('id').eq('id', user.id).single();
+        if (!profile) {
+            const username = user.user_metadata?.username || `Guest-${Math.floor(Math.random() * 10000)}`;
+            const display_name = user.user_metadata?.display_name || username;
+            await supabase.from('profiles').upsert({
+                id: user.id,
+                username,
+                display_name
+            });
+        }
         let body = null;
         const enc = request.headers.get('content-encoding');
         if (enc === 'gzip') {

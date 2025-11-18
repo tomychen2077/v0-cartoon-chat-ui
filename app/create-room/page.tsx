@@ -1,12 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
 import { Globe, Lock, Key, Sparkles, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 
 export default function CreateRoom() {
   const [formData, setFormData] = useState({
@@ -23,6 +24,20 @@ export default function CreateRoom() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
+  const supabase = createClient()
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      const guest = !!user && (((user as any).is_anonymous) || ((user as any).app_metadata?.provider === 'anonymous'))
+      if (!user || guest) {
+        setError('Please create an account to create rooms')
+        setTimeout(() => {
+          router.replace('/auth')
+        }, 1500)
+      }
+    }
+    checkAuth()
+  }, [])
 
   const languages = ['English', 'Spanish', 'French', 'German', 'Japanese', 'Korean', 'Chinese', 'Portuguese']
   
@@ -112,8 +127,14 @@ export default function CreateRoom() {
 
       if (!response.ok) {
         if (response.status === 401) {
-          // User not authenticated, redirect to auth page
           router.push('/auth')
+          return
+        }
+        if (response.status === 403) {
+          setError('Please create an account to create rooms')
+          setTimeout(() => {
+            router.replace('/auth')
+          }, 1500)
           return
         }
         throw new Error(data.error || 'Failed to create room')

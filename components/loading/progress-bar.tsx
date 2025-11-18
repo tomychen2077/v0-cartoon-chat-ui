@@ -26,7 +26,7 @@ export function ProgressBar({
     ['--la-easing' as any]: easing,
   }
 
-  const barStyle: React.CSSProperties = value != null ? { width: `${Math.max(0, Math.min(100, value))}%` } : undefined
+  const barStyle: React.CSSProperties | undefined = value != null ? { width: `${Math.max(0, Math.min(100, value))}%` } : undefined
 
   return (
     <div

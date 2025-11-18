@@ -218,26 +218,45 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navi
 ;
 function GuestProfile() {
     const [guestUsername, setGuestUsername] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('Guest');
-    const [guestAvatar, setGuestAvatar] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('/placeholder.svg');
+    const [guestAvatar, setGuestAvatar] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('');
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRouter"])();
     const supabase = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2f$client$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["createClient"])();
     const [startingGuest, setStartingGuest] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [guestError, setGuestError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [navigating, setNavigating] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     // Generate client-only stable randoms to avoid hydration mismatch
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         const seed = Math.floor(Math.random() * 10000);
         const username = `Guest-${seed}`;
-        const avatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=guest${seed}`;
         setGuestUsername(username);
-        setGuestAvatar(avatar);
+        setGuestAvatar('');
     }, []);
     const startGuest = async ()=>{
         try {
             setGuestError(null);
             setStartingGuest(true);
-            const { data, error } = await supabase.auth.signInAnonymously();
+            let { data, error } = await supabase.auth.signInAnonymously();
             if (error) {
-                setGuestError('Guest sign-in failed. Please try again or sign in.');
+                try {
+                    console.error('[guest] anonymous sign-in error:', error);
+                } catch  {}
+                // Retry once after ensuring no existing session
+                try {
+                    await supabase.auth.signOut();
+                    const retry = await supabase.auth.signInAnonymously();
+                    data = retry.data;
+                    error = retry.error;
+                } catch  {}
+            }
+            if (error) {
+                const msg = error?.message || 'Guest sign-in failed. Please sign in to continue.';
+                setGuestError(msg);
+                setTimeout(()=>{
+                    if (!navigating) {
+                        setNavigating(true);
+                        router.replace('/auth');
+                    }
+                }, 1500);
                 return;
             }
             const user = data?.user;
@@ -245,15 +264,30 @@ function GuestProfile() {
                 await supabase.from('profiles').upsert({
                     id: user.id,
                     username: guestUsername,
-                    display_name: guestUsername,
-                    avatar_url: guestAvatar
+                    display_name: guestUsername
                 });
                 router.push('/');
             } else {
                 setGuestError('Guest session unavailable. Please sign in to continue.');
+                setTimeout(()=>{
+                    if (!navigating) {
+                        setNavigating(true);
+                        router.replace('/auth');
+                    }
+                }, 1500);
             }
-        } catch  {
-            setGuestError('Unexpected error. Please try again.');
+        } catch (e) {
+            try {
+                console.error('[guest] unexpected error:', e);
+            } catch  {}
+            const msg = e instanceof Error ? e.message : 'Unexpected error. Please sign in to continue.';
+            setGuestError(msg);
+            setTimeout(()=>{
+                if (!navigating) {
+                    setNavigating(true);
+                    router.replace('/auth');
+                }
+            }, 1500);
         } finally{
             setStartingGuest(false);
         }
@@ -293,7 +327,7 @@ function GuestProfile() {
                                     children: "💬"
                                 }, void 0, false, {
                                     fileName: "[project]/app/guest/page.tsx",
-                                    lineNumber: 66,
+                                    lineNumber: 97,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
@@ -301,13 +335,13 @@ function GuestProfile() {
                                     children: "ChatBloom"
                                 }, void 0, false, {
                                     fileName: "[project]/app/guest/page.tsx",
-                                    lineNumber: 69,
+                                    lineNumber: 100,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/guest/page.tsx",
-                            lineNumber: 65,
+                            lineNumber: 96,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -322,14 +356,14 @@ function GuestProfile() {
                                             className: "w-4 h-4 mr-2"
                                         }, void 0, false, {
                                             fileName: "[project]/app/guest/page.tsx",
-                                            lineNumber: 75,
+                                            lineNumber: 106,
                                             columnNumber: 15
                                         }, this),
                                         "Settings"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/guest/page.tsx",
-                                    lineNumber: 74,
+                                    lineNumber: 105,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -341,31 +375,31 @@ function GuestProfile() {
                                             className: "w-4 h-4 mr-2"
                                         }, void 0, false, {
                                             fileName: "[project]/app/guest/page.tsx",
-                                            lineNumber: 79,
+                                            lineNumber: 110,
                                             columnNumber: 15
                                         }, this),
                                         "Start Guest Session"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/guest/page.tsx",
-                                    lineNumber: 78,
+                                    lineNumber: 109,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/guest/page.tsx",
-                            lineNumber: 73,
+                            lineNumber: 104,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/guest/page.tsx",
-                    lineNumber: 64,
+                    lineNumber: 95,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/guest/page.tsx",
-                lineNumber: 63,
+                lineNumber: 94,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -381,7 +415,7 @@ function GuestProfile() {
                                         className: "w-8 h-8 text-primary"
                                     }, void 0, false, {
                                         fileName: "[project]/app/guest/page.tsx",
-                                        lineNumber: 91,
+                                        lineNumber: 122,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -389,13 +423,13 @@ function GuestProfile() {
                                         children: "GUEST MODE"
                                     }, void 0, false, {
                                         fileName: "[project]/app/guest/page.tsx",
-                                        lineNumber: 92,
+                                        lineNumber: 123,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/guest/page.tsx",
-                                lineNumber: 90,
+                                lineNumber: 121,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -404,24 +438,15 @@ function GuestProfile() {
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "flex justify-center",
                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "w-32 h-32 rounded-3xl border-4 border-primary/50 overflow-hidden shadow-lg",
-                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
-                                                src: guestAvatar || "/placeholder.svg",
-                                                alt: "Guest avatar",
-                                                className: "w-full h-full"
-                                            }, void 0, false, {
-                                                fileName: "[project]/app/guest/page.tsx",
-                                                lineNumber: 99,
-                                                columnNumber: 17
-                                            }, this)
+                                            className: "w-32 h-32 rounded-3xl border-4 border-primary/50 overflow-hidden shadow-lg bg-gradient-to-br from-muted to-muted/50"
                                         }, void 0, false, {
                                             fileName: "[project]/app/guest/page.tsx",
-                                            lineNumber: 98,
+                                            lineNumber: 129,
                                             columnNumber: 15
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/guest/page.tsx",
-                                        lineNumber: 97,
+                                        lineNumber: 128,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -432,7 +457,7 @@ function GuestProfile() {
                                                 children: guestUsername
                                             }, void 0, false, {
                                                 fileName: "[project]/app/guest/page.tsx",
-                                                lineNumber: 105,
+                                                lineNumber: 134,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -440,7 +465,7 @@ function GuestProfile() {
                                                 children: "Explore ChatBloom as a guest. Create an account to unlock all features!"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/guest/page.tsx",
-                                                lineNumber: 106,
+                                                lineNumber: 135,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -451,7 +476,7 @@ function GuestProfile() {
                                                         children: "Or start chatting as a guest"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/guest/page.tsx",
-                                                        lineNumber: 110,
+                                                        lineNumber: 139,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -463,14 +488,14 @@ function GuestProfile() {
                                                                 className: "w-4 h-4 mr-2"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/guest/page.tsx",
-                                                                lineNumber: 112,
+                                                                lineNumber: 141,
                                                                 columnNumber: 19
                                                             }, this),
                                                             startingGuest ? 'Starting…' : 'Continue as Guest'
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/guest/page.tsx",
-                                                        lineNumber: 111,
+                                                        lineNumber: 140,
                                                         columnNumber: 17
                                                     }, this),
                                                     guestError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -478,13 +503,13 @@ function GuestProfile() {
                                                         children: guestError
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/guest/page.tsx",
-                                                        lineNumber: 116,
+                                                        lineNumber: 145,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/guest/page.tsx",
-                                                lineNumber: 109,
+                                                lineNumber: 138,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -493,25 +518,25 @@ function GuestProfile() {
                                                 children: "Already have an account? Sign in"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/guest/page.tsx",
-                                                lineNumber: 120,
+                                                lineNumber: 149,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/guest/page.tsx",
-                                        lineNumber: 104,
+                                        lineNumber: 133,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/guest/page.tsx",
-                                lineNumber: 95,
+                                lineNumber: 126,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/guest/page.tsx",
-                        lineNumber: 89,
+                        lineNumber: 120,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -522,7 +547,7 @@ function GuestProfile() {
                                 children: "Guest Limitations"
                             }, void 0, false, {
                                 fileName: "[project]/app/guest/page.tsx",
-                                lineNumber: 129,
+                                lineNumber: 158,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -530,7 +555,7 @@ function GuestProfile() {
                                 children: "As a guest, you have limited access to some features. Upgrade to unlock everything:"
                             }, void 0, false, {
                                 fileName: "[project]/app/guest/page.tsx",
-                                lineNumber: 130,
+                                lineNumber: 159,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -545,7 +570,7 @@ function GuestProfile() {
                                                     children: limit.icon
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/guest/page.tsx",
-                                                    lineNumber: 136,
+                                                    lineNumber: 165,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -553,29 +578,29 @@ function GuestProfile() {
                                                     children: limit.text
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/guest/page.tsx",
-                                                    lineNumber: 137,
+                                                    lineNumber: 166,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/guest/page.tsx",
-                                            lineNumber: 135,
+                                            lineNumber: 164,
                                             columnNumber: 17
                                         }, this)
                                     }, i, false, {
                                         fileName: "[project]/app/guest/page.tsx",
-                                        lineNumber: 134,
+                                        lineNumber: 163,
                                         columnNumber: 15
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/app/guest/page.tsx",
-                                lineNumber: 132,
+                                lineNumber: 161,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/guest/page.tsx",
-                        lineNumber: 128,
+                        lineNumber: 157,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -586,7 +611,7 @@ function GuestProfile() {
                                 children: "Feature Comparison"
                             }, void 0, false, {
                                 fileName: "[project]/app/guest/page.tsx",
-                                lineNumber: 146,
+                                lineNumber: 175,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
@@ -605,7 +630,7 @@ function GuestProfile() {
                                                             children: "Feature"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/guest/page.tsx",
-                                                            lineNumber: 152,
+                                                            lineNumber: 181,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -613,7 +638,7 @@ function GuestProfile() {
                                                             children: "Guest"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/guest/page.tsx",
-                                                            lineNumber: 153,
+                                                            lineNumber: 182,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -621,18 +646,18 @@ function GuestProfile() {
                                                             children: "Member"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/guest/page.tsx",
-                                                            lineNumber: 154,
+                                                            lineNumber: 183,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/guest/page.tsx",
-                                                    lineNumber: 151,
+                                                    lineNumber: 180,
                                                     columnNumber: 19
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/guest/page.tsx",
-                                                lineNumber: 150,
+                                                lineNumber: 179,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -686,7 +711,7 @@ function GuestProfile() {
                                                                 children: row[0]
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/guest/page.tsx",
-                                                                lineNumber: 169,
+                                                                lineNumber: 198,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -696,12 +721,12 @@ function GuestProfile() {
                                                                     children: row[1]
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/guest/page.tsx",
-                                                                    lineNumber: 171,
+                                                                    lineNumber: 200,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/guest/page.tsx",
-                                                                lineNumber: 170,
+                                                                lineNumber: 199,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -711,45 +736,45 @@ function GuestProfile() {
                                                                     children: row[2]
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/guest/page.tsx",
-                                                                    lineNumber: 176,
+                                                                    lineNumber: 205,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/guest/page.tsx",
-                                                                lineNumber: 175,
+                                                                lineNumber: 204,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, i, true, {
                                                         fileName: "[project]/app/guest/page.tsx",
-                                                        lineNumber: 168,
+                                                        lineNumber: 197,
                                                         columnNumber: 21
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/app/guest/page.tsx",
-                                                lineNumber: 157,
+                                                lineNumber: 186,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/guest/page.tsx",
-                                        lineNumber: 149,
+                                        lineNumber: 178,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/guest/page.tsx",
-                                    lineNumber: 148,
+                                    lineNumber: 177,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/guest/page.tsx",
-                                lineNumber: 147,
+                                lineNumber: 176,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/guest/page.tsx",
-                        lineNumber: 145,
+                        lineNumber: 174,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -759,7 +784,7 @@ function GuestProfile() {
                                 className: "absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 blur-xl"
                             }, void 0, false, {
                                 fileName: "[project]/app/guest/page.tsx",
-                                lineNumber: 188,
+                                lineNumber: 217,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
@@ -770,7 +795,7 @@ function GuestProfile() {
                                         children: "Start Your Journey Today"
                                     }, void 0, false, {
                                         fileName: "[project]/app/guest/page.tsx",
-                                        lineNumber: 190,
+                                        lineNumber: 219,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -778,7 +803,7 @@ function GuestProfile() {
                                         children: "Create a free account and unlock all the features of ChatBloom. Build friendships, create rooms, and earn rewards!"
                                     }, void 0, false, {
                                         fileName: "[project]/app/guest/page.tsx",
-                                        lineNumber: 191,
+                                        lineNumber: 220,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -791,7 +816,7 @@ function GuestProfile() {
                                                 children: "Create Account"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/guest/page.tsx",
-                                                lineNumber: 195,
+                                                lineNumber: 224,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -804,43 +829,43 @@ function GuestProfile() {
                                                         className: "w-4 h-4 ml-2"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/guest/page.tsx",
-                                                        lineNumber: 200,
+                                                        lineNumber: 229,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/guest/page.tsx",
-                                                lineNumber: 198,
+                                                lineNumber: 227,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/guest/page.tsx",
-                                        lineNumber: 194,
+                                        lineNumber: 223,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/guest/page.tsx",
-                                lineNumber: 189,
+                                lineNumber: 218,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/guest/page.tsx",
-                        lineNumber: 187,
+                        lineNumber: 216,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/guest/page.tsx",
-                lineNumber: 87,
+                lineNumber: 118,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/guest/page.tsx",
-        lineNumber: 61,
+        lineNumber: 92,
         columnNumber: 5
     }, this);
 }

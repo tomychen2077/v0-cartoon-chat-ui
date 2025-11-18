@@ -17,12 +17,15 @@ export default function AuthPage() {
     password: '',
     confirmPassword: '',
     username: '',
+    gender: 'other',
+    age: '',
     agreeToTerms: false,
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
   const supabase = createClient()
+  
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target
@@ -96,6 +99,8 @@ export default function AuthPage() {
             data: {
               username: formData.username,
               display_name: formData.username,
+              gender: formData.gender,
+              age: formData.age ? Number(formData.age) : null,
             },
           },
         })
@@ -126,6 +131,8 @@ export default function AuthPage() {
               username: formData.username,
               display_name: formData.username,
               email: formData.email,
+              gender: formData.gender || 'other',
+              age: formData.age ? Number(formData.age) : null,
             })
           
           if (profileError) {
@@ -163,6 +170,8 @@ export default function AuthPage() {
             password: '',
             confirmPassword: '',
             username: '',
+            gender: 'other',
+            age: '',
             agreeToTerms: false,
           })
           router.push('/')
@@ -187,19 +196,7 @@ export default function AuthPage() {
       </div>
 
       {/* Main Auth Card */}
-      <Card className="relative w-full max-w-md p-8 md:p-12 backdrop-blur-sm">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center justify-center mb-6">
-            <div className="w-14 h-14 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center text-white font-bold text-2xl">
-              💬
-            </div>
-          </Link>
-          <h1 className="text-3xl font-bold mb-2">ChatBloom</h1>
-          <p className="text-foreground/60">
-            {isSignUp ? 'Create your account' : 'Welcome back'}
-          </p>
-        </div>
+      <Card className="relative w-full max-w-sm p-6 md:p-8 backdrop-blur-sm border-2 border-border/50 rounded-lg">
 
         {/* Auth Tabs */}
         <div className="flex gap-2 mb-8 bg-muted p-1 rounded-full">
@@ -267,6 +264,36 @@ export default function AuthPage() {
                 />
               </div>
               <p className="text-xs text-foreground/50 mt-1">3-20 characters, letters, numbers & underscores only</p>
+            </div>
+          )}
+
+          {/* Extra fields (Sign Up only) */}
+          {isSignUp && (
+            <div className="grid grid-cols-1 gap-4">
+              <div>
+                <label className="text-sm font-semibold block mb-2">Gender</label>
+                <select
+                  name="gender"
+                  value={formData.gender}
+                  onChange={(e) => setFormData(prev => ({ ...prev, gender: e.target.value }))}
+                  className="w-full px-3 py-2 rounded-lg border border-border bg-background"
+                >
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-sm font-semibold block mb-2">Age</label>
+                <Input
+                  type="number"
+                  name="age"
+                  placeholder="Your age"
+                  value={formData.age}
+                  onChange={handleInputChange}
+                  className="rounded-lg"
+                />
+              </div>
             </div>
           )}
 
@@ -357,21 +384,14 @@ export default function AuthPage() {
           </Button>
         </form>
 
-        {/* Divider */}
-        <div className="flex items-center gap-3 mb-6">
-          <div className="flex-1 h-px bg-border" />
-          <span className="text-xs text-foreground/50">or continue with</span>
-          <div className="flex-1 h-px bg-border" />
-        </div>
-
-        {/* OAuth Buttons */}
-        <div className="mb-6">
+        <div className="mt-4 flex gap-2">
           <Button
             type="button"
             variant="outline"
-            className="rounded-full w-full"
+            className="rounded-full w-1/2"
             onClick={handleGoogleSignIn}
             disabled={loading}
+            aria-label="Continue with Google"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -381,6 +401,11 @@ export default function AuthPage() {
             </svg>
             <span className="ml-2">{loading ? 'Redirecting...' : 'Continue with Google'}</span>
           </Button>
+          <Link href="/guest" aria-label="Continue as Guest" className="w-1/2">
+            <Button variant="outline" className="w-full rounded-full">
+              Continue as Guest
+            </Button>
+          </Link>
         </div>
 
         {/* Signup Link */}
@@ -397,16 +422,18 @@ export default function AuthPage() {
           </p>
         </div>
 
-        {/* Guest Option */}
-        <div className="mt-6 p-4 bg-accent/10 rounded-lg text-center">
-          <p className="text-sm text-foreground/70 mb-3">Not ready to commit?</p>
-          <Link href="/guest">
+        
+
+        {/* Back to Home */}
+        <div className="mt-6">
+          <Link href="/">
             <Button variant="outline" className="w-full rounded-full">
-              Continue as Guest
+              Back to Home
             </Button>
           </Link>
         </div>
       </Card>
+      
     </div>
   )
 }

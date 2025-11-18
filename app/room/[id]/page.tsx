@@ -53,6 +53,9 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
   const flushTimerRef = useRef<number | null>(null)
   const lastInputEventTimeRef = useRef<number | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const receivedIdsRef = useRef<Set<string>>(new Set())
+  const lastImmediateSendRef = useRef<number | null>(null)
+  const [latencies, setLatencies] = useState<number[]>([])
   const supabase = createClient()
   const router = useRouter()
 
@@ -83,6 +86,18 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
     requestAnimationFrame(() => {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
     })
+  }
+
+  const pushSystemMessage = (text: string) => {
+    const msg: Message = {
+      id: `sys_${Date.now()}`,
+      content: text,
+      created_at: new Date().toISOString(),
+      user_id: 'system',
+      profiles: { username: 'System' },
+    }
+    setMessages((prev) => [...prev, msg])
+    setTimeout(scrollToBottom, 100)
   }
 
   // Fetch room information
@@ -117,19 +132,16 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
     getUser()
   }, [supabase])
 
-  // Join/leave membership tracking (single active room, respect capacity)
+  // Join membership on mount; attempt robust cleanup on unmount and page leave
   useEffect(() => {
-    let joined = false
     const join = async () => {
       if (!roomId || !currentUser?.id) return
       try {
-        // Ensure single active membership: remove any existing memberships for this user
         await supabase
           .from('room_members')
           .delete()
           .eq('user_id', currentUser.id)
 
-        // Enforce capacity: prevent join when room is full
         const { data: members } = await supabase
           .from('room_members')
           .select('id')
@@ -141,32 +153,73 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
           return
         }
 
-        const { error } = await supabase
+        await supabase
           .from('room_members')
           .insert({ room_id: roomId, user_id: currentUser.id })
-        if (!error) joined = true
-      } catch (err: any) {
-      }
+      } catch {}
     }
     join()
-    return () => {
+
+    const cleanup = async () => {
       if (!roomId || !currentUser?.id) return
-      if (!joined) return
-      supabase
-        .from('room_members')
-        .delete()
-        .eq('room_id', roomId)
-        .eq('user_id', currentUser.id)
-        .then(() => {})
-        .catch(() => {})
+      try {
+        await supabase
+          .from('room_members')
+          .delete()
+          .eq('room_id', roomId)
+          .eq('user_id', currentUser.id)
+      } catch {}
+    }
+
+    let hb: number | null = null
+    const startHeartbeat = () => {
+      if (!roomId) return
+      const send = () => {
+        try {
+          fetch('/api/room-members/heartbeat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ room_id: roomId }),
+            keepalive: true,
+          }).catch(() => {})
+        } catch {}
+      }
+      send()
+      hb = window.setInterval(send, 25_000)
+    }
+    startHeartbeat()
+
+    const sendBeaconLeave = () => {
+      if (!roomId) return
+      try {
+        const body = new Blob([JSON.stringify({ room_id: roomId })], { type: 'application/json' })
+        navigator.sendBeacon('/api/room-members/leave', body)
+      } catch {}
+    }
+
+    const onBeforeUnload = () => {
+      sendBeaconLeave()
+    }
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') sendBeaconLeave()
+    }
+    window.addEventListener('beforeunload', onBeforeUnload)
+    document.addEventListener('visibilitychange', onVisibilityChange)
+
+    return () => {
+      window.removeEventListener('beforeunload', onBeforeUnload)
+      document.removeEventListener('visibilitychange', onVisibilityChange)
+      if (hb) { try { window.clearInterval(hb) } catch {} }
+      try { cleanup() } catch {}
     }
   }, [roomId, currentUser, supabase, room])
 
   // Fetch initial messages
   useEffect(() => {
+    const ac = new AbortController()
     const fetchMessages = async () => {
       try {
-        const response = await fetch(`/api/chat/get-messages?room_id=${roomId}`)
+        const response = await fetch(`/api/chat/get-messages?room_id=${roomId}`, { signal: ac.signal })
         if (!response.ok) throw new Error('Failed to fetch messages')
         let data: any = []
         try {
@@ -183,7 +236,10 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
         })
         setTimeout(scrollToBottom, 100)
       } catch (err) {
-        console.error('Error fetching messages:', err)
+        const name = (err as any)?.name
+        if (name !== 'AbortError') {
+          console.error('Error fetching messages:', err)
+        }
         setLoading(false)
       }
     }
@@ -191,6 +247,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
     if (roomId) {
       fetchMessages()
     }
+    return () => { try { ac.abort() } catch {} }
   }, [roomId])
 
   // Subscribe to real-time messages
@@ -208,6 +265,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
           filter: `room_id=eq.${roomId}`,
         },
         async (payload) => {
+          if (receivedIdsRef.current.has(payload.new.id)) { return }
           // Fetch the new message with profile data
           const { data: newMessage } = await supabase
             .from('messages')
@@ -219,6 +277,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
             .single()
 
           if (newMessage) {
+            receivedIdsRef.current.add(newMessage.id)
             performance.mark('message_append_start')
             setMessages((prev) => [...prev, newMessage])
             requestAnimationFrame(() => {
@@ -277,16 +336,23 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
   const flushQueue = async () => {
     if (!sendQueueRef.current.length) return
     const batch = sendQueueRef.current.splice(0, sendQueueRef.current.length)
-    const gz = await tryGzip({ room_id: roomId, messages: batch })
-    const response = await fetch('/api/chat/send-batch', {
-      method: 'POST',
-      headers: gz ? { 'Content-Encoding': 'gzip' } : { 'Content-Type': 'application/json' },
-      body: gz ? (gz as any) : JSON.stringify({ room_id: roomId, messages: batch }),
-    })
-    if (!response.ok) {
+    if (batch.length === 1) {
+      const m = batch[0]
+      const clientTs = m.client_ts || performance.now()
+      const response = await fetch('/api/chat/send-message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ room_id: roomId, content: m.content, media_url: m.media_url || null, media_type: m.media_type || null, client_ts: clientTs }),
+      })
+      if (response.ok) {
+        const t = Math.round(performance.now() - clientTs)
+        try { console.log('send_latency_ms', t) } catch {}
+        setLatencies((prev) => { const arr = prev.slice(-49); arr.push(t); return arr })
+        return
+      }
       try {
         const err = await response.json()
-        console.error('Batch send error:', err)
+        console.error('Send error:', err)
         if ((response.status === 401 || response.status === 403)) {
           pushSystemMessage('Create an account to send messages')
         } else {
@@ -295,6 +361,46 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
       } catch {
         pushSystemMessage('Message failed to send. Please try again')
       }
+      return
+    }
+    const gz = await tryGzip({ room_id: roomId, messages: batch })
+    const response = await fetch('/api/chat/send-batch', {
+      method: 'POST',
+      headers: gz ? { 'Content-Encoding': 'gzip' } : { 'Content-Type': 'application/json' },
+      body: gz ? (gz as any) : JSON.stringify({ room_id: roomId, messages: batch }),
+    })
+    if (response.ok) {
+      let data: any = null
+      try { data = await response.json() } catch { data = null }
+      const items: any[] = data?.data || []
+      items.forEach((row) => {
+        const tmpId = row?.tmp_id
+        if (row?.id && tmpId) {
+          receivedIdsRef.current.add(row.id)
+          const t = Math.round(performance.now() - (row.client_ts || performance.now()))
+          try { console.log('send_latency_ms', t) } catch {}
+          setLatencies((prev) => { const arr = prev.slice(-49); arr.push(t); return arr })
+          const finalMsg: Message = { ...row, profiles: { username: 'You' } }
+          setMessages((prev) => {
+            const map = new Map(prev.map((m) => [m.id, m]))
+            map.delete(tmpId)
+            map.set(finalMsg.id, finalMsg)
+            return Array.from(map.values())
+          })
+        }
+      })
+      return
+    }
+    try {
+      const err = await response.json()
+      console.error('Batch send error:', err)
+      if ((response.status === 401 || response.status === 403)) {
+        pushSystemMessage('Create an account to send messages')
+      } else {
+        pushSystemMessage('Message failed to send. Please try again')
+      }
+    } catch {
+      pushSystemMessage('Message failed to send. Please try again')
     }
   }
 
@@ -303,10 +409,10 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
     flushTimerRef.current = setTimeout(() => {
       flushTimerRef.current = null
       flushQueue()
-    }, 200) as unknown as number
+    }, 180) as unknown as number
   }
 
-  const enqueueMessage = (payload: { content: string; media_url?: string | null; media_type?: string | null }) => {
+  const enqueueMessage = (payload: { content: string; media_url?: string | null; media_type?: string | null; client_ts?: number; tmp_id?: string }) => {
     sendQueueRef.current.push(payload)
     scheduleFlush()
   }
@@ -340,6 +446,18 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
     setUploadingMedia(true)
     let mediaUrl: string | null = null
     let mediaType: string | null = null
+    const tempId = `tmp_${Date.now()}`
+    const optimistic: Message = {
+      id: tempId,
+      content: inputValue.trim() || (selectedFile ? '📷 Photo' : ''),
+      created_at: new Date().toISOString(),
+      user_id: currentUser.id,
+      profiles: { username: 'You' },
+      media_url: selectedFile ? 'uploading' : undefined,
+      media_type: undefined,
+    }
+    setMessages((prev) => [...prev, optimistic])
+    setTimeout(scrollToBottom, 50)
 
     try {
       // Upload file if selected
@@ -370,11 +488,48 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
         const latency = performance.now() - lastInputEventTimeRef.current
         try { console.log('input_latency_ms', Math.round(latency)) } catch {}
       }
-      enqueueMessage({
-        content,
-        media_url: mediaUrl,
-        media_type: mediaType,
-      })
+      const now = performance.now()
+      const withinBurst = (lastImmediateSendRef.current && (now - lastImmediateSendRef.current) < 150) || sendQueueRef.current.length > 0
+      if (withinBurst) {
+        enqueueMessage({ content, media_url: mediaUrl, media_type: mediaType, client_ts: now, tmp_id: tempId })
+      } else {
+        lastImmediateSendRef.current = now
+        const response = await fetch('/api/chat/send-message', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ room_id: roomId, content, media_url: mediaUrl || null, media_type: mediaType || null, client_ts: now }),
+        })
+        if (!response.ok) {
+          try {
+            const err = await response.json()
+            console.error('Send error:', err)
+            if ((response.status === 401 || response.status === 403)) {
+              pushSystemMessage('Create an account to send messages')
+            } else {
+              pushSystemMessage('Message failed to send. Please try again')
+            }
+          } catch {
+            pushSystemMessage('Message failed to send. Please try again')
+          }
+          setMessages((prev) => prev.filter((m) => m.id !== tempId))
+        } else {
+          let data: any = null
+          try { data = await response.json() } catch { data = null }
+          if (data?.id) {
+            receivedIdsRef.current.add(data.id)
+            const finalMsg: Message = { ...data, profiles: { username: 'You' } }
+            setMessages((prev) => {
+              const map = new Map(prev.map((m) => [m.id, m]))
+              map.delete(tempId)
+              map.set(finalMsg.id, finalMsg)
+              return Array.from(map.values())
+            })
+            const t = Math.round(performance.now() - (data.client_ts || now))
+            try { console.log('send_latency_ms', t) } catch {}
+            setLatencies((prev) => { const arr = prev.slice(-49); arr.push(t); return arr })
+          }
+        }
+      }
 
       setInputValue('')
       setSelectedFile(null)
@@ -384,6 +539,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
       } catch (err) {
         console.error('Error sending message:', err)
         alert((err as any)?.message || 'Failed to send message. Please try again.')
+        setMessages((prev) => prev.filter((m) => m.id !== tempId))
       } finally {
         setSending(false)
         setUploadingMedia(false)
@@ -461,6 +617,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
       return message.profiles.avatar_url
     }
     const username = message.profiles?.username || message.user_id || 'user'
+    if (username.startsWith('Guest')) return ''
     return `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`
   }
 
@@ -526,6 +683,13 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
           </div>
           <div className="flex items-center gap-0.5 sm:gap-2 flex-shrink-0">
             <ThemeToggle />
+            {process.env.NODE_ENV === 'development' && latencies.length > 0 && (
+              <div className="ml-1 sm:ml-2 px-2 py-1 rounded-full text-xs bg-primary/10 text-foreground/70">
+                {`avg ${Math.round(latencies.reduce((a,b)=>a+b,0)/latencies.length)}ms`}
+                {` • max ${Math.max(...latencies)}ms`}
+                {` • out ${latencies.filter((l)=>l > (latencies.reduce((a,b)=>a+b,0)/latencies.length)*1.7).length}`}
+              </div>
+            )}
             <div className="relative">
               <Button 
                 variant="ghost" 
@@ -610,6 +774,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
                       message={msg.content}
                       sender={getSenderName(msg)}
                       avatar={getAvatar(msg)}
+                      showAvatar={!(msg.profiles?.username || '').startsWith('Guest')}
                       isOwn={currentUser?.id === msg.user_id}
                       timestamp={formatTimestamp(msg.created_at)}
                       reactions={[]}
@@ -737,14 +902,3 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
     </div>
   )
 }
-  const pushSystemMessage = (text: string) => {
-    const msg: Message = {
-      id: `sys_${Date.now()}`,
-      content: text,
-      created_at: new Date().toISOString(),
-      user_id: 'system',
-      profiles: { username: 'System' },
-    }
-    setMessages((prev) => [...prev, msg])
-    setTimeout(scrollToBottom, 100)
-  }

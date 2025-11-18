@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { room_id, content, media_url, media_type } = await request.json()
+    const { room_id, content, media_url, media_type, client_ts } = await request.json()
 
     if (!room_id || (!content && !media_url)) {
       return NextResponse.json(
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
 
     if (error) throw error
 
-    return NextResponse.json(data)
+    return NextResponse.json({ ...data, client_ts })
   } catch (error) {
     console.error('Error sending message:', error)
     return NextResponse.json(

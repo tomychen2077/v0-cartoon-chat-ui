@@ -9,6 +9,7 @@ interface ChatBubbleProps {
   message: string
   sender: string
   avatar: string
+  showAvatar?: boolean
   isOwn?: boolean
   timestamp?: string
   reactions?: { emoji: string; count: number }[]
@@ -22,6 +23,7 @@ function ChatBubbleComponent({
   message,
   sender,
   avatar,
+  showAvatar = true,
   isOwn = false,
   timestamp,
   reactions = [],
@@ -80,11 +82,13 @@ function ChatBubbleComponent({
       style={{ contentVisibility: 'auto', containIntrinsicSize: '160px' }}
       data-message-id={messageId}
     >
-      <img
-        src={avatar || "/placeholder.svg"}
-        alt={sender}
-        className="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex-shrink-0"
-      />
+      {showAvatar && (
+        <img
+          src={avatar || "/placeholder.svg"}
+          alt={sender}
+          className="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex-shrink-0"
+        />
+      )}
       <div className={`flex flex-col ${isOwn ? 'items-end' : 'items-start'} flex-1 min-w-0`}>
         <p className="text-[10px] sm:text-xs text-foreground/50 px-1.5 sm:px-3 mb-0.5 sm:mb-1">{sender}</p>
         <div className={`relative max-w-[80%] sm:max-w-xs md:max-w-md px-2.5 sm:px-4 py-1.5 sm:py-3 rounded-2xl sm:rounded-3xl ${

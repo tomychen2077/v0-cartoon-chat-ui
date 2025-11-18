@@ -93,7 +93,7 @@ async function POST(request) {
                 status: 401
             });
         }
-        const { room_id, content, media_url, media_type } = await request.json();
+        const { room_id, content, media_url, media_type, client_ts } = await request.json();
         if (!room_id || !content && !media_url) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                 error: 'Missing required fields'
@@ -109,7 +109,10 @@ async function POST(request) {
             media_type: media_type || null
         }).select().single();
         if (error) throw error;
-        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json(data);
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+            ...data,
+            client_ts
+        });
     } catch (error) {
         console.error('Error sending message:', error);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({

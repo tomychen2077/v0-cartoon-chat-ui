@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     const isGuest = (user as any)?.is_anonymous || (user as any)?.app_metadata?.provider === 'anonymous'
     if (isGuest) {
       return NextResponse.json(
-        { error: 'Guests cannot perform this action' },
+        { error: 'Please create an account to create rooms' },
         { status: 403 }
       )
     }

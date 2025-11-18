@@ -54,7 +54,8 @@ export async function POST(request: NextRequest) {
       .select()
 
     if (error) throw error
-    return NextResponse.json({ count: data?.length || 0 })
+    const enriched = (data || []).map((row: any, i: number) => ({ ...row, client_ts: messages[i]?.client_ts, tmp_id: messages[i]?.tmp_id }))
+    return NextResponse.json({ data: enriched })
   } catch (error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }

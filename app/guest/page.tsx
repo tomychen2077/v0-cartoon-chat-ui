@@ -10,44 +10,75 @@ import { useRouter } from 'next/navigation'
 
 export default function GuestProfile() {
   const [guestUsername, setGuestUsername] = useState('Guest')
-  const [guestAvatar, setGuestAvatar] = useState('/placeholder.svg')
+  const [guestAvatar, setGuestAvatar] = useState('')
   const router = useRouter()
   const supabase = createClient()
   const [startingGuest, setStartingGuest] = useState(false)
   const [guestError, setGuestError] = useState<string | null>(null)
+  const [navigating, setNavigating] = useState(false)
 
   // Generate client-only stable randoms to avoid hydration mismatch
   useEffect(() => {
     const seed = Math.floor(Math.random() * 10000)
     const username = `Guest-${seed}`
-    const avatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=guest${seed}`
     setGuestUsername(username)
-    setGuestAvatar(avatar)
+    setGuestAvatar('')
   }, [])
 
   const startGuest = async () => {
     try {
       setGuestError(null)
       setStartingGuest(true)
-      const { data, error } = await supabase.auth.signInAnonymously()
+      let { data, error } = await supabase.auth.signInAnonymously()
       if (error) {
-        setGuestError('Guest sign-in failed. Please try again or sign in.')
+        try { console.error('[guest] anonymous sign-in error:', error) } catch {}
+        // Retry once after ensuring no existing session
+        try {
+          await supabase.auth.signOut()
+          const retry = await supabase.auth.signInAnonymously()
+          data = retry.data
+          error = retry.error
+        } catch {}
+      }
+      if (error) {
+        const msg = (error as any)?.message || 'Guest sign-in failed. Please sign in to continue.'
+        setGuestError(msg)
+        setTimeout(() => {
+          if (!navigating) {
+            setNavigating(true)
+            router.replace('/auth')
+          }
+        }, 1500)
         return
       }
       const user = data?.user
       if (user?.id) {
         await supabase
           .from('profiles')
-          .upsert({ id: user.id, username: guestUsername, display_name: guestUsername, avatar_url: guestAvatar })
+          .upsert({ id: user.id, username: guestUsername, display_name: guestUsername })
         router.push('/')
       } else {
         setGuestError('Guest session unavailable. Please sign in to continue.')
+        setTimeout(() => {
+          if (!navigating) {
+            setNavigating(true)
+            router.replace('/auth')
+          }
+        }, 1500)
       }
-    } catch {
-      setGuestError('Unexpected error. Please try again.')
-    } finally {
-      setStartingGuest(false)
-    }
+      } catch (e) {
+      try { console.error('[guest] unexpected error:', e) } catch {}
+      const msg = e instanceof Error ? e.message : 'Unexpected error. Please sign in to continue.'
+      setGuestError(msg)
+      setTimeout(() => {
+        if (!navigating) {
+          setNavigating(true)
+          router.replace('/auth')
+        }
+      }, 1500)
+      } finally {
+        setStartingGuest(false)
+      }
   }
 
   const limitations = [
@@ -93,11 +124,9 @@ export default function GuestProfile() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 items-center">
-            {/* Avatar */}
+            {/* Avatar removed for guests */}
             <div className="flex justify-center">
-              <div className="w-32 h-32 rounded-3xl border-4 border-primary/50 overflow-hidden shadow-lg">
-                <img src={guestAvatar || "/placeholder.svg"} alt="Guest avatar" className="w-full h-full" />
-              </div>
+              <div className="w-32 h-32 rounded-3xl border-4 border-primary/50 overflow-hidden shadow-lg bg-gradient-to-br from-muted to-muted/50" />
             </div>
 
             {/* Info */}

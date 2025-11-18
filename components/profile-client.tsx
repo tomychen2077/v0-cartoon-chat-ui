@@ -17,6 +17,8 @@ interface Profile {
   bio?: string
   xp_points: number
   level: number
+  gender?: string
+  age?: number
 }
 
 interface Friend {
@@ -46,6 +48,7 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
   const friendsRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const supabase = createClient()
+  const [isGuestUser, setIsGuestUser] = useState(false)
 
   const avatarOptions = [
     'https://api.dicebear.com/7.x/avataaars/svg?seed=user1',
@@ -68,6 +71,15 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
     loadFriends()
     loadPendingRequests()
   }, [])
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      const guest = !!user && (((user as any).is_anonymous) || ((user as any).app_metadata?.provider === 'anonymous'))
+      setIsGuestUser(!!guest)
+    }
+    getUser()
+  }, [supabase])
 
   const loadFriends = async () => {
     try {
@@ -223,7 +235,9 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
         .update({
           display_name: profile.display_name,
           bio: profile.bio,
-          avatar_url: selectedAvatar,
+          avatar_url: isGuestUser ? null : selectedAvatar,
+          gender: profile.gender,
+          age: profile.age ?? null,
           updated_at: new Date().toISOString(),
         })
         .eq('id', userId)
@@ -284,12 +298,16 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
             <div className="grid md:grid-cols-3 gap-8 items-center">
               {/* Avatar Section */}
               <div className="flex flex-col items-center">
-                <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-3xl border-4 border-primary/50 overflow-hidden shadow-lg mb-4">
-                  <img 
-                    src={selectedAvatar || "/placeholder.svg"} 
-                    alt="User avatar" 
-                    className="w-full h-full object-cover" 
-                  />
+              <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-3xl border-4 border-primary/50 overflow-hidden shadow-lg mb-4">
+                  {isGuestUser ? (
+                    <div className="w-full h-full bg-gradient-to-br from-muted to-muted/50" />
+                  ) : (
+                    <img 
+                      src={selectedAvatar || "/placeholder.svg"} 
+                      alt="User avatar" 
+                      className="w-full h-full object-cover" 
+                    />
+                  )}
                   {isEditing && (
                     <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
                       <Button
@@ -311,7 +329,7 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
                   onChange={handleImageUpload}
                   className="hidden"
                 />
-                {isEditing && (
+                {isEditing && !isGuestUser && (
                   <div className="space-y-3 w-full">
                     <Button
                       size="sm"
@@ -352,45 +370,72 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
 
               {/* Profile Info */}
               <div className="md:col-span-2">
-                {isEditing ? (
-                  <div className="space-y-4">
+              {isEditing ? (
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-semibold mb-2 block">Display Name</label>
+                    <Input
+                      value={profile.display_name || ''}
+                      onChange={(e) => setProfile({ ...profile, display_name: e.target.value })}
+                      className="rounded-lg"
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="text-sm font-semibold mb-2 block">Display Name</label>
+                      <label className="text-sm font-semibold mb-2 block">Gender</label>
+                      <select
+                        value={profile.gender || 'other'}
+                        onChange={(e) => setProfile({ ...profile, gender: e.target.value })}
+                        className="w-full px-3 py-2 rounded-lg border border-border bg-background"
+                      >
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-sm font-semibold mb-2 block">Age</label>
                       <Input
-                        value={profile.display_name || ''}
-                        onChange={(e) => setProfile({ ...profile, display_name: e.target.value })}
+                        type="number"
+                        value={profile.age || ''}
+                        onChange={(e) => setProfile({ ...profile, age: Number(e.target.value) })}
                         className="rounded-lg"
                       />
                     </div>
-                    <div>
-                      <label className="text-sm font-semibold mb-2 block">Bio</label>
-                      <textarea
-                        value={profile.bio || ''}
-                        onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
-                        className="w-full px-3 py-2 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary"
-                        rows={3}
-                      />
-                    </div>
-                    <div className="flex gap-2">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="rounded-full"
-                        onClick={() => setIsEditing(false)}
-                      >
-                        Cancel
-                      </Button>
-                    </div>
                   </div>
-                ) : (
                   <div>
-                    <h2 className="text-4xl font-bold mb-2">{profile.display_name || profile.username}</h2>
-                    <p className="text-foreground/70 mb-4">{profile.bio || 'No bio yet'}</p>
-                    <div className="flex flex-wrap items-center gap-2 mb-4">
-                      <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-xs font-semibold">
-                        <Crown className="w-3 h-3" />
-                        <span>Level {profile.level || 1}</span>
-                      </div>
+                    <label className="text-sm font-semibold mb-2 block">Bio</label>
+                    <textarea
+                      value={profile.bio || ''}
+                      onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
+                      className="w-full px-3 py-2 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                      rows={3}
+                    />
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="rounded-full"
+                      onClick={() => setIsEditing(false)}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <h2 className="text-4xl font-bold mb-2">{profile.display_name || profile.username}</h2>
+                  <p className="text-foreground/70 mb-4">{profile.bio || 'No bio yet'}</p>
+                  <div className="flex gap-4 text-sm text-foreground/70 mb-4">
+                    {profile.gender && <span>Gender: {profile.gender}</span>}
+                    {typeof profile.age === 'number' && <span>Age: {profile.age}</span>}
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2 mb-4">
+                    <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-xs font-semibold">
+                      <Crown className="w-3 h-3" />
+                      <span>Level {profile.level || 1}</span>
+                    </div>
                       <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-accent/10 text-xs font-semibold">
                         <Star className="w-3 h-3" />
                         <span>{(profile.xp_points || 0).toLocaleString()} XP</span>

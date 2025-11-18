@@ -430,6 +430,35 @@ async function FriendProfile({ params }) {
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "flex gap-4 text-sm text-foreground/70 mb-4",
+                                                    children: [
+                                                        friendProfile.gender && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                            children: [
+                                                                "Gender: ",
+                                                                friendProfile.gender
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/app/profile/[id]/page.tsx",
+                                                            lineNumber: 85,
+                                                            columnNumber: 44
+                                                        }, this),
+                                                        typeof friendProfile.age === 'number' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                            children: [
+                                                                "Age: ",
+                                                                friendProfile.age
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/app/profile/[id]/page.tsx",
+                                                            lineNumber: 86,
+                                                            columnNumber: 61
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/app/profile/[id]/page.tsx",
+                                                    lineNumber: 84,
+                                                    columnNumber: 17
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "flex gap-2",
                                                     children: friendship?.status === 'accepted' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Button"], {
                                                         size: "sm",
@@ -441,14 +470,14 @@ async function FriendProfile({ params }) {
                                                                 className: "w-4 h-4 mr-2"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/profile/[id]/page.tsx",
-                                                                lineNumber: 87,
+                                                                lineNumber: 91,
                                                                 columnNumber: 23
                                                             }, this),
                                                             "Friends"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/profile/[id]/page.tsx",
-                                                        lineNumber: 86,
+                                                        lineNumber: 90,
                                                         columnNumber: 21
                                                     }, this) : friendship?.status === 'pending' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Button"], {
                                                         size: "sm",
@@ -458,18 +487,18 @@ async function FriendProfile({ params }) {
                                                         children: "Request Pending"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/profile/[id]/page.tsx",
-                                                        lineNumber: 91,
+                                                        lineNumber: 95,
                                                         columnNumber: 21
                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$add$2d$friend$2d$button$2e$tsx__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["AddFriendButton"], {
                                                         friendId: friendId
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/profile/[id]/page.tsx",
-                                                        lineNumber: 95,
+                                                        lineNumber: 99,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/profile/[id]/page.tsx",
-                                                    lineNumber: 84,
+                                                    lineNumber: 88,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
@@ -529,20 +558,20 @@ async function FriendProfile({ params }) {
                                                 children: stat.label
                                             }, void 0, false, {
                                                 fileName: "[project]/app/profile/[id]/page.tsx",
-                                                lineNumber: 114,
+                                                lineNumber: 118,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(Icon, {
                                                 className: `w-5 h-5 text-transparent bg-gradient-to-r ${stat.color} bg-clip-text`
                                             }, void 0, false, {
                                                 fileName: "[project]/app/profile/[id]/page.tsx",
-                                                lineNumber: 115,
+                                                lineNumber: 119,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/profile/[id]/page.tsx",
-                                        lineNumber: 113,
+                                        lineNumber: 117,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -550,19 +579,19 @@ async function FriendProfile({ params }) {
                                         children: stat.value
                                     }, void 0, false, {
                                         fileName: "[project]/app/profile/[id]/page.tsx",
-                                        lineNumber: 117,
+                                        lineNumber: 121,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, i, true, {
                                 fileName: "[project]/app/profile/[id]/page.tsx",
-                                lineNumber: 112,
+                                lineNumber: 116,
                                 columnNumber: 15
                             }, this);
                         })
                     }, void 0, false, {
                         fileName: "[project]/app/profile/[id]/page.tsx",
-                        lineNumber: 104,
+                        lineNumber: 108,
                         columnNumber: 9
                     }, this)
                 ]

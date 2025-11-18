@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
@@ -52,31 +52,69 @@ export default function Home() {
   const [startingGuest, setStartingGuest] = useState(false)
   const router = useRouter()
   const supabaseDirect = createClient()
+  const [authNav, setAuthNav] = useState(false)
+  const goAuth = () => { if (!authNav) { setAuthNav(true); router.replace('/auth') } }
+  const [showAccountPrompt, setShowAccountPrompt] = useState(false)
+  const [showCleanupWarn, setShowCleanupWarn] = useState(false)
+  const [cleanupRunning, setCleanupRunning] = useState(false)
+  const [staleCount, setStaleCount] = useState(0)
+  const devCheckAbortRef = useRef<AbortController | null>(null)
+  const cleanupAbortRef = useRef<AbortController | null>(null)
+  const handleCreateRoomClick = () => {
+    if (!user || isGuestUser) {
+      setGuestError('Please create an account to create rooms')
+      setShowAccountPrompt(true)
+      setTimeout(() => {
+        setShowAccountPrompt(false)
+        goAuth()
+      }, 1500)
+      return
+    }
+    router.push('/create-room')
+  }
   const handleStartGuest = async () => {
     setGuestError(null)
     setStartingGuest(true)
     try {
-      const { data, error } = await supabaseDirect.auth.signInAnonymously()
+      let { data, error } = await supabaseDirect.auth.signInAnonymously()
       if (error) {
-        setGuestError('Guest sign-in failed. Redirecting to Guest page...')
-        router.push('/guest')
+        try { console.error('[home] anonymous sign-in error:', error) } catch {}
+        // Retry once after ensuring no existing session
+        try {
+          await supabaseDirect.auth.signOut()
+          const retry = await supabaseDirect.auth.signInAnonymously()
+          data = retry.data
+          error = retry.error
+        } catch {}
+      }
+      if (error) {
+        const msg = (error as any)?.message || 'Guest sign-in failed. Please sign in to continue.'
+        setGuestError(msg)
+        setTimeout(() => {
+          goAuth()
+        }, 1500)
         return
       }
       const u = data?.user
       if (u?.id) {
         const username = `Guest-${Math.floor(Math.random()*10000)}`
-        const avatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=guest${Math.random()}`
         await supabaseDirect
           .from('profiles')
-          .upsert({ id: u.id, username, display_name: username, avatar_url: avatar })
+          .upsert({ id: u.id, username, display_name: username })
         setUser(u)
       } else {
-        setGuestError('Guest session unavailable. Use Guest page instead.')
-        router.push('/guest')
+        setGuestError('Guest session unavailable. Please sign in to continue.')
+        setTimeout(() => {
+          goAuth()
+        }, 1500)
       }
-    } catch {
-      setGuestError('Unexpected error. Redirecting to Guest page...')
-      router.push('/guest')
+    } catch (e) {
+      try { console.error('[home] unexpected error:', e) } catch {}
+      const msg = e instanceof Error ? e.message : 'Unexpected error. Please sign in to continue.'
+      setGuestError(msg)
+      setTimeout(() => {
+        goAuth()
+      }, 1500)
     } finally {
       setStartingGuest(false)
     }
@@ -223,6 +261,33 @@ export default function Home() {
     })
     checkUser()
 
+    const checkCleanup = async () => {
+      if (process.env.NODE_ENV !== 'development') return
+      try {
+        const ac = new AbortController()
+        devCheckAbortRef.current = ac
+        const cutoff = new Date(Date.now() - 3 * 60 * 1000).toISOString()
+        let count = 0
+        const r1 = await supabase
+          .from('room_members')
+          .select('id', { count: 'exact', head: true })
+          .abortSignal(ac.signal)
+          .lt('last_seen', cutoff)
+        count += r1.count || 0
+        if (count === 0) {
+          const r2 = await supabase
+            .from('room_members')
+            .select('id', { count: 'exact', head: true })
+            .abortSignal(ac.signal)
+            .lt('joined_at', cutoff)
+          count += r2.count || 0
+        }
+        setStaleCount(count)
+        setShowCleanupWarn(count > 0)
+      } catch {}
+    }
+    checkCleanup()
+
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null)
@@ -230,8 +295,66 @@ export default function Home() {
 
     return () => {
       subscription.unsubscribe()
+      try { devCheckAbortRef.current?.abort() } catch {}
+      try { cleanupAbortRef.current?.abort() } catch {}
     }
   }, [])
+
+  useEffect(() => {
+    if (!showCleanupWarn) return
+    const t = window.setTimeout(() => setShowCleanupWarn(false), 6000)
+    return () => { try { window.clearTimeout(t) } catch {} }
+  }, [showCleanupWarn])
+
+  const runDevCleanup = async () => {
+    try {
+      setCleanupRunning(true)
+      cleanupAbortRef.current?.abort()
+      const ctrl = new AbortController()
+      cleanupAbortRef.current = ctrl
+      const res = await fetch('/api/room-members/cleanup?minutes=2', { method: 'POST', signal: ctrl.signal })
+      if (res.ok) {
+        await new Promise((r) => setTimeout(r, 500))
+        const supabase = createClient()
+        const cutoff = new Date(Date.now() - 3 * 60 * 1000).toISOString()
+        let count = 0
+        const r1 = await supabase
+          .from('room_members')
+          .select('id', { count: 'exact', head: true })
+          .abortSignal(ctrl.signal)
+          .lt('last_seen', cutoff)
+        count += r1.count || 0
+        if (count === 0) {
+          const r2 = await supabase
+            .from('room_members')
+            .select('id', { count: 'exact', head: true })
+            .abortSignal(ctrl.signal)
+            .lt('joined_at', cutoff)
+          count += r2.count || 0
+        }
+        setStaleCount(count)
+        setShowCleanupWarn(count > 0)
+      }
+    } finally {
+      setCleanupRunning(false)
+    }
+  }
+
+  const runDevMessageCleanup = async () => {
+    try {
+      setCleanupRunning(true)
+      cleanupAbortRef.current?.abort()
+      const ctrl = new AbortController()
+      cleanupAbortRef.current = ctrl
+      const res = await fetch('/api/chat/cleanup?days=30', { method: 'POST', signal: ctrl.signal })
+      if (res.ok) {
+        setShowCleanupWarn(true)
+        setTimeout(() => setShowCleanupWarn(false), 2000)
+      }
+    } finally {
+      setCleanupRunning(false)
+    }
+  }
 
   const handleSignOut = async () => {
     try {
@@ -280,13 +403,9 @@ export default function Home() {
                 </Button>
               </Link>
             )}
-            {!isGuestUser && (
-              <Link href="/create-room">
-                <Button size="sm" className="bg-accent hover:bg-accent/90 rounded-full">
-                  Create Room
-                </Button>
-              </Link>
-            )}
+            <Button size="sm" className="bg-accent hover:bg-accent/90 rounded-full" onClick={handleCreateRoomClick} aria-label="Create Room">
+              Create Room
+            </Button>
           </div>
 
           {/* Mobile menu button */}
@@ -326,11 +445,7 @@ export default function Home() {
                   <Button variant="outline" className="w-full rounded-full justify-start">Sign In</Button>
                 </Link>
               )}
-              {!isGuestUser && (
-                <Link href="/create-room" onClick={() => setShowMobileMenu(false)}>
-                  <Button className="w-full rounded-full bg-accent hover:bg-accent/90 justify-start">Create Room</Button>
-                </Link>
-              )}
+              <Button className="w-full rounded-full bg-accent hover:bg-accent/90 justify-start" onClick={() => { setShowMobileMenu(false); handleCreateRoomClick() }} aria-label="Create Room">Create Room</Button>
             </div>
           </div>
         </>
@@ -354,19 +469,16 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center md:justify-start">
-                <Link href="/create-room">
-                  <Button size="lg" className="bg-primary hover:bg-primary/90 rounded-full font-semibold px-8 w-full">
-                    <Sparkles className="w-5 h-5 mr-2" />
-                    Create Room
-                  </Button>
-                </Link>
-                <Button size="lg" variant="outline" className="rounded-full font-semibold px-8 w-full" onClick={handleStartGuest} disabled={startingGuest}>
-                  <MessageCircle className="w-5 h-5 mr-2" />
-                  {startingGuest ? 'Starting…' : 'Join as Guest'}
+              <div className="flex flex-row flex-wrap gap-3 sm:gap-4 justify-center md:justify-start">
+                <Button size="lg" className="bg-primary hover:bg-primary/90 rounded-full font-semibold px-8 min-w-[200px]" onClick={handleCreateRoomClick} aria-label="Create Room">
+                  <Sparkles className="w-5 h-5 mr-2" />
+                  Create Room
                 </Button>
-                {guestError && (
-                  <p className="mt-2 text-xs text-foreground/60">{guestError}</p>
+                {!user && (
+                  <Button size="lg" variant="outline" className="rounded-full font-semibold px-8 min-w-[200px]" onClick={handleStartGuest} disabled={startingGuest} aria-label="Join as Guest">
+                    <MessageCircle className="w-5 h-5 mr-2" />
+                    {startingGuest ? 'Starting…' : 'Join as Guest'}
+                  </Button>
                 )}
               </div>
 
@@ -384,10 +496,10 @@ export default function Home() {
             </div>
 
             {/* Right Hero Illustration - hidden on mobile */}
-            <div className="relative h-72 md:h-full hidden md:block">
+            <div className="relative h-56 md:h-64 hidden md:block">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded-3xl blur-2xl" />
               <div className="relative flex items-center justify-center h-full">
-                <div className="w-56 h-56 md:w-64 md:h-64 bg-gradient-to-br from-primary via-secondary to-accent rounded-3xl shadow-2xl flex items-center justify-center animate-float">
+                <div className="w-44 h-44 md:w-56 md:h-56 bg-gradient-to-br from-primary via-secondary to-accent rounded-3xl shadow-2xl flex items-center justify-center animate-float">
                   <div className="text-center">
                     <p className="text-5xl md:text-6xl mb-2 md:mb-4">💬</p>
                     <p className="text-white font-bold text-base md:text-lg">Chat Magic</p>
@@ -403,6 +515,34 @@ export default function Home() {
         <div className="hidden md:block absolute bottom-20 right-10 w-32 h-32 bg-accent/20 rounded-full blur-xl animate-float" style={{ animationDelay: '1s' }} />
         <div className="hidden md:block absolute top-1/2 right-1/4 w-24 h-24 bg-secondary/20 rounded-full blur-xl animate-float" style={{ animationDelay: '2s' }} />
       </section>
+      {showAccountPrompt && (
+        <div role="alert" aria-live="polite" className="fixed top-4 left-1/2 -translate-x-1/2 z-[1000] bg-primary text-primary-foreground px-4 py-2 rounded-full shadow-lg">
+          Create Account to create rooms
+        </div>
+      )}
+      {showCleanupWarn && (
+        <div role="alert" aria-live="polite" className="fixed top-14 left-1/2 -translate-x-1/2 z-[1000] bg-destructive text-destructive-foreground px-4 py-2 rounded-full shadow-lg">
+          <span>Presence cleanup not detected ({staleCount}) – dev only</span>
+          {process.env.NODE_ENV === 'development' && (
+            <button
+              onClick={runDevCleanup}
+              disabled={cleanupRunning}
+              className="ml-3 inline-flex items-center rounded-full border border-destructive-foreground/30 px-3 py-1 text-xs hover:bg-destructive-foreground hover:text-destructive"
+            >
+              {cleanupRunning ? 'Cleaning…' : 'Run cleanup'}
+            </button>
+          )}
+          {process.env.NODE_ENV === 'development' && (
+            <button
+              onClick={runDevMessageCleanup}
+              disabled={cleanupRunning}
+              className="ml-2 inline-flex items-center rounded-full border border-destructive-foreground/30 px-3 py-1 text-xs hover:bg-destructive-foreground hover:text-destructive"
+            >
+              {cleanupRunning ? 'Cleaning…' : 'Cleanup Old Chats (30d)'}
+            </button>
+          )}
+        </div>
+      )}
 
       {/* Public Rooms Section */}
       <section className="py-20 border-t border-border">

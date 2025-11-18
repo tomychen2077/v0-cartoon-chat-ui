@@ -6,11 +6,21 @@ security definer
 set search_path = public
 as $$
 begin
-  insert into public.profiles (id, username, display_name)
+  insert into public.profiles (id, username, display_name, gender, age)
   values (
     new.id,
-    coalesce(new.raw_user_meta_data ->> 'username', new.email),
-    coalesce(new.raw_user_meta_data ->> 'display_name', split_part(new.email, '@', 1))
+    coalesce(
+      new.raw_user_meta_data ->> 'username',
+      nullif(split_part(new.email, '@', 1), ''),
+      'guest_' || substring(gen_random_uuid()::text, 1, 8)
+    ),
+    coalesce(
+      new.raw_user_meta_data ->> 'display_name',
+      nullif(split_part(new.email, '@', 1), ''),
+      'Guest'
+    ),
+    nullif(new.raw_user_meta_data ->> 'gender', ''),
+    nullif((new.raw_user_meta_data ->> 'age')::int, 0)
   )
   on conflict (id) do nothing;
 
