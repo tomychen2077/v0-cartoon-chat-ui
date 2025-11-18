@@ -10,6 +10,21 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    // Ensure a profile row exists for this user (guest or member)
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('id', user.id)
+      .single()
+
+    if (!profile) {
+      const username = (user.user_metadata as any)?.username || `Guest-${Math.floor(Math.random() * 10000)}`
+      const display_name = (user.user_metadata as any)?.display_name || username
+      await supabase
+        .from('profiles')
+        .upsert({ id: user.id, username, display_name })
+    }
+
     let body: any = null
     const enc = request.headers.get('content-encoding')
     if (enc === 'gzip') {

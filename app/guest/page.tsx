@@ -1,14 +1,54 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Sparkles, ArrowRight, MessageCircle, Settings, LogOut } from 'lucide-react'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase/client'
+import { useRouter } from 'next/navigation'
 
 export default function GuestProfile() {
-  const [guestUsername] = useState('Guest-' + Math.floor(Math.random() * 10000))
-  const [guestAvatar] = useState(`https://api.dicebear.com/7.x/avataaars/svg?seed=guest${Math.random()}`)
+  const [guestUsername, setGuestUsername] = useState('Guest')
+  const [guestAvatar, setGuestAvatar] = useState('/placeholder.svg')
+  const router = useRouter()
+  const supabase = createClient()
+  const [startingGuest, setStartingGuest] = useState(false)
+  const [guestError, setGuestError] = useState<string | null>(null)
+
+  // Generate client-only stable randoms to avoid hydration mismatch
+  useEffect(() => {
+    const seed = Math.floor(Math.random() * 10000)
+    const username = `Guest-${seed}`
+    const avatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=guest${seed}`
+    setGuestUsername(username)
+    setGuestAvatar(avatar)
+  }, [])
+
+  const startGuest = async () => {
+    try {
+      setGuestError(null)
+      setStartingGuest(true)
+      const { data, error } = await supabase.auth.signInAnonymously()
+      if (error) {
+        setGuestError('Guest sign-in failed. Please try again or sign in.')
+        return
+      }
+      const user = data?.user
+      if (user?.id) {
+        await supabase
+          .from('profiles')
+          .upsert({ id: user.id, username: guestUsername, display_name: guestUsername, avatar_url: guestAvatar })
+        router.push('/')
+      } else {
+        setGuestError('Guest session unavailable. Please sign in to continue.')
+      }
+    } catch {
+      setGuestError('Unexpected error. Please try again.')
+    } finally {
+      setStartingGuest(false)
+    }
+  }
 
   const limitations = [
     { icon: '💬', text: 'Temporary Username' },
@@ -35,9 +75,9 @@ export default function GuestProfile() {
               <Settings className="w-4 h-4 mr-2" />
               Settings
             </Button>
-            <Button size="sm" className="bg-accent hover:bg-accent/90 rounded-full">
-              <LogOut className="w-4 h-4 mr-2" />
-              Exit Guest
+            <Button size="sm" className="bg-accent hover:bg-accent/90 rounded-full" onClick={startGuest}>
+              <MessageCircle className="w-4 h-4 mr-2" />
+              Start Guest Session
             </Button>
           </div>
         </div>
@@ -67,11 +107,14 @@ export default function GuestProfile() {
 
               {/* Upgrade CTA */}
               <div className="bg-primary/20 border border-primary/40 rounded-xl p-4 mb-6">
-                <p className="text-sm font-semibold mb-3">Ready to join permanently?</p>
-                <Button className="w-full bg-primary hover:bg-primary/90 rounded-full font-semibold">
+                <p className="text-sm font-semibold mb-3">Or start chatting as a guest</p>
+                <Button className="w-full bg-primary hover:bg-primary/90 rounded-full font-semibold" onClick={startGuest} disabled={startingGuest}>
                   <Sparkles className="w-4 h-4 mr-2" />
-                  Create Full Account
+                  {startingGuest ? 'Starting…' : 'Continue as Guest'}
                 </Button>
+                {guestError && (
+                  <p className="mt-2 text-xs text-foreground/70">{guestError}</p>
+                )}
               </div>
 
               <Link href="/signin" className="text-sm text-primary hover:underline">

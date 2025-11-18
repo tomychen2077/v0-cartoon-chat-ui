@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
 import { Heart, Users, Sparkles, MessageCircle, LogOut, User, Menu } from 'lucide-react'
 import { ThemeToggle } from '@/components/theme-toggle'
@@ -10,6 +11,13 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
 interface RoomMember {
+  id: string
+  username: string
+  display_name?: string
+  avatar_url?: string
+}
+
+interface RoomCreator {
   id: string
   username: string
   display_name?: string
@@ -27,6 +35,7 @@ interface Room {
   max_members?: number
   members?: RoomMember[]
   liveCount?: number
+  creator?: RoomCreator
 }
 
 export default function Home() {
@@ -34,8 +43,44 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true)
   const [user, setUser] = useState<any>(null)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [selectedTopic, setSelectedTopic] = useState<string>('all')
+  const [capacityFilter, setCapacityFilter] = useState<'any' | 'available' | 'full'>('any')
+  const [sortBy, setSortBy] = useState<'most_active' | 'recent' | 'alphabetical'>('most_active')
+  const isGuestUser = !!user && (((user as any).is_anonymous) || ((user as any).app_metadata?.provider === 'anonymous'))
+  const [guestError, setGuestError] = useState<string | null>(null)
+  const [startingGuest, setStartingGuest] = useState(false)
   const router = useRouter()
   const supabaseDirect = createClient()
+  const handleStartGuest = async () => {
+    setGuestError(null)
+    setStartingGuest(true)
+    try {
+      const { data, error } = await supabaseDirect.auth.signInAnonymously()
+      if (error) {
+        setGuestError('Guest sign-in failed. Redirecting to Guest page...')
+        router.push('/guest')
+        return
+      }
+      const u = data?.user
+      if (u?.id) {
+        const username = `Guest-${Math.floor(Math.random()*10000)}`
+        const avatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=guest${Math.random()}`
+        await supabaseDirect
+          .from('profiles')
+          .upsert({ id: u.id, username, display_name: username, avatar_url: avatar })
+        setUser(u)
+      } else {
+        setGuestError('Guest session unavailable. Use Guest page instead.')
+        router.push('/guest')
+      }
+    } catch {
+      setGuestError('Unexpected error. Redirecting to Guest page...')
+      router.push('/guest')
+    } finally {
+      setStartingGuest(false)
+    }
+  }
 
   useEffect(() => {
     const supabase = createClient()
@@ -46,6 +91,12 @@ export default function Home() {
           .from('rooms')
           .select(`
             *,
+            creator:profiles!rooms_created_by_fkey (
+              id,
+              username,
+              display_name,
+              avatar_url
+            ),
             room_members (
               user_id,
               profiles (
@@ -57,15 +108,21 @@ export default function Home() {
             )
           `)
           .eq('is_public', true)
-          .limit(6)
+          .limit(50)
 
         if (error) throw error
         
-        // Transform rooms to include member info
-        const roomsWithMembers = (rooms || []).map((room: any) => ({
-          ...room,
-          members: room.room_members?.slice(0, 4).map((rm: any) => rm.profiles).filter(Boolean) || []
-        }))
+        const roomsWithMembers = (rooms || []).map((room: any) => {
+          const members = room.room_members?.slice(0, 4).map((rm: any) => rm.profiles).filter(Boolean) || []
+          const liveCount = Array.isArray(room.room_members) ? room.room_members.length : members.length
+          const creator = room.creator ? {
+            id: room.creator.id,
+            username: room.creator.username,
+            display_name: room.creator.display_name,
+            avatar_url: room.creator.avatar_url,
+          } : undefined
+          return { ...room, members, liveCount, creator }
+        })
         
         setPublicRooms(roomsWithMembers)
       } catch (err) {
@@ -91,10 +148,7 @@ export default function Home() {
 
     fetchRooms().then(async () => {
       try {
-        // Initialize live counts for fetched rooms
-        setPublicRooms((prev) => {
-          return prev.map((room) => ({ ...room, liveCount: room.members?.length || 0 }))
-        })
+        
 
         const roomIds = (publicRooms || []).map((r) => r.id)
         if (roomIds.length === 0) return
@@ -185,7 +239,6 @@ export default function Home() {
       const { error } = await supabase.auth.signOut()
       if (error) throw error
       router.push('/')
-      router.refresh()
     } catch (err) {
       console.error('Failed to sign out:', err)
     }
@@ -207,7 +260,7 @@ export default function Home() {
           {/* Desktop actions */}
           <div className="hidden sm:flex gap-3 items-center">
             <ThemeToggle />
-            {user ? (
+            {user && !isGuestUser ? (
               <>
                 <Link href="/profile">
                   <Button variant="outline" size="sm" className="rounded-full">
@@ -227,11 +280,13 @@ export default function Home() {
                 </Button>
               </Link>
             )}
-            <Link href="/create-room">
-              <Button size="sm" className="bg-accent hover:bg-accent/90 rounded-full">
-                Create Room
-              </Button>
-            </Link>
+            {!isGuestUser && (
+              <Link href="/create-room">
+                <Button size="sm" className="bg-accent hover:bg-accent/90 rounded-full">
+                  Create Room
+                </Button>
+              </Link>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -255,7 +310,7 @@ export default function Home() {
           <div className="fixed inset-0 z-[45] bg-background/40" onClick={() => setShowMobileMenu(false)} />
           <div className="fixed top-14 left-0 right-0 z-[50] px-3">
             <div className="bg-card border border-border rounded-2xl shadow-lg p-3 grid grid-cols-1 gap-2">
-              {user ? (
+              {user && !isGuestUser ? (
                 <>
                   <Link href="/profile" onClick={() => setShowMobileMenu(false)}>
                     <Button variant="outline" className="w-full rounded-full justify-start">
@@ -271,9 +326,11 @@ export default function Home() {
                   <Button variant="outline" className="w-full rounded-full justify-start">Sign In</Button>
                 </Link>
               )}
-              <Link href="/create-room" onClick={() => setShowMobileMenu(false)}>
-                <Button className="w-full rounded-full bg-accent hover:bg-accent/90 justify-start">Create Room</Button>
-              </Link>
+              {!isGuestUser && (
+                <Link href="/create-room" onClick={() => setShowMobileMenu(false)}>
+                  <Button className="w-full rounded-full bg-accent hover:bg-accent/90 justify-start">Create Room</Button>
+                </Link>
+              )}
             </div>
           </div>
         </>
@@ -304,12 +361,13 @@ export default function Home() {
                     Create Room
                   </Button>
                 </Link>
-                <Link href="/guest">
-                  <Button size="lg" variant="outline" className="rounded-full font-semibold px-8 w-full">
-                    <MessageCircle className="w-5 h-5 mr-2" />
-                    Join as Guest
-                  </Button>
-                </Link>
+                <Button size="lg" variant="outline" className="rounded-full font-semibold px-8 w-full" onClick={handleStartGuest} disabled={startingGuest}>
+                  <MessageCircle className="w-5 h-5 mr-2" />
+                  {startingGuest ? 'Starting…' : 'Join as Guest'}
+                </Button>
+                {guestError && (
+                  <p className="mt-2 text-xs text-foreground/60">{guestError}</p>
+                )}
               </div>
 
               {/* Stats */}
@@ -351,7 +409,33 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="mb-12">
             <h3 className="text-3xl md:text-4xl font-bold mb-2">Explore Chat Rooms</h3>
-            <p className="text-foreground/60">Join thousands in our most popular chat rooms</p>
+            <p className="text-foreground/60">Find rooms by name, topic, and availability</p>
+            <div className="mt-6 space-y-2">
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Search rooms by name or topic"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="rounded-full h-10 text-sm flex-1"
+                />
+              </div>
+              <div className="flex gap-2 overflow-x-auto whitespace-nowrap py-1 -mx-1 px-1">
+                <Button variant={capacityFilter === 'any' ? 'default' : 'outline'} size="sm" className="rounded-full px-3" onClick={() => setCapacityFilter('any')}>Any</Button>
+                <Button variant={capacityFilter === 'available' ? 'default' : 'outline'} size="sm" className="rounded-full px-3" onClick={() => setCapacityFilter('available')}>Available</Button>
+                <Button variant={capacityFilter === 'full' ? 'default' : 'outline'} size="sm" className="rounded-full px-3" onClick={() => setCapacityFilter('full')}>Full</Button>
+              </div>
+              <div className="flex gap-2 overflow-x-auto whitespace-nowrap py-1 -mx-1 px-1">
+                {['all','General','Gaming','Art & Design','Technology','Music','Learning','Sports','Food'].map((t) => (
+                  <Button key={t} variant={selectedTopic === t ? 'default' : 'outline'} size="sm" className="rounded-full px-3" onClick={() => setSelectedTopic(t)}>
+                    {t === 'all' ? 'All Topics' : t}
+                  </Button>
+                ))}
+              </div>
+              <div className="flex gap-2 justify-end">
+                <Button variant={sortBy === 'most_active' ? 'default' : 'outline'} size="sm" className="rounded-full px-3" onClick={() => setSortBy('most_active')}>Most Active</Button>
+                <Button variant={sortBy === 'alphabetical' ? 'default' : 'outline'} size="sm" className="rounded-full px-3" onClick={() => setSortBy('alphabetical')}>A–Z</Button>
+              </div>
+            </div>
           </div>
 
           {isLoading ? (
@@ -360,17 +444,46 @@ export default function Home() {
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              {publicRooms.map((room) => (
-                <Link key={room.id} href={`/room/${room.id}`}>
-                  <Card className="p-4 sm:p-6 hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 cursor-pointer group border-border/50 hover:border-primary/50 h-full">
+              {publicRooms
+                .filter((room) => {
+                  const q = searchQuery.trim().toLowerCase()
+                  const inSearch = q === '' || room.name.toLowerCase().includes(q) || (room.topic || '').toLowerCase().includes(q)
+                  const topicOk = selectedTopic === 'all' || (room.topic || '').toLowerCase() === selectedTopic.toLowerCase()
+                  const available = ((room.max_members ?? 8) - (room.liveCount ?? 0)) > 0
+                  const capacityOk = capacityFilter === 'any' ? true : capacityFilter === 'available' ? available : !available
+                  return inSearch && topicOk && capacityOk
+                })
+                .sort((a, b) => {
+                  if (sortBy === 'alphabetical') return a.name.localeCompare(b.name)
+                  return (b.liveCount ?? 0) - (a.liveCount ?? 0)
+                })
+                .map((room) => (
+                  <Card key={room.id} onClick={() => router.push(`/room/${room.id}`)} className="p-4 sm:p-6 hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 cursor-pointer group border-border/50 hover:border-primary/50 h-full">
                     <div className="flex items-start justify-between mb-3 sm:mb-4">
                       <div className="text-3xl sm:text-5xl">{room.emoji}</div>
                       <div className="bg-primary/10 dark:bg-primary/20 text-primary rounded-full px-2 sm:px-3 py-1 text-xs sm:text-sm font-semibold group-hover:scale-110 transition-transform">
-                        {room.liveCount ?? room.member_count ?? 0}
+                        {(room.liveCount ?? 0)}/{room.max_members ?? 8}
                       </div>
                     </div>
                     <h4 className="text-lg sm:text-xl font-bold mb-1 text-balance group-hover:text-primary transition-colors">{room.name}</h4>
-                    <p className="text-xs sm:text-sm text-foreground/60 mb-3 sm:mb-4">{room.topic}</p>
+                    <p className="text-xs sm:text-sm text-foreground/60 mb-2 sm:mb-3">{room.topic}</p>
+
+                    {room.creator && (
+                      <div className="flex items-center gap-2 mb-3 sm:mb-4">
+                        <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full border-2 border-background overflow-hidden bg-primary/20 flex items-center justify-center">
+                          {room.creator.avatar_url ? (
+                            <img src={room.creator.avatar_url} alt={room.creator.display_name || room.creator.username} className="w-full h-full object-cover" />
+                          ) : (
+                            <span className="text-xs font-semibold text-foreground/70">
+                              {(room.creator.display_name || room.creator.username || '?').charAt(0).toUpperCase()}
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-xs sm:text-sm text-foreground/70">
+                          Admin {room.creator.display_name || room.creator.username}
+                        </span>
+                      </div>
+                    )}
                     
                     {/* Member Avatars */}
                     {room.members && room.members.length > 0 && (
@@ -413,11 +526,10 @@ export default function Home() {
                         router.push(`/room/${room.id}`)
                       }}
                     >
-                      Join Now
+                      {((room.max_members ?? 8) - (room.liveCount ?? 0)) <= 0 ? 'Full – View' : 'Join Now'}
                     </Button>
                   </Card>
-                </Link>
-              ))}
+                ))}
             </div>
           )}
         </div>

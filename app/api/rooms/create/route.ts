@@ -12,6 +12,13 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       )
     }
+    const isGuest = (user as any)?.is_anonymous || (user as any)?.app_metadata?.provider === 'anonymous'
+    if (isGuest) {
+      return NextResponse.json(
+        { error: 'Guests cannot perform this action' },
+        { status: 403 }
+      )
+    }
 
     const { name, description, topic, emoji, is_public, is_private, language, max_members } = await request.json()
 

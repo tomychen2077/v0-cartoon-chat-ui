@@ -117,18 +117,35 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
     getUser()
   }, [supabase])
 
-  // Join/leave membership tracking
+  // Join/leave membership tracking (single active room, respect capacity)
   useEffect(() => {
     let joined = false
     const join = async () => {
       if (!roomId || !currentUser?.id) return
       try {
+        // Ensure single active membership: remove any existing memberships for this user
+        await supabase
+          .from('room_members')
+          .delete()
+          .eq('user_id', currentUser.id)
+
+        // Enforce capacity: prevent join when room is full
+        const { data: members } = await supabase
+          .from('room_members')
+          .select('id')
+          .eq('room_id', roomId)
+
+        const currentCount = (members?.length ?? 0)
+        const max = (room as any)?.max_members ?? 8
+        if (currentCount >= max) {
+          return
+        }
+
         const { error } = await supabase
           .from('room_members')
           .insert({ room_id: roomId, user_id: currentUser.id })
         if (!error) joined = true
       } catch (err: any) {
-        // Ignore unique violations
       }
     }
     join()
@@ -143,7 +160,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
         .then(() => {})
         .catch(() => {})
     }
-  }, [roomId, currentUser, supabase])
+  }, [roomId, currentUser, supabase, room])
 
   // Fetch initial messages
   useEffect(() => {
@@ -151,8 +168,12 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
       try {
         const response = await fetch(`/api/chat/get-messages?room_id=${roomId}`)
         if (!response.ok) throw new Error('Failed to fetch messages')
-        
-        const data = await response.json()
+        let data: any = []
+        try {
+          data = await response.json()
+        } catch {
+          data = []
+        }
         performance.mark('messages_fetch_start')
         setMessages(data || [])
         setLoading(false)
@@ -266,7 +287,14 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
       try {
         const err = await response.json()
         console.error('Batch send error:', err)
-      } catch {}
+        if ((response.status === 401 || response.status === 403)) {
+          pushSystemMessage('Create an account to send messages')
+        } else {
+          pushSystemMessage('Message failed to send. Please try again')
+        }
+      } catch {
+        pushSystemMessage('Message failed to send. Please try again')
+      }
     }
   }
 
@@ -286,6 +314,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
+    if (isGuestUser) { pushSystemMessage('Create an account to upload images'); return }
 
     // Validate file type
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
@@ -315,6 +344,9 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
     try {
       // Upload file if selected
       if (selectedFile) {
+        if (isGuestUser) {
+          throw new Error('Media uploads are not available in Guest mode')
+        }
         const formData = new FormData()
         formData.append('file', selectedFile)
         formData.append('room_id', roomId)
@@ -349,14 +381,14 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
       if (fileInputRef.current) {
         fileInputRef.current.value = ''
       }
-    } catch (err) {
-      console.error('Error sending message:', err)
-      alert('Failed to send message. Please try again.')
-    } finally {
-      setSending(false)
-      setUploadingMedia(false)
+      } catch (err) {
+        console.error('Error sending message:', err)
+        alert((err as any)?.message || 'Failed to send message. Please try again.')
+      } finally {
+        setSending(false)
+        setUploadingMedia(false)
+      }
     }
-  }
 
   const handleDeleteRoom = async () => {
     if (!confirm('Are you sure you want to delete this room? This action cannot be undone.')) {
@@ -380,6 +412,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
   }
 
   const isRoomOwner = currentUser && room && room.created_by === currentUser.id
+  const isGuestUser = !!currentUser && (((currentUser as any).is_anonymous) || ((currentUser as any).app_metadata?.provider === 'anonymous'))
 
   const handleDeleteMessage = async (messageId: string) => {
     try {
@@ -668,7 +701,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
                 variant="ghost"
                 size="icon"
                 className="rounded-full h-8 w-8 sm:h-10 sm:w-10"
-                onClick={() => fileInputRef.current?.click()}
+                onClick={() => { if (isGuestUser) { pushSystemMessage('Create an account to upload images'); } else { fileInputRef.current?.click() } }}
                 disabled={uploadingMedia}
               >
                 <Paperclip className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
@@ -704,3 +737,14 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
     </div>
   )
 }
+  const pushSystemMessage = (text: string) => {
+    const msg: Message = {
+      id: `sys_${Date.now()}`,
+      content: text,
+      created_at: new Date().toISOString(),
+      user_id: 'system',
+      profiles: { username: 'System' },
+    }
+    setMessages((prev) => [...prev, msg])
+    setTimeout(scrollToBottom, 100)
+  }

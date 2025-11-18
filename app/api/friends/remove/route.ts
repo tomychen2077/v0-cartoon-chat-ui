@@ -12,6 +12,13 @@ export async function DELETE(request: NextRequest) {
         { status: 401 }
       )
     }
+    const isGuest = (user as any)?.is_anonymous || (user as any)?.app_metadata?.provider === 'anonymous'
+    if (isGuest) {
+      return NextResponse.json(
+        { error: 'Guests cannot perform this action' },
+        { status: 403 }
+      )
+    }
 
     const friendId = request.nextUrl.searchParams.get('friend_id')
     if (!friendId) {
