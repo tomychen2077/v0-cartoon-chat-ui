@@ -133,7 +133,7 @@ async function POST(request) {
             }
             inviteRow = invite;
         }
-        const { data: members } = await supabase.from('room_members').select('id').eq('room_id', room_id);
+        const { data: members } = await supabase.from('room_members').select('id, user_id').eq('room_id', room_id);
         const currentCount = members?.length ?? 0;
         const max = room?.max_members ?? null;
         if (max && currentCount >= max) {
@@ -141,6 +141,12 @@ async function POST(request) {
                 error: 'Room is full'
             }, {
                 status: 409
+            });
+        }
+        const alreadyMember = (members || []).some((m)=>m.user_id === user.id);
+        if (alreadyMember) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                success: true
             });
         }
         const { error: insertErr } = await supabase.from('room_members').insert({

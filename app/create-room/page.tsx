@@ -255,7 +255,7 @@ export default function CreateRoom() {
               </div>
             </Link>
             <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Create Room
+              chat2077
             </h1>
           </div>
           <Link href="/">

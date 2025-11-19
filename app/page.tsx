@@ -378,7 +378,7 @@ export default function Home() {
               💬
             </div>
             <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              ChatBloom
+              chat2077
             </h1>
           </div>
           {/* Desktop actions */}

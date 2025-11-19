@@ -7,7 +7,7 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'ChatBloom - Modern Cartoon Chat',
+  title: 'chat2077 - Modern Cartoon Chat',
   description: 'A vibrant, fun chatting platform with group chats, 1-on-1 messaging, and rewards',
   generator: 'v0.app',
   icons: {

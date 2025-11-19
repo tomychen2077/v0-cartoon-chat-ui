@@ -49,13 +49,18 @@ export async function POST(request: NextRequest) {
 
     const { data: members } = await supabase
       .from('room_members')
-      .select('id')
+      .select('id, user_id')
       .eq('room_id', room_id)
 
     const currentCount = (members?.length ?? 0)
     const max = (room as any)?.max_members ?? null
     if (max && currentCount >= max) {
       return NextResponse.json({ error: 'Room is full' }, { status: 409 })
+    }
+
+    const alreadyMember = (members || []).some((m: any) => m.user_id === user.id)
+    if (alreadyMember) {
+      return NextResponse.json({ success: true })
     }
 
     const { error: insertErr } = await supabase

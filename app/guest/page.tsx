@@ -98,7 +98,7 @@ export default function GuestProfile() {
               💬
             </div>
             <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              ChatBloom
+              chat2077
             </h1>
           </Link>
           <div className="flex gap-2">

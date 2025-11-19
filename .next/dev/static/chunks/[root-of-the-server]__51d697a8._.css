@@ -178,7 +178,6 @@
     --color-orange-400: #ff8b1a;
     --color-orange-500: #fe6e00;
     --color-orange-700: #c53c00;
-    --color-amber-500: #f99c00;
     --color-yellow-400: #fac800;
     --color-yellow-500: #edb200;
     --color-green-400: #05df72;
@@ -252,7 +251,6 @@
       --color-orange-400: lab(70.0429% 42.5156 75.8207);
       --color-orange-500: lab(64.272% 57.1788 90.3583);
       --color-orange-700: lab(46.4615% 57.7275 70.8507);
-      --color-amber-500: lab(72.7183% 31.8672 97.9407);
       --color-yellow-400: lab(83.2664% 8.65132 106.895);
       --color-yellow-500: lab(76.3898% 14.5258 98.4589);
       --color-green-400: lab(78.503% -64.9265 39.7492);
@@ -1109,10 +1107,6 @@
 
   .min-w-0 {
     min-width: calc(var(--spacing) * 0);
-  }
-
-  .min-w-\[140px\] {
-    min-width: 140px;
   }
 
   .min-w-\[160px\] {
@@ -2178,10 +2172,6 @@
     padding-right: calc(var(--spacing) * 1);
   }
 
-  .pb-4 {
-    padding-bottom: calc(var(--spacing) * 4);
-  }
-
   .pl-4 {
     padding-left: calc(var(--spacing) * 4);
   }
@@ -2293,20 +2283,12 @@
     overflow-wrap: break-word;
   }
 
-  .whitespace-normal {
-    white-space: normal;
-  }
-
   .whitespace-nowrap {
     white-space: nowrap;
   }
 
   .text-accent {
     color: var(--accent);
-  }
-
-  .text-amber-500 {
-    color: var(--color-amber-500);
   }
 
   .text-card-foreground {
@@ -2660,15 +2642,6 @@
 
   .placeholder\:text-muted-foreground::placeholder {
     color: var(--muted-foreground);
-  }
-
-  .last\:border-0:last-child {
-    border-style: var(--tw-border-style);
-    border-width: 0;
-  }
-
-  .last\:pb-0:last-child {
-    padding-bottom: calc(var(--spacing) * 0);
   }
 
   @media (hover: hover) {
@@ -3219,12 +3192,6 @@
   }
 
   @media (min-width: 40rem) {
-    .sm\:grid-cols-3 {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-
-  @media (min-width: 40rem) {
     .sm\:grid-cols-4 {
       grid-template-columns: repeat(4, minmax(0, 1fr));
     }
@@ -3239,12 +3206,6 @@
   @media (min-width: 40rem) {
     .sm\:flex-row {
       flex-direction: row;
-    }
-  }
-
-  @media (min-width: 40rem) {
-    .sm\:items-center {
-      align-items: center;
     }
   }
 
