@@ -5,8 +5,9 @@ import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { Heart, Star, Trophy, Crown, Edit2, LogOut, MessageCircle, UserPlus, Upload, X, Search, Users, Check, UserX } from 'lucide-react'
+import { Heart, Trophy, Crown, Edit2, LogOut, MessageCircle, UserPlus, Upload, X, Search, Users, Check, UserX } from 'lucide-react'
 import Link from 'next/link'
+import * as AlertDialog from '@radix-ui/react-alert-dialog'
 import { useRouter } from 'next/navigation'
 
 interface Profile {
@@ -24,6 +25,8 @@ interface Profile {
 interface Friend {
   id: string
   friend_id: string
+  user_id?: string
+  friend_id_raw?: string
   username: string
   display_name: string
   avatar_url?: string
@@ -44,11 +47,18 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
   const [searchResults, setSearchResults] = useState<any[]>([])
   const [pendingRequests, setPendingRequests] = useState<Friend[]>([])
   const [showFriends, setShowFriends] = useState(false)
+  const [loadingFriends, setLoadingFriends] = useState(false)
+  const [loadingPending, setLoadingPending] = useState(false)
+  const [removeTarget, setRemoveTarget] = useState<string | null>(null)
+  const [pendingActionId, setPendingActionId] = useState<string | null>(null)
+  const [removing, setRemoving] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const friendsRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const supabase = createClient()
   const [isGuestUser, setIsGuestUser] = useState(false)
+  const [ownedRooms, setOwnedRooms] = useState<any[]>([])
+  const [recentRooms, setRecentRooms] = useState<any[]>([])
 
   const avatarOptions = [
     'https://api.dicebear.com/7.x/avataaars/svg?seed=user1',
@@ -70,6 +80,8 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
   useEffect(() => {
     loadFriends()
     loadPendingRequests()
+    loadOwnedRooms()
+    loadRecentRooms()
   }, [])
 
   useEffect(() => {
@@ -83,6 +95,7 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
 
   const loadFriends = async () => {
     try {
+      setLoadingFriends(true)
       const response = await fetch('/api/friends/get?status=accepted')
       if (response.ok) {
         const data = await response.json()
@@ -91,10 +104,14 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
     } catch (err) {
       console.error('Error loading friends:', err)
     }
+    finally {
+      setLoadingFriends(false)
+    }
   }
 
   const loadPendingRequests = async () => {
     try {
+      setLoadingPending(true)
       const response = await fetch('/api/friends/get?status=pending')
       if (response.ok) {
         const data = await response.json()
@@ -103,6 +120,37 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
     } catch (err) {
       console.error('Error loading pending requests:', err)
     }
+    finally {
+      setLoadingPending(false)
+    }
+  }
+
+  const loadOwnedRooms = async () => {
+    try {
+      const { data } = await supabase
+        .from('rooms')
+        .select('*')
+        .eq('created_by', userId)
+        .order('created_at', { ascending: false })
+        .limit(8)
+      setOwnedRooms(data || [])
+    } catch {}
+  }
+
+  const loadRecentRooms = async () => {
+    try {
+      const { data } = await supabase
+        .from('room_members')
+        .select('room_id, joined_at, rooms(*)')
+        .eq('user_id', userId)
+        .order('joined_at', { ascending: false })
+        .limit(8)
+      const rows = (data || []) as any[]
+      const mapped = rows
+        .map((r) => ({ joined_at: r.joined_at, room: (r as any).rooms }))
+        .filter((x) => x.room)
+      setRecentRooms(mapped)
+    } catch {}
   }
 
   useEffect(() => {
@@ -167,6 +215,13 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
     }
   }
 
+  useEffect(() => {
+    const t = setTimeout(() => {
+      handleSearchUsers()
+    }, 250)
+    return () => clearTimeout(t)
+  }, [searchQuery])
+
   const handleAddFriend = async (friendId: string) => {
     try {
       setError(null)
@@ -193,6 +248,7 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
 
   const handleAcceptRequest = async (requestId: string) => {
     try {
+      setPendingActionId(requestId)
       const response = await fetch('/api/friends/accept', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -206,23 +262,42 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to accept request'
       setError(message)
+    } finally {
+      setPendingActionId(null)
     }
   }
 
-  const handleRemoveFriend = async (friendId: string) => {
-    if (!confirm('Are you sure you want to remove this friend?')) return
-
+  const handleDeclineRequest = async (requestId: string) => {
     try {
-      const response = await fetch(`/api/friends/remove?friend_id=${friendId}`, {
-        method: 'DELETE',
+      setPendingActionId(requestId)
+      const response = await fetch('/api/friends/decline', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ friend_request_id: requestId }),
       })
+      if (!response.ok) throw new Error('Failed to decline request')
+      loadPendingRequests()
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to decline request'
+      setError(message)
+    } finally {
+      setPendingActionId(null)
+    }
+  }
 
+  const confirmRemoveFriend = async () => {
+    if (!removeTarget) return
+    try {
+      setRemoving(true)
+      const response = await fetch(`/api/friends/remove?friend_id=${removeTarget}`, { method: 'DELETE' })
       if (!response.ok) throw new Error('Failed to remove friend')
-
+      setRemoveTarget(null)
       loadFriends()
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to remove friend'
       setError(message)
+    } finally {
+      setRemoving(false)
     }
   }
 
@@ -436,15 +511,11 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
                       <Crown className="w-3 h-3" />
                       <span>Level {profile.level || 1}</span>
                     </div>
-                      <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-accent/10 text-xs font-semibold">
-                        <Star className="w-3 h-3" />
-                        <span>{(profile.xp_points || 0).toLocaleString()} XP</span>
-                      </div>
-                      <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-secondary/10 text-xs font-semibold">
-                        <Trophy className="w-3 h-3" />
-                        <span>{badges.length} Achievements</span>
-                      </div>
+                    <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-secondary/10 text-xs font-semibold">
+                      <Trophy className="w-3 h-3" />
+                      <span>{badges.length} Achievements</span>
                     </div>
+                  </div>
                     <div className="flex gap-2">
                       <Button
                         size="sm"
@@ -454,15 +525,22 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
                         <Edit2 className="w-4 h-4 mr-2" />
                         Edit Profile
                       </Button>
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
-                        className="rounded-full"
-                        onClick={() => setShowFriends(!showFriends)}
-                      >
-                        <Users className="w-4 h-4 mr-2" />
-                        Friends ({friends.length})
-                      </Button>
+                      <div className="flex items-center gap-2">
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="rounded-full"
+                          onClick={() => setShowFriends(!showFriends)}
+                        >
+                          <Users className="w-4 h-4 mr-2" />
+                          Friends ({friends.length})
+                        </Button>
+                        {pendingRequests.length > 0 && (
+                          <span className="px-2 py-0.5 rounded-full bg-destructive text-destructive-foreground text-xs font-semibold">
+                            {pendingRequests.length} pending
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
                 )}
@@ -532,38 +610,91 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
                     ))}
                   </div>
                 )}
-
-                {/* Pending Requests */}
-                {pendingRequests.length > 0 && (
+                {searchResults.length === 0 && !!searchQuery.trim() && (
                   <div className="space-y-2 mb-4">
-                    <p className="text-sm font-semibold text-foreground/70">Pending Requests</p>
-                    {pendingRequests.map((request) => (
-                      <div key={request.id} className="flex items-center justify-between p-3 bg-accent/10 rounded-lg">
-                        <div className="flex items-center gap-3">
-                          <img
-                            src={request.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${request.username}`}
-                            alt={request.username}
-                            className="w-10 h-10 rounded-full"
-                          />
-                          <div>
-                            <p className="font-medium">{request.display_name || request.username}</p>
-                            <p className="text-xs text-foreground/60">@{request.username}</p>
-                          </div>
-                        </div>
-                        <Button
-                          size="sm"
-                          onClick={() => handleAcceptRequest(request.id)}
-                          className="rounded-full"
-                        >
-                          <Check className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    ))}
+                    <div className="text-xs text-foreground/60">No results</div>
                   </div>
                 )}
 
+                {/* Pending Requests */}
+                {loadingPending ? (
+                  <div className="space-y-2 mb-4">
+                    <p className="text-sm font-semibold text-foreground/70">Pending Requests</p>
+                    {[...Array(3)].map((_, i) => (
+                      <div key={i} className="p-3 bg-accent/10 rounded-lg animate-pulse">
+                        <div className="h-6 w-1/2 bg-muted rounded" />
+                      </div>
+                    ))}
+                  </div>
+                ) : pendingRequests.length > 0 ? (
+                  <div className="space-y-2 mb-4">
+                    <p className="text-sm font-semibold text-foreground/70">Pending Requests</p>
+                    {pendingRequests.map((request) => {
+                      const isRecipient = request.friend_id_raw === userId
+                      const otherId = isRecipient ? (request.user_id || '') : request.friend_id
+                      return (
+                        <div key={request.id} className="flex items-center justify-between p-3 bg-accent/10 rounded-lg">
+                          <Link href={otherId ? `/profile/${otherId}` : '#'} className="flex items-center gap-3">
+                            <img
+                              src={request.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${request.username}`}
+                              alt={request.username}
+                              className="w-10 h-10 rounded-full"
+                            />
+                            <div>
+                              <p className="font-medium">{request.display_name || request.username}</p>
+                              <p className="text-xs text-foreground/60">@{request.username}</p>
+                            </div>
+                          </Link>
+                          {isRecipient ? (
+                           <div className="flex items-center gap-2">
+                            <Button
+                              size="sm"
+                              onClick={() => handleAcceptRequest(request.id)}
+                              loading={pendingActionId === request.id}
+                              className="rounded-full"
+                            >
+                              <Check className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleDeclineRequest(request.id)}
+                              loading={pendingActionId === request.id}
+                              className="rounded-full"
+                            >
+                              <X className="w-4 h-4" />
+                            </Button>
+                           </div>
+                          ) : (
+                           <div className="flex items-center gap-2">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleDeclineRequest(request.id)}
+                              loading={pendingActionId === request.id}
+                              className="rounded-full"
+                            >
+                              <X className="w-4 h-4" />
+                            </Button>
+                           </div>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                ) : null}
+
                 {/* Friends List */}
-                {friends.length > 0 ? (
+                {loadingFriends ? (
+                  <div className="space-y-2">
+                    <p className="text-sm font-semibold text-foreground/70 mb-2">Your Friends</p>
+                    {[...Array(4)].map((_, i) => (
+                      <div key={i} className="p-3 bg-accent/10 rounded-lg animate-pulse">
+                        <div className="h-6 w-1/3 bg-muted rounded" />
+                      </div>
+                    ))}
+                  </div>
+                ) : friends.length > 0 ? (
                   <div className="space-y-2">
                     <p className="text-sm font-semibold text-foreground/70 mb-2">Your Friends</p>
                     <div className="grid sm:grid-cols-2 gap-3">
@@ -580,14 +711,21 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
                               <p className="text-xs text-foreground/60">@{friend.username}</p>
                             </div>
                           </Link>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => handleRemoveFriend(friend.friend_id)}
-                            className="rounded-full"
-                          >
-                            <UserX className="w-4 h-4 text-destructive" />
-                          </Button>
+                           <div className="flex items-center gap-2">
+                             <Link href={`/create-room?dm=${friend.friend_id}`}>
+                               <Button size="sm" variant="outline" className="rounded-full">
+                                 <MessageCircle className="w-4 h-4" />
+                               </Button>
+                             </Link>
+                             <Button
+                               size="sm"
+                               variant="ghost"
+                               onClick={() => setRemoveTarget(friend.friend_id)}
+                               className="rounded-full"
+                             >
+                               <UserX className="w-4 h-4 text-destructive" />
+                             </Button>
+                           </div>
                         </div>
                       ))}
                     </div>
@@ -598,33 +736,76 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
               </div>
             </Card>
           )}
+
+          {/* Remove friend confirm dialog */}
+          <AlertDialog.Root open={!!removeTarget} onOpenChange={(o) => { if (!o) setRemoveTarget(null) }}>
+            <AlertDialog.Portal>
+              <AlertDialog.Overlay className="fixed inset-0 bg-background/50 backdrop-blur-sm z-[70]" />
+              <AlertDialog.Content className="fixed z-[71] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[92vw] sm:w-[420px] rounded-xl border border-border bg-card p-4 shadow-lg">
+                <AlertDialog.Title className="font-semibold text-base">Remove Friend</AlertDialog.Title>
+                <AlertDialog.Description className="text-xs text-foreground/60 mt-2">This action will remove the user from your friends list.</AlertDialog.Description>
+                <div className="mt-4 flex items-center justify-end gap-2">
+                  <AlertDialog.Cancel asChild>
+                    <Button variant="outline" size="sm" className="rounded-full">Cancel</Button>
+                  </AlertDialog.Cancel>
+                  <AlertDialog.Action asChild>
+                    <Button size="sm" className="rounded-full bg-destructive text-destructive-foreground" onClick={confirmRemoveFriend} loading={removing}>Remove</Button>
+                  </AlertDialog.Action>
+                </div>
+              </AlertDialog.Content>
+            </AlertDialog.Portal>
+          </AlertDialog.Root>
         </div>
 
-        {/* Activity */}
         <div>
-          <h3 className="text-2xl font-bold mb-6">Recent Activity</h3>
+          <h3 className="text-2xl font-bold mb-6">Your Rooms</h3>
           <Card className="p-6">
-            <div className="space-y-4">
-              {[
-                { type: 'room', text: 'Joined ChatBloom', time: 'Just now' },
-                { type: 'message', text: 'Profile created', time: 'Just now' },
-                { type: 'badge', text: 'Welcome to ChatBloom', time: 'Just now' },
-                { type: 'level', text: 'Level 1', time: 'Just now' },
-              ].map((activity, i) => (
-                <div key={i} className="flex items-center gap-4 pb-4 border-b border-border last:border-0 last:pb-0">
-                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                    {activity.type === 'room' && <MessageCircle className="w-5 h-5 text-primary" />}
-                    {activity.type === 'message' && <Heart className="w-5 h-5 text-accent" />}
-                    {activity.type === 'badge' && <Trophy className="w-5 h-5 text-amber-500" />}
-                    {activity.type === 'level' && <Star className="w-5 h-5 text-primary" />}
+            {ownedRooms.length > 0 ? (
+              <div className="grid sm:grid-cols-2 gap-4">
+                {ownedRooms.map((room) => (
+                  <div key={room.id} className="p-4 border border-border rounded-xl flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="text-2xl">{room.emoji || '💬'}</div>
+                      <div>
+                        <p className="font-semibold text-sm">{room.name}</p>
+                        <p className="text-xs text-foreground/60">{room.topic}</p>
+                      </div>
+                    </div>
+                    <Link href={`/room/${room.id}`}>
+                      <Button size="sm" className="rounded-full">View</Button>
+                    </Link>
                   </div>
-                  <div className="flex-1">
-                    <p className="font-medium text-sm">{activity.text}</p>
-                    <p className="text-xs text-foreground/50">{activity.time}</p>
+                ))}
+              </div>
+            ) : (
+              <p className="text-center text-foreground/60">You don’t own any rooms yet.</p>
+            )}
+          </Card>
+        </div>
+
+        <div className="mt-8">
+          <h3 className="text-2xl font-bold mb-6">Recently Joined</h3>
+          <Card className="p-6">
+            {recentRooms.length > 0 ? (
+              <div className="grid sm:grid-cols-2 gap-4">
+                {recentRooms.map((row, i) => (
+                  <div key={row.room.id + i} className="p-4 border border-border rounded-xl flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="text-2xl">{row.room.emoji || '💬'}</div>
+                      <div>
+                        <p className="font-semibold text-sm">{row.room.name}</p>
+                        <p className="text-xs text-foreground/60">{row.room.topic}</p>
+                      </div>
+                    </div>
+                    <Link href={`/room/${row.room.id}`}>
+                      <Button size="sm" className="rounded-full">Open</Button>
+                    </Link>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-center text-foreground/60">No recent rooms joined.</p>
+            )}
           </Card>
         </div>
       </div>

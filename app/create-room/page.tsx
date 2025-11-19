@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
-import { Globe, Lock, Key, Sparkles, ArrowLeft } from 'lucide-react'
+import { Globe, Lock, Sparkles, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
 export default function CreateRoom() {
@@ -15,9 +15,10 @@ export default function CreateRoom() {
     description: '',
     topic: '',
     language: 'English',
-    privacy: 'public' as 'public' | 'private' | 'invite',
+    privacy: 'public' as 'public' | 'private',
     maxMembers: '',
   })
+  const [noLimit, setNoLimit] = useState(false)
 
   const [step, setStep] = useState(1)
   const [showPreview, setShowPreview] = useState(false)
@@ -25,6 +26,10 @@ export default function CreateRoom() {
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
   const supabase = createClient()
+  const [friends, setFriends] = useState<any[]>([])
+  const [selectedFriendIds, setSelectedFriendIds] = useState<string[]>([])
+  const [friendSearch, setFriendSearch] = useState('')
+  const searchParams = useSearchParams()
   useEffect(() => {
     const checkAuth = async () => {
       const { data: { user } } = await supabase.auth.getUser()
@@ -38,6 +43,27 @@ export default function CreateRoom() {
     }
     checkAuth()
   }, [])
+
+  useEffect(() => {
+    const friendId = searchParams.get('dm') || searchParams.get('friend') || searchParams.get('prefillFriendId')
+    if (friendId) {
+      setFormData((prev) => ({ ...prev, privacy: 'private', topic: prev.topic || 'General', name: prev.name || '' }))
+      loadFriends()
+      setSelectedFriendIds((prev) => Array.from(new Set([...prev, friendId])))
+      ;(async () => {
+        const { data } = await supabase
+          .from('profiles')
+          .select('id, display_name, username')
+          .eq('id', friendId)
+          .single()
+        const n = data?.display_name || data?.username
+        if (n) {
+          setFormData((prev) => ({ ...prev, name: prev.name || `Chat with ${n}` }))
+        }
+      })()
+      setStep(2)
+    }
+  }, [searchParams])
 
   const languages = ['English', 'Spanish', 'French', 'German', 'Japanese', 'Korean', 'Chinese', 'Portuguese']
   
@@ -67,14 +93,38 @@ export default function CreateRoom() {
       desc: 'Only invited members can join',
       badge: 'Exclusive',
     },
-    {
-      id: 'invite',
-      icon: Key,
-      title: 'Invite Only',
-      desc: 'Share unique invite link with friends',
-      badge: 'Limited',
-    },
   ]
+
+  const languageCodes: Record<string, string> = {
+    English: 'en',
+    Spanish: 'es',
+    French: 'fr',
+    German: 'de',
+    Japanese: 'ja',
+    Korean: 'ko',
+    Chinese: 'zh',
+    Portuguese: 'pt',
+  }
+
+  const privacyOrder: Array<'public' | 'private'> = ['public', 'private']
+
+  const handlePrivacyKeyNav = (current: 'public' | 'private', e: React.KeyboardEvent<HTMLButtonElement>) => {
+    const i = privacyOrder.indexOf(current)
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      const next = privacyOrder[(i + 1) % privacyOrder.length]
+      handlePrivacySelect(next)
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      const prev = privacyOrder[(i - 1 + privacyOrder.length) % privacyOrder.length]
+      handlePrivacySelect(prev)
+    } else if (e.key === 'Home') {
+      handlePrivacySelect(privacyOrder[0])
+    } else if (e.key === 'End') {
+      handlePrivacySelect(privacyOrder[privacyOrder.length - 1])
+    } else if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault()
+      handlePrivacySelect(current)
+    }
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -84,11 +134,41 @@ export default function CreateRoom() {
     }))
   }
 
-  const handlePrivacySelect = (privacy: 'public' | 'private' | 'invite') => {
+  const handlePrivacySelect = (privacy: 'public' | 'private') => {
     setFormData(prev => ({
       ...prev,
       privacy,
     }))
+    if (privacy === 'private') {
+      loadFriends()
+    }
+  }
+
+  const loadFriends = async () => {
+    try {
+      const res = await fetch('/api/friends/get?status=accepted')
+      const data = await res.json()
+      if (res.ok) {
+        const list = ((data?.friends || data) as any[]) || []
+        const { data: profs } = await supabase
+          .from('profiles')
+          .select('id, username, display_name, avatar_url')
+          .in('id', list.map((f: any) => f.friend_id || f.user_id || f.id).filter((x: any) => !!x))
+        const map = new Map((profs || []).map((p: any) => [p.id, p]))
+        const enriched = list.map((f: any) => {
+          const fid = f.friend_id || f.user_id || f.id
+          const p = fid ? map.get(fid) : null
+          return {
+            ...f,
+            id: fid,
+            display_name: f.display_name || p?.display_name || f.username || p?.username,
+            username: f.username || p?.username,
+            avatar_url: f.avatar_url || p?.avatar_url,
+          }
+        })
+        setFriends(enriched)
+      }
+    } catch {}
   }
 
   const handleCreate = async () => {
@@ -104,7 +184,7 @@ export default function CreateRoom() {
 
       // Map privacy to is_public and is_private booleans
       const is_public = formData.privacy === 'public'
-      const is_private = formData.privacy === 'private' || formData.privacy === 'invite'
+      const is_private = formData.privacy === 'private'
 
       const response = await fetch('/api/rooms/create', {
         method: 'POST',
@@ -118,8 +198,8 @@ export default function CreateRoom() {
           emoji,
           is_public,
           is_private,
-          language: formData.language,
-          max_members: formData.maxMembers ? Number(formData.maxMembers) : null,
+          language: languageCodes[formData.language] || 'en',
+          max_members: noLimit ? null : (formData.maxMembers ? Number(formData.maxMembers) : null),
         }),
       })
 
@@ -140,7 +220,17 @@ export default function CreateRoom() {
         throw new Error(data.error || 'Failed to create room')
       }
 
-      // Redirect to the created room
+      if (formData.privacy !== 'public' && selectedFriendIds.length > 0) {
+        const rows = selectedFriendIds.map((id) => ({ room_id: data.id, user_id: id }))
+        await supabase.from('room_members').insert(rows)
+        try {
+          await fetch('/api/notifications/bulk', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ recipients: selectedFriendIds, type: 'room_member_added', room_id: data.id }),
+          })
+        } catch {}
+      }
       router.push(`/room/${data.id}`)
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to create room'
@@ -151,7 +241,7 @@ export default function CreateRoom() {
     }
   }
 
-  const isFormValid = formData.name.trim() && formData.topic && formData.maxMembers && Number(formData.maxMembers) >= 2 && Number(formData.maxMembers) <= 8
+  const isFormValid = !!formData.name.trim() && !!formData.topic && (noLimit || (!!formData.maxMembers && Number(formData.maxMembers) >= 2 && Number(formData.maxMembers) <= 8))
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 dark:from-background dark:via-background dark:to-primary/10">
@@ -279,22 +369,37 @@ export default function CreateRoom() {
                     <p className="text-xs text-foreground/50 mt-2">{formData.description.length}/200 characters</p>
                   </div>
 
-                  {/* Max Members */}
-                  <div>
-                    <label className="block text-sm font-semibold mb-3">Max Members (Required)</label>
-                    <Input
-                      name="maxMembers"
-                      type="number"
-                      placeholder="2-8 people"
-                      value={formData.maxMembers}
-                      onChange={handleInputChange}
-                      min="2"
-                      max="8"
-                      required
-                      className="rounded-xl"
+                {/* Max Members */}
+                <div>
+                  <label className="block text-sm font-semibold mb-3">Max Members</label>
+                  <Input
+                    name="maxMembers"
+                    type="number"
+                    placeholder="2-8 people"
+                    value={formData.maxMembers}
+                    onChange={handleInputChange}
+                    min="2"
+                    max="8"
+                    disabled={noLimit}
+                    className="rounded-xl"
+                  />
+                  <div className="flex items-center gap-2 mt-2">
+                    <input
+                      id="noLimit"
+                      type="checkbox"
+                      checked={noLimit}
+                      onChange={(e) => {
+                        const checked = e.target.checked
+                        setNoLimit(checked)
+                        if (checked) {
+                          setFormData(prev => ({ ...prev, maxMembers: '' }))
+                        }
+                      }}
                     />
-                    <p className="text-xs text-foreground/50 mt-2">Set how many people can join (minimum 2, maximum 8).</p>
+                    <label htmlFor="noLimit" className="text-xs text-foreground/70">No limit</label>
                   </div>
+                  <p className="text-xs text-foreground/50 mt-2">{noLimit ? 'Unlimited members can join.' : 'Set how many people can join (minimum 2, maximum 8).'}</p>
+                </div>
 
                   {/* Navigation */}
                   <div className="flex gap-3 pt-6">
@@ -317,18 +422,23 @@ export default function CreateRoom() {
               <Card className="p-8 animate-in fade-in">
                 <h2 className="text-2xl font-bold mb-8">Who can join your room?</h2>
 
-                <div className="space-y-4 mb-8">
+                <div role="radiogroup" aria-label="Room privacy" className="space-y-4 mb-8">
                   {privacyOptions.map((option) => {
                     const IconComponent = option.icon
                     return (
                       <button
                         key={option.id}
-                        onClick={() => handlePrivacySelect(option.id as 'public' | 'private' | 'invite')}
+                        type="button"
+                        role="radio"
+                        aria-checked={formData.privacy === option.id}
+                        tabIndex={formData.privacy === option.id ? 0 : -1}
+                        onKeyDown={(e) => handlePrivacyKeyNav(option.id as 'public' | 'private', e)}
+                        onClick={() => handlePrivacySelect(option.id as 'public' | 'private')}
                         className={`w-full p-6 rounded-2xl border-2 transition-all text-left ${
                           formData.privacy === option.id
                             ? 'border-primary bg-primary/10'
                             : 'border-border hover:border-primary/50'
-                        }`}
+                          }`}
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex gap-4">
@@ -356,6 +466,65 @@ export default function CreateRoom() {
                     )
                   })}
                 </div>
+
+                {formData.privacy === 'private' && (
+                  <div className="mt-6">
+                    <p className="font-semibold text-sm mb-3">Add Friends Now (Optional)</p>
+                    <Input
+                      placeholder="Search friends..."
+                      value={friendSearch}
+                      onChange={(e) => setFriendSearch(e.target.value)}
+                      className="mb-2"
+                    />
+                    {friends.length > 0 && (
+                      <div className="flex items-center justify-between mb-2">
+                        <label className="flex items-center gap-2 text-xs">
+                          <input
+                            type="checkbox"
+                            checked={friends.filter((f: any) => (f.display_name || f.username || '').toLowerCase().includes(friendSearch.toLowerCase())).every((f: any) => selectedFriendIds.includes(f.id || f.friend_id || f.user_id)) && friends.filter((f: any) => (f.display_name || f.username || '').toLowerCase().includes(friendSearch.toLowerCase())).length > 0}
+                            onChange={(e) => {
+                              const filtered = friends.filter((f: any) => (f.display_name || f.username || '').toLowerCase().includes(friendSearch.toLowerCase()))
+                              const ids = filtered.map((f: any) => f.id || f.friend_id || f.user_id)
+                              if (e.target.checked) {
+                                setSelectedFriendIds((prev) => Array.from(new Set([...prev, ...ids])))
+                              } else {
+                                setSelectedFriendIds((prev) => prev.filter((x) => !ids.includes(x)))
+                              }
+                            }}
+                          />
+                          Select All
+                        </label>
+                        <Button variant="outline" size="sm" className="rounded-full h-7" onClick={() => setSelectedFriendIds([])}>Select None</Button>
+                      </div>
+                    )}
+                    <div className="space-y-2">
+                      {friends.length === 0 ? (
+                        <p className="text-xs text-foreground/60">No accepted friends found.</p>
+                      ) : (
+                        friends
+                          .filter((f) => (f.display_name || f.username || '').toLowerCase().includes(friendSearch.toLowerCase()))
+                          .map((f) => {
+                          const id = f.id || f.friend_id || f.user_id
+                          const name = f.display_name || f.username || 'Friend'
+                          const checked = selectedFriendIds.includes(id)
+                          return (
+                            <label key={id} className="flex items-center gap-3 text-sm">
+                              <img src={f.avatar_url || '/placeholder.svg'} alt={name} className="w-6 h-6 rounded-full" />
+                              <input
+                                type="checkbox"
+                                checked={checked}
+                                onChange={(e) => {
+                                  setSelectedFriendIds((prev) => e.target.checked ? [...prev, id] : prev.filter((x) => x !== id))
+                                }}
+                              />
+                              {name}
+                            </label>
+                          )
+                        })
+                      )}
+                    </div>
+                  </div>
+                )}
 
                 {/* Navigation */}
                 <div className="flex gap-3">
@@ -438,6 +607,7 @@ export default function CreateRoom() {
                     className="flex-1 bg-gradient-to-r from-primary to-accent hover:opacity-90 rounded-full"
                     onClick={handleCreate}
                     disabled={!isFormValid || loading}
+                    loading={loading}
                   >
                     <Sparkles className="w-4 h-4 mr-2" />
                     {loading ? 'Creating...' : 'Create Room'}

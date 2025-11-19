@@ -52,6 +52,18 @@ export async function POST(request: NextRequest) {
 
     if (error) throw error
 
+    // Notify the requester that the request was accepted
+    try {
+      await supabase
+        .from('notifications')
+        .insert({
+          sender_id: user.id,
+          recipient_id: friendRequest.user_id,
+          type: 'friend_request_accepted',
+          friend_request_id: friend_request_id,
+        })
+    } catch {}
+
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('Error accepting friend request:', error)

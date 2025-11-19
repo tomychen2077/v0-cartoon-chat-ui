@@ -38,6 +38,7 @@ export function AddFriendButton({ friendId }: { friendId: string }) {
       className="bg-primary hover:bg-primary/90 rounded-full" 
       onClick={handleAddFriend}
       disabled={loading}
+      loading={loading}
     >
       <UserPlus className="w-4 h-4 mr-2" />
       {loading ? 'Adding...' : 'Add Friend'}

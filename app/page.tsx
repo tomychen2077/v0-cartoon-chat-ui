@@ -9,6 +9,7 @@ import { ThemeToggle } from '@/components/theme-toggle'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { NotificationsPopover } from '@/components/notifications-popover'
 
 interface RoomMember {
   id: string
@@ -383,6 +384,7 @@ export default function Home() {
           {/* Desktop actions */}
           <div className="hidden sm:flex gap-3 items-center">
             <ThemeToggle />
+            <NotificationsPopover />
             {user && !isGuestUser ? (
               <>
                 <Link href="/profile">
@@ -411,6 +413,7 @@ export default function Home() {
           {/* Mobile menu button */}
           <div className="sm:hidden flex items-center gap-2">
             <ThemeToggle />
+            <NotificationsPopover />
             <Button
               variant="outline"
               size="icon"

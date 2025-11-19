@@ -1,0 +1,3 @@
+{
+  "/api/rooms/invite/create/route": "app/api/rooms/invite/create/route.js"
+}

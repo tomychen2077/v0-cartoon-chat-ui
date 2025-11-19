@@ -70,6 +70,19 @@ export async function POST(request: NextRequest) {
 
     if (error) throw error
 
+    const { error: notifErr } = await supabase
+      .from('notifications')
+      .insert({
+        sender_id: user.id,
+        recipient_id: friend_id,
+        type: 'friend_request',
+        friend_request_id: data.id,
+      })
+
+    if (notifErr) {
+      return NextResponse.json({ success: true, data, warn: 'notification_failed' })
+    }
+
     return NextResponse.json({ success: true, data })
   } catch (error) {
     console.error('Error adding friend:', error)

@@ -41,6 +41,8 @@ export async function GET(request: NextRequest) {
         bio: friendProfile?.bio,
         status: f.status,
         created_at: f.created_at,
+        user_id: f.user_id,
+        friend_id_raw: f.friend_id,
       }
     }) || []
 

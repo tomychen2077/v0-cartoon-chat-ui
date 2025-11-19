@@ -87,10 +87,18 @@ export default async function FriendProfile({ params }: { params: Promise<{ id: 
                 </div>
                 <div className="flex gap-2">
                   {friendship?.status === 'accepted' ? (
-                    <Button size="sm" variant="outline" className="rounded-full" disabled>
-                      <UserPlus className="w-4 h-4 mr-2" />
-                      Friends
-                    </Button>
+                    <>
+                      <Button size="sm" variant="outline" className="rounded-full" disabled>
+                        <UserPlus className="w-4 h-4 mr-2" />
+                        Friends
+                      </Button>
+                      <Link href={`/create-room?dm=${friendId}`}>
+                        <Button size="sm" className="rounded-full">
+                          <MessageCircle className="w-4 h-4 mr-2" />
+                          Message
+                        </Button>
+                      </Link>
+                    </>
                   ) : friendship?.status === 'pending' ? (
                     <Button size="sm" variant="outline" className="rounded-full" disabled>
                       Request Pending

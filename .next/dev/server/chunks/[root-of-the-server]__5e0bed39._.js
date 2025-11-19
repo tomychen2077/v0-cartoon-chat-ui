@@ -141,6 +141,19 @@ async function POST(request) {
             status: 'pending'
         }).select().single();
         if (error) throw error;
+        const { error: notifErr } = await supabase.from('notifications').insert({
+            sender_id: user.id,
+            recipient_id: friend_id,
+            type: 'friend_request',
+            friend_request_id: data.id
+        });
+        if (notifErr) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                success: true,
+                data,
+                warn: 'notification_failed'
+            });
+        }
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             success: true,
             data

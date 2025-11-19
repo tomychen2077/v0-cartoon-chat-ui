@@ -6,10 +6,12 @@ import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
 import { ChatBubble } from '@/components/chat-bubble'
 import { ThemeToggle } from '@/components/theme-toggle'
-import { SendHorizontal, Smile, Paperclip, MoreVertical, Edit, Trash2, X } from 'lucide-react'
+import { SendHorizontal, Smile, Paperclip, MoreVertical, Edit, Trash2, X, Copy, MessageCircle } from 'lucide-react'
+import * as Dialog from '@radix-ui/react-dialog'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import { NotificationsPopover } from '@/components/notifications-popover'
 
 interface Message {
   id: string
@@ -44,9 +46,18 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
   const [sending, setSending] = useState(false)
   const [currentUser, setCurrentUser] = useState<any>(null)
   const [roomId, setRoomId] = useState<string>('')
+  const [joined, setJoined] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [uploadingMedia, setUploadingMedia] = useState(false)
   const [showRoomMenu, setShowRoomMenu] = useState(false)
+  const [startingGuest, setStartingGuest] = useState(false)
+  const [inviteCreating, setInviteCreating] = useState(false)
+  const [inviteToken, setInviteToken] = useState<string | null>(null)
+  const [inviteError, setInviteError] = useState<string | null>(null)
+  const [friends, setFriends] = useState<any[]>([])
+  const [showAddFriends, setShowAddFriends] = useState(false)
+  const [selectedFriendIds, setSelectedFriendIds] = useState<string[]>([])
+  const [friendSearch, setFriendSearch] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const messagesContainerRef = useRef<HTMLDivElement>(null)
   const sendQueueRef = useRef<any[]>([])
@@ -57,6 +68,8 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
   const lastImmediateSendRef = useRef<number | null>(null)
   const [latencies, setLatencies] = useState<number[]>([])
   const supabase = createClient()
+  const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
+  const [joinError, setJoinError] = useState<string | null>(null)
   const router = useRouter()
 
   const handleLeaveRoom = async () => {
@@ -88,6 +101,84 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
     })
   }
 
+  const handleCreateInvite = async () => {
+    setInviteCreating(true)
+    setInviteError(null)
+    setInviteToken(null)
+    try {
+      const res = await fetch('/api/rooms/invite/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ room_id: roomId }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Failed to create invite')
+      setInviteToken(data.token)
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'Failed to create invite'
+      setInviteError(msg)
+    } finally {
+      setInviteCreating(false)
+    }
+  }
+
+  const loadFriends = async () => {
+    try {
+      const res = await fetch('/api/friends/get?status=accepted')
+      const data = await res.json()
+      if (res.ok) {
+        const list = ((data?.friends || data) as any[]) || []
+        const ids = list
+          .map((f: any) => f.friend_id || f.user_id || f.id)
+          .filter((x: any) => !!x)
+        if (ids.length > 0) {
+          const { data: profs } = await supabase
+            .from('profiles')
+            .select('id, username, display_name, avatar_url')
+            .in('id', ids)
+          const map = new Map((profs || []).map((p: any) => [p.id, p]))
+          const enriched = list.map((f: any) => {
+            const fid = f.friend_id || f.user_id || f.id
+            const p = fid ? map.get(fid) : null
+            return {
+              ...f,
+              id: fid,
+              display_name: f.display_name || p?.display_name || f.username || p?.username,
+              username: f.username || p?.username,
+              avatar_url: f.avatar_url || p?.avatar_url,
+            }
+          })
+          setFriends(enriched)
+        } else {
+          setFriends(list)
+        }
+      }
+    } catch {}
+  }
+
+  const [addingFriends, setAddingFriends] = useState(false)
+  const handleAddSelectedFriends = async () => {
+    try {
+      setAddingFriends(true)
+      if (!roomId || selectedFriendIds.length === 0) { setShowAddFriends(false); return }
+      const rows = selectedFriendIds.map((id) => ({ room_id: roomId, user_id: id }))
+      await supabase.from('room_members').insert(rows)
+      try {
+        await fetch('/api/notifications/bulk', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ recipients: selectedFriendIds, type: 'room_member_added', room_id: roomId }),
+        })
+      } catch {}
+      setShowAddFriends(false)
+      setSelectedFriendIds([])
+    } catch {
+      setShowAddFriends(false)
+    } finally {
+      setAddingFriends(false)
+    }
+  }
+
   const pushSystemMessage = (text: string) => {
     const msg: Message = {
       id: `sys_${Date.now()}`,
@@ -99,6 +190,32 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
     setMessages((prev) => [...prev, msg])
     setTimeout(scrollToBottom, 100)
   }
+
+  // Join first if possible (needed for private rooms with invites)
+  useEffect(() => {
+    if (!roomId) return
+
+    const attemptJoin = async () => {
+      if (!currentUser?.id) return
+      try {
+        const token = searchParams?.get('token') || null
+        const res = await fetch('/api/rooms/join', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ room_id: roomId, token }),
+        })
+        if (res.ok) {
+          setJoined(true)
+          setJoinError(null)
+        } else {
+          const msg = res.status === 403 ? 'Invite required or invalid' : res.status === 409 ? 'Room is full' : 'Failed to join'
+          setJoinError(msg)
+        }
+      } catch {}
+    }
+
+    attemptJoin()
+  }, [roomId, currentUser])
 
   // Fetch room information
   useEffect(() => {
@@ -116,12 +233,13 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
         setRoom(data)
       } catch (err) {
         console.error('Error fetching room:', err)
-        router.push('/')
+        setLoading(false)
+        setJoinError('Room not found or you do not have access')
       }
     }
 
     fetchRoom()
-  }, [roomId, supabase, router])
+  }, [roomId, supabase])
 
   // Get current user
   useEffect(() => {
@@ -137,25 +255,8 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
     const join = async () => {
       if (!roomId || !currentUser?.id) return
       try {
-        await supabase
-          .from('room_members')
-          .delete()
-          .eq('user_id', currentUser.id)
-
-        const { data: members } = await supabase
-          .from('room_members')
-          .select('id')
-          .eq('room_id', roomId)
-
-        const currentCount = (members?.length ?? 0)
-        const max = (room as any)?.max_members ?? 8
-        if (currentCount >= max) {
-          return
-        }
-
-        await supabase
-          .from('room_members')
-          .insert({ room_id: roomId, user_id: currentUser.id })
+        // Already attempted a join above; no-op here
+        setJoinError(null)
       } catch {}
     }
     join()
@@ -683,6 +784,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
           </div>
           <div className="flex items-center gap-0.5 sm:gap-2 flex-shrink-0">
             <ThemeToggle />
+            <NotificationsPopover />
             {process.env.NODE_ENV === 'development' && latencies.length > 0 && (
               <div className="ml-1 sm:ml-2 px-2 py-1 rounded-full text-xs bg-primary/10 text-foreground/70">
                 {`avg ${Math.round(latencies.reduce((a,b)=>a+b,0)/latencies.length)}ms`}
@@ -710,13 +812,27 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
                     className="fixed inset-0 z-[5] bg-background/20"
                     onClick={() => setShowRoomMenu(false)}
                   />
-                  <div className="absolute right-0 top-12 bg-card border border-border rounded-lg shadow-lg p-1 z-10 min-w-[140px]">
+                  <div className="absolute right-0 top-12 bg-card border border-border rounded-lg shadow-lg p-1 z-10 min-w-[200px]">
                     <Link href={`/room/${roomId}/edit`}>
                       <button className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent active:bg-accent/80 rounded-md transition-colors">
                         <Edit className="w-4 h-4" />
                         Edit Room
                       </button>
                     </Link>
+                    <button
+                      onClick={() => { setShowAddFriends((v) => !v); if (!showAddFriends) loadFriends() }}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-primary/10 active:bg-primary/20 rounded-md transition-colors"
+                    >
+                      Add Friends
+                    </button>
+                    <button
+                      onClick={handleCreateInvite}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-primary/10 active:bg-primary/20 rounded-md transition-colors"
+                      disabled={inviteCreating}
+                    >
+                      <Copy className="w-4 h-4" />
+                      {inviteCreating ? 'Creating…' : 'Create Invite Link'}
+                    </button>
                     <button
                       onClick={() => {
                         setShowRoomMenu(false)
@@ -727,6 +843,58 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
                       <Trash2 className="w-4 h-4" />
                       Delete Room
                     </button>
+                    {inviteError && (
+                      <div className="px-3 py-2 text-xs text-destructive">{inviteError}</div>
+                    )}
+                    {showAddFriends && (
+                      <div className="p-2 border-t mt-1">
+                        <div className="text-xs mb-2">Select friends to add</div>
+                        <div className="space-y-2 max-h-40 overflow-auto pr-1">
+                          {friends.length === 0 ? (
+                            <p className="text-xs text-foreground/60">No accepted friends found.</p>
+                          ) : (
+                            friends.map((f) => (
+                              <div key={f.id || f.friend_id} className="flex items-center justify-between text-xs">
+                                <span>{f.display_name || f.username || 'Friend'}</span>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="rounded-full h-7"
+                                  onClick={async () => {
+                                    const uid = f.id || f.friend_id
+                                    if (!uid || !roomId) return
+                                    try {
+                                      await supabase.from('room_members').insert({ room_id: roomId, user_id: uid })
+                                    } catch {}
+                                  }}
+                                >
+                                  Add
+                                </Button>
+                              </div>
+                            ))
+                          )}
+                        </div>
+                      </div>
+                    )}
+                    {inviteToken && (
+                      <div className="p-2">
+                        <div className="text-xs mb-1">Invite Link</div>
+                        <div className="flex items-center gap-2">
+                          <Input readOnly value={`${typeof window !== 'undefined' ? window.location.origin : ''}/room/${roomId}?token=${inviteToken}`} />
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="rounded-full"
+                            onClick={() => {
+                              const url = `${typeof window !== 'undefined' ? window.location.origin : ''}/room/${roomId}?token=${inviteToken}`
+                              navigator.clipboard.writeText(url).catch(() => {})
+                            }}
+                          >
+                            Copy
+                          </Button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </>
               )}
@@ -734,6 +902,81 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
           </div>
         </div>
       </header>
+
+      <Dialog.Root open={showAddFriends} onOpenChange={(o) => { setShowAddFriends(!!o) }}>
+        <Dialog.Portal>
+          <Dialog.Overlay className="fixed inset-0 bg-background/50 backdrop-blur-sm z-[60]" />
+          <Dialog.Content className="fixed z-[61] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-md rounded-xl border border-border bg-card p-4 shadow-lg">
+            <Dialog.Title className="font-semibold text-base">Add Friends</Dialog.Title>
+            <Dialog.Description className="text-xs text-foreground/60 mb-3">Select friends to add to this private room.</Dialog.Description>
+            <Input
+              placeholder="Search friends..."
+              value={friendSearch}
+              onChange={(e) => setFriendSearch(e.target.value)}
+              className="mb-2"
+            />
+            {friends.length > 0 && (
+              <div className="flex items-center justify-between mb-2">
+                <label className="flex items-center gap-2 text-xs">
+                  <input
+                    type="checkbox"
+                    checked={friends.filter((f: any) => (f.display_name || f.username || '').toLowerCase().includes(friendSearch.toLowerCase())).every((f: any) => selectedFriendIds.includes(f.id || f.friend_id || f.user_id)) && friends.filter((f: any) => (f.display_name || f.username || '').toLowerCase().includes(friendSearch.toLowerCase())).length > 0}
+                    onChange={(e) => {
+                      const filtered = friends.filter((f: any) => (f.display_name || f.username || '').toLowerCase().includes(friendSearch.toLowerCase()))
+                      const ids = filtered.map((f: any) => f.id || f.friend_id || f.user_id)
+                      if (e.target.checked) {
+                        setSelectedFriendIds((prev) => Array.from(new Set([...prev, ...ids])))
+                      } else {
+                        setSelectedFriendIds((prev) => prev.filter((x) => !ids.includes(x)))
+                      }
+                    }}
+                  />
+                  Select All
+                </label>
+                <Button variant="outline" size="sm" className="rounded-full h-7" onClick={() => setSelectedFriendIds([])}>Select None</Button>
+              </div>
+            )}
+            <div className="space-y-2 max-h-56 overflow-auto pr-1">
+              {friends.length === 0 ? (
+                <p className="text-xs text-foreground/60">No accepted friends found.</p>
+              ) : (
+                friends
+                  .filter((f) => (f.display_name || f.username || '').toLowerCase().includes(friendSearch.toLowerCase()))
+                  .map((f) => {
+                  const id = f.id || f.friend_id
+                  const name = f.display_name || f.username || 'Friend'
+                  const checked = selectedFriendIds.includes(id)
+                  return (
+                    <label key={id} className="flex items-center gap-3 text-sm">
+                      <img src={f.avatar_url || '/placeholder.svg'} alt={name} className="w-6 h-6 rounded-full" />
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={(e) => {
+                          setSelectedFriendIds((prev) => e.target.checked ? [...prev, id] : prev.filter((x) => x !== id))
+                        }}
+                      />
+                      {name}
+                    </label>
+                  )
+                })
+              )}
+            </div>
+            <div className="mt-4 flex items-center justify-end gap-2">
+              <Dialog.Close asChild>
+                <Button variant="outline" size="sm" className="rounded-full">Cancel</Button>
+              </Dialog.Close>
+                <Button size="sm" className="rounded-full bg-primary" onClick={handleAddSelectedFriends} loading={addingFriends}>Add Selected</Button>
+            </div>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
+
+      {joinError && (
+        <div role="alert" aria-live="polite" className="fixed top-4 left-1/2 -translate-x-1/2 z-[1000] bg-destructive text-destructive-foreground px-4 py-2 rounded-full shadow-lg">
+          {joinError}
+        </div>
+      )}
 
       {/* Messages Container - Mobile responsive */}
       <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-1.5 sm:p-4 md:p-6 space-y-1 sm:space-y-4">
@@ -795,10 +1038,18 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
       {/* Input Section - Mobile responsive */}
       {!currentUser ? (
         <div className="border-t border-border bg-background p-2 sm:p-4 text-center">
-          <p className="text-foreground/60 mb-1.5 sm:mb-2 text-xs sm:text-base">Please sign in to send messages</p>
-          <Link href="/auth">
-            <Button size="sm" className="text-xs sm:text-sm h-7 sm:h-9">Sign In</Button>
-          </Link>
+          <p className="text-foreground/60 mb-1.5 sm:mb-2 text-xs sm:text-base">Sign in or continue as a guest user.</p>
+          <div className="flex items-center justify-center gap-2">
+            <Link href="/auth">
+              <Button size="sm" className="text-xs sm:text-sm h-7 sm:h-9">Sign In</Button>
+            </Link>
+            <Link href="/guest">
+              <Button variant="outline" size="sm" className="h-7 sm:h-9 rounded-full">
+                <MessageCircle className="w-4 h-4 mr-2" />
+                Join as Guest
+              </Button>
+            </Link>
+          </div>
         </div>
       ) : (
         <div className="border-t border-border bg-background sticky bottom-0 p-2 sm:p-4 md:p-6">
@@ -887,6 +1138,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
                 className="bg-primary hover:bg-primary/90 rounded-full h-8 w-8 sm:h-10 sm:w-10 flex-shrink-0"
                 size="icon"
                 disabled={sending || uploadingMedia || (!inputValue.trim() && !selectedFile)}
+                loading={sending || uploadingMedia}
               >
                 {uploadingMedia ? (
                   <div className="w-3.5 h-3.5 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />

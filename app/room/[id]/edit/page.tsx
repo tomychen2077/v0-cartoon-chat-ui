@@ -5,7 +5,7 @@ import { useRouter, useParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
-import { Globe, Lock, Key, ArrowLeft, Save, Trash2 } from 'lucide-react'
+import { Globe, Lock, ArrowLeft, Save, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 
@@ -37,9 +37,15 @@ export default function EditRoom() {
     description: '',
     topic: '',
     language: 'English',
-    privacy: 'public' as 'public' | 'private' | 'invite',
+    privacy: 'public' as 'public' | 'private',
     maxMembers: '',
   })
+  const [noLimit, setNoLimit] = useState(false)
+
+  const [inviteCreating, setInviteCreating] = useState(false)
+  const [inviteToken, setInviteToken] = useState<string | null>(null)
+  const [inviteError, setInviteError] = useState<string | null>(null)
+  const [invites, setInvites] = useState<any[]>([])
 
   const languages = ['English', 'Spanish', 'French', 'German', 'Japanese', 'Korean', 'Chinese', 'Portuguese']
   
@@ -57,7 +63,6 @@ export default function EditRoom() {
   const privacyOptions = [
     { id: 'public', icon: Globe, title: 'Public', desc: 'Anyone can discover and join' },
     { id: 'private', icon: Lock, title: 'Private', desc: 'Only invited members can join' },
-    { id: 'invite', icon: Key, title: 'Invite Only', desc: 'Share unique invite link with friends' },
   ]
 
   useEffect(() => {
@@ -86,7 +91,7 @@ export default function EditRoom() {
       }
 
       setRoom(data)
-      const privacy = data.is_public ? 'public' : (data.is_private ? 'private' : 'invite')
+      const privacy = data.is_public ? 'public' : 'private'
       setFormData({
         name: data.name || '',
         description: data.description || '',
@@ -95,6 +100,7 @@ export default function EditRoom() {
         privacy,
         maxMembers: data.max_members ? String(data.max_members) : '',
       })
+      setNoLimit(!data.max_members)
     } catch (err) {
       console.error('Error loading room:', err)
       setError('Failed to load room')
@@ -116,7 +122,7 @@ export default function EditRoom() {
       const selectedTopic = topics.find(t => t.name === formData.topic)
       const emoji = selectedTopic?.emoji || '💬'
       const is_public = formData.privacy === 'public'
-      const is_private = formData.privacy === 'private' || formData.privacy === 'invite'
+      const is_private = formData.privacy === 'private'
 
       const response = await fetch('/api/rooms/update', {
         method: 'PUT',
@@ -130,7 +136,7 @@ export default function EditRoom() {
           is_public,
           is_private,
           language: formData.language,
-          max_members: formData.maxMembers ? Number(formData.maxMembers) : null,
+          max_members: noLimit ? null : (formData.maxMembers ? Number(formData.maxMembers) : null),
         }),
       })
 
@@ -175,6 +181,45 @@ export default function EditRoom() {
       setDeleting(false)
     }
   }
+
+  const handleCreateInvite = async () => {
+    setInviteCreating(true)
+    setInviteError(null)
+    setInviteToken(null)
+    try {
+      const payload: any = { room_id: roomId }
+      const res = await fetch('/api/rooms/invite/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Failed to create invite')
+      setInviteToken(data.token)
+      await loadInvites()
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'Failed to create invite'
+      setInviteError(msg)
+    } finally {
+      setInviteCreating(false)
+    }
+  }
+
+  const loadInvites = async () => {
+    try {
+      const res = await fetch(`/api/rooms/invite/list?room_id=${roomId}`)
+      const data = await res.json()
+      if (res.ok) {
+        setInvites(data.invites || [])
+      }
+    } catch {}
+  }
+
+  useEffect(() => {
+    if (roomId && formData.privacy !== 'public') {
+      loadInvites()
+    }
+  }, [roomId, formData.privacy])
 
   if (loading) {
     return (
@@ -280,7 +325,7 @@ export default function EditRoom() {
 
             {/* Max Members */}
             <div>
-              <label className="block text-sm font-semibold mb-3">Max Members (Required)</label>
+              <label className="block text-sm font-semibold mb-3">Max Members</label>
               <Input
                 type="number"
                 value={formData.maxMembers}
@@ -288,10 +333,25 @@ export default function EditRoom() {
                 placeholder="2-8 people"
                 min="2"
                 max="8"
-                required
+                disabled={noLimit}
                 className="rounded-xl"
               />
-              <p className="text-xs text-foreground/50 mt-2">Set how many people can join (minimum 2, maximum 8).</p>
+              <div className="flex items-center gap-2 mt-2">
+                <input
+                  id="noLimitEdit"
+                  type="checkbox"
+                  checked={noLimit}
+                  onChange={(e) => {
+                    const checked = e.target.checked
+                    setNoLimit(checked)
+                    if (checked) {
+                      setFormData(prev => ({ ...prev, maxMembers: '' }))
+                    }
+                  }}
+                />
+                <label htmlFor="noLimitEdit" className="text-xs text-foreground/70">No limit</label>
+              </div>
+              <p className="text-xs text-foreground/50 mt-2">{noLimit ? 'Unlimited members can join.' : 'Set how many people can join (minimum 2, maximum 8).'}</p>
             </div>
 
             {/* Privacy */}
@@ -328,6 +388,69 @@ export default function EditRoom() {
                 })}
               </div>
             </div>
+
+            {formData.privacy !== 'public' && (
+              <div className="border rounded-lg p-3">
+                <p className="font-semibold text-sm mb-3">Invites</p>
+                {inviteError && (
+                  <p className="text-xs text-destructive mb-2">{inviteError}</p>
+                )}
+                <div className="flex items-center gap-2 mb-3">
+                  <Button onClick={handleCreateInvite} disabled={inviteCreating} className="rounded-full">
+                    {inviteCreating ? 'Creating…' : 'Create Invite'}
+                  </Button>
+                  {inviteToken && (
+                    <>
+                      <Input readOnly value={`${typeof window !== 'undefined' ? window.location.origin : ''}/room/${roomId}?token=${inviteToken}`} />
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          const url = `${typeof window !== 'undefined' ? window.location.origin : ''}/room/${roomId}?token=${inviteToken}`
+                          navigator.clipboard.writeText(url).catch(() => {})
+                        }}
+                        className="rounded-full"
+                      >
+                        Copy
+                      </Button>
+                    </>
+                  )}
+                </div>
+                <div>
+                  <p className="text-sm font-semibold mb-2">Active Invites</p>
+                  <div className="space-y-2">
+                    {invites.filter((i) => i.status === 'active').length === 0 ? (
+                      <p className="text-xs text-foreground/60">No active invites</p>
+                    ) : (
+                      invites.filter((i) => i.status === 'active').map((i) => (
+                        <div key={i.id} className="p-2 border rounded-md flex items-center justify-between">
+                          <div className="text-xs">
+                            <p className="font-semibold">{(i.token || '').slice(0, 8)}…</p>
+                            <p className="text-foreground/60">Uses: {i.uses || 0}{i.max_uses ? `/${i.max_uses}` : ''}</p>
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            className="rounded-full"
+                            onClick={async () => {
+                              try {
+                                const res = await fetch('/api/rooms/invite/deactivate', {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({ invite_id: i.id }),
+                                })
+                                if (res.ok) { loadInvites() }
+                              } catch {}
+                            }}
+                          >
+                            Deactivate
+                          </Button>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Actions */}
             <div className="flex gap-3 pt-6">

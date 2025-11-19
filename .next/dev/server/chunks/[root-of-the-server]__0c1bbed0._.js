@@ -113,7 +113,9 @@ async function GET(request) {
                 avatar_url: friendProfile?.avatar_url,
                 bio: friendProfile?.bio,
                 status: f.status,
-                created_at: f.created_at
+                created_at: f.created_at,
+                user_id: f.user_id,
+                friend_id_raw: f.friend_id
             };
         }) || [];
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
