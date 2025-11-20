@@ -253,7 +253,7 @@ export default function EditRoom() {
                 Back to Room
               </Button>
             </Link>
-            <h1 className="text-xl font-bold">Edit Room</h1>
+            <h1 className="text-xl font-bold">chat2077</h1>
           </div>
         </div>
       </nav>

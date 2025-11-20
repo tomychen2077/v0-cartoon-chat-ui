@@ -295,7 +295,7 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-function CreateRoom() {
+function CreateRoomInner() {
     _s();
     const [formData, setFormData] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({
         name: '',
@@ -317,61 +317,61 @@ function CreateRoom() {
     const [friendSearch, setFriendSearch] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
     const searchParams = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSearchParams"])();
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
-        "CreateRoom.useEffect": ()=>{
+        "CreateRoomInner.useEffect": ()=>{
             const checkAuth = {
-                "CreateRoom.useEffect.checkAuth": async ()=>{
+                "CreateRoomInner.useEffect.checkAuth": async ()=>{
                     const { data: { user } } = await supabase.auth.getUser();
                     const guest = !!user && (user.is_anonymous || user.app_metadata?.provider === 'anonymous');
                     if (!user || guest) {
                         setError('Please create an account to create rooms');
                         setTimeout({
-                            "CreateRoom.useEffect.checkAuth": ()=>{
+                            "CreateRoomInner.useEffect.checkAuth": ()=>{
                                 router.replace('/auth');
                             }
-                        }["CreateRoom.useEffect.checkAuth"], 1500);
+                        }["CreateRoomInner.useEffect.checkAuth"], 1500);
                     }
                 }
-            }["CreateRoom.useEffect.checkAuth"];
+            }["CreateRoomInner.useEffect.checkAuth"];
             checkAuth();
         }
-    }["CreateRoom.useEffect"], []);
+    }["CreateRoomInner.useEffect"], []);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
-        "CreateRoom.useEffect": ()=>{
+        "CreateRoomInner.useEffect": ()=>{
             const friendId = searchParams.get('dm') || searchParams.get('friend') || searchParams.get('prefillFriendId');
             if (friendId) {
                 setFormData({
-                    "CreateRoom.useEffect": (prev)=>({
+                    "CreateRoomInner.useEffect": (prev)=>({
                             ...prev,
                             privacy: 'private',
                             topic: prev.topic || 'General',
                             name: prev.name || ''
                         })
-                }["CreateRoom.useEffect"]);
+                }["CreateRoomInner.useEffect"]);
                 loadFriends();
                 setSelectedFriendIds({
-                    "CreateRoom.useEffect": (prev)=>Array.from(new Set([
+                    "CreateRoomInner.useEffect": (prev)=>Array.from(new Set([
                             ...prev,
                             friendId
                         ]))
-                }["CreateRoom.useEffect"]);
+                }["CreateRoomInner.useEffect"]);
                 ({
-                    "CreateRoom.useEffect": async ()=>{
+                    "CreateRoomInner.useEffect": async ()=>{
                         const { data } = await supabase.from('profiles').select('id, display_name, username').eq('id', friendId).single();
                         const n = data?.display_name || data?.username;
                         if (n) {
                             setFormData({
-                                "CreateRoom.useEffect": (prev)=>({
+                                "CreateRoomInner.useEffect": (prev)=>({
                                         ...prev,
                                         name: prev.name || `Chat with ${n}`
                                     })
-                            }["CreateRoom.useEffect"]);
+                            }["CreateRoomInner.useEffect"]);
                         }
                     }
-                })["CreateRoom.useEffect"]();
+                })["CreateRoomInner.useEffect"]();
                 setStep(2);
             }
         }
-    }["CreateRoom.useEffect"], [
+    }["CreateRoomInner.useEffect"], [
         searchParams
     ]);
     const languages = [
@@ -1557,15 +1557,44 @@ function CreateRoom() {
         columnNumber: 5
     }, this);
 }
-_s(CreateRoom, "ligaIvH6t6Y9XRVCbsOXOesSTL4=", false, function() {
+_s(CreateRoomInner, "ligaIvH6t6Y9XRVCbsOXOesSTL4=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"],
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSearchParams"]
     ];
 });
-_c = CreateRoom;
-var _c;
-__turbopack_context__.k.register(_c, "CreateRoom");
+_c = CreateRoomInner;
+function CreateRoom() {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Suspense"], {
+        fallback: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "min-h-screen flex items-center justify-center",
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "w-10 h-10 border-4 border-primary/20 border-t-primary rounded-full animate-spin"
+            }, void 0, false, {
+                fileName: "[project]/app/create-room/page.tsx",
+                lineNumber: 627,
+                columnNumber: 88
+            }, void 0)
+        }, void 0, false, {
+            fileName: "[project]/app/create-room/page.tsx",
+            lineNumber: 627,
+            columnNumber: 25
+        }, void 0),
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(CreateRoomInner, {}, void 0, false, {
+            fileName: "[project]/app/create-room/page.tsx",
+            lineNumber: 628,
+            columnNumber: 7
+        }, this)
+    }, void 0, false, {
+        fileName: "[project]/app/create-room/page.tsx",
+        lineNumber: 627,
+        columnNumber: 5
+    }, this);
+}
+_c1 = CreateRoom;
+var _c, _c1;
+__turbopack_context__.k.register(_c, "CreateRoomInner");
+__turbopack_context__.k.register(_c1, "CreateRoom");
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }

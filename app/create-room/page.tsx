@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
@@ -9,7 +9,7 @@ import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
-export default function CreateRoom() {
+function CreateRoomInner() {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -619,5 +619,13 @@ export default function CreateRoom() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function CreateRoom() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-10 h-10 border-4 border-primary/20 border-t-primary rounded-full animate-spin" /></div>}>
+      <CreateRoomInner />
+    </Suspense>
   )
 }
