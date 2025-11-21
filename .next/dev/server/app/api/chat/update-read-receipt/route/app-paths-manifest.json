@@ -1,0 +1,3 @@
+{
+  "/api/chat/update-read-receipt/route": "app/api/chat/update-read-receipt/route.js"
+}

@@ -6,12 +6,16 @@ import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
 import { ChatBubble } from '@/components/chat-bubble'
 import { ThemeToggle } from '@/components/theme-toggle'
-import { SendHorizontal, Smile, Paperclip, MoreVertical, Edit, Trash2, X, Copy, MessageCircle } from 'lucide-react'
+import { SendHorizontal, Smile, Paperclip, MoreVertical, Edit, Trash2, X, Copy, MessageCircle, Check, ChevronLeft, Image as ImageIconLucide } from 'lucide-react'
 import * as Dialog from '@radix-ui/react-dialog'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { NotificationsPopover } from '@/components/notifications-popover'
+import { GiphyPicker } from '@/components/giphy-picker'
+import { TypingIndicator } from '@/components/typing-indicator'
+import { VoiceRecorder } from '@/components/voice-recorder'
+import { ThemeSelector } from '@/components/theme-selector'
 
 interface Message {
   id: string
@@ -24,6 +28,7 @@ interface Message {
     username: string
     avatar_url?: string
   }
+  reactions?: { emoji: string; user_id: string }[]
 }
 
 interface Room {
@@ -58,6 +63,10 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
   const [showAddFriends, setShowAddFriends] = useState(false)
   const [selectedFriendIds, setSelectedFriendIds] = useState<string[]>([])
   const [friendSearch, setFriendSearch] = useState('')
+  const [selectionMode, setSelectionMode] = useState(false)
+  const [selectedMessageIds, setSelectedMessageIds] = useState<Set<string>>(new Set())
+  const [showGiphyPicker, setShowGiphyPicker] = useState(false)
+  const typingChannelRef = useRef<any>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const messagesContainerRef = useRef<HTMLDivElement>(null)
   const sendQueueRef = useRef<any[]>([])
@@ -154,7 +163,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
           setFriends(list)
         }
       }
-    } catch {}
+    } catch { }
   }
 
   const [addingFriends, setAddingFriends] = useState(false)
@@ -170,7 +179,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ recipients: selectedFriendIds, type: 'room_member_added', room_id: roomId }),
         })
-      } catch {}
+      } catch { }
       setShowAddFriends(false)
       setSelectedFriendIds([])
     } catch {
@@ -212,7 +221,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
           const msg = res.status === 403 ? 'Invite required or invalid' : res.status === 409 ? 'Room is full' : 'Failed to join'
           setJoinError(msg)
         }
-      } catch {}
+      } catch { }
     }
 
     attemptJoin()
@@ -258,7 +267,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
       try {
         // Already attempted a join above; no-op here
         setJoinError(null)
-      } catch {}
+      } catch { }
     }
     join()
 
@@ -270,7 +279,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
           .delete()
           .eq('room_id', roomId)
           .eq('user_id', currentUser.id)
-      } catch {}
+      } catch { }
     }
 
     let hb: number | null = null
@@ -283,8 +292,8 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ room_id: roomId }),
             keepalive: true,
-          }).catch(() => {})
-        } catch {}
+          }).catch(() => { })
+        } catch { }
       }
       send()
       hb = window.setInterval(send, 25_000)
@@ -296,7 +305,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
       try {
         const body = new Blob([JSON.stringify({ room_id: roomId })], { type: 'application/json' })
         navigator.sendBeacon('/api/room-members/leave', body)
-      } catch {}
+      } catch { }
     }
 
     const onBeforeUnload = () => {
@@ -311,8 +320,8 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
     return () => {
       window.removeEventListener('beforeunload', onBeforeUnload)
       document.removeEventListener('visibilitychange', onVisibilityChange)
-      if (hb) { try { window.clearInterval(hb) } catch {} }
-      try { cleanup() } catch {}
+      if (hb) { try { window.clearInterval(hb) } catch { } }
+      try { cleanup() } catch { }
     }
   }, [roomId, currentUser, supabase, room])
 
@@ -331,6 +340,8 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
         }
         performance.mark('messages_fetch_start')
         setMessages(data || [])
+        const ids = new Set<string>((data || []).map((m: any) => String(m.id)))
+        receivedIdsRef.current = ids
         setLoading(false)
         requestAnimationFrame(() => {
           performance.mark('messages_render_end')
@@ -349,10 +360,10 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
     if (roomId) {
       fetchMessages()
     }
-    return () => { try { ac.abort() } catch {} }
+    return () => { try { ac.abort() } catch { } }
   }, [roomId])
 
-  // Subscribe to real-time messages
+  // Subscribe to real-time messages and reactions
   useEffect(() => {
     if (!roomId) return
 
@@ -373,7 +384,8 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
             .from('messages')
             .select(`
               *,
-              profiles (username, avatar_url)
+              profiles (username, avatar_url),
+              reactions (emoji, user_id)
             `)
             .eq('id', payload.new.id)
             .single()
@@ -381,13 +393,41 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
           if (newMessage) {
             receivedIdsRef.current.add(newMessage.id)
             performance.mark('message_append_start')
-            setMessages((prev) => [...prev, newMessage])
+            setMessages((prev) => {
+              if (prev.some(m => m.id === newMessage.id)) return prev
+              return [...prev, newMessage]
+            })
             requestAnimationFrame(() => {
               performance.mark('message_append_end')
               performance.measure('message_append_render', 'message_append_start', 'message_append_end')
             })
             setTimeout(scrollToBottom, 100)
           }
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'reactions',
+        },
+        async (payload) => {
+          const messageId = (payload.new as any)?.message_id || (payload.old as any)?.message_id
+          if (!messageId) return
+
+          const { data: reactions } = await supabase
+            .from('reactions')
+            .select('emoji, user_id')
+            .eq('message_id', messageId)
+
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === messageId
+                ? { ...msg, reactions: reactions || [] }
+                : msg
+            )
+          )
         }
       )
       .subscribe()
@@ -397,10 +437,73 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
     }
   }, [roomId, supabase])
 
+  // Subscribe to profile changes
+  useEffect(() => {
+    const channel = supabase
+      .channel('public:profiles')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'profiles',
+        },
+        (payload) => {
+          const newProfile = payload.new as any
+          setMessages((prev) =>
+            prev.map((msg) => {
+              if (msg.user_id === newProfile.id) {
+                return {
+                  ...msg,
+                  profiles: {
+                    ...(msg.profiles || { username: 'User' }),
+                    username: newProfile.username,
+                    avatar_url: newProfile.avatar_url,
+                  } as any,
+                }
+              }
+              return msg
+            })
+          )
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [supabase])
+
   // Auto-scroll when new messages arrive
   useEffect(() => {
     scrollToBottom()
   }, [messages])
+
+  // Track read receipts
+  useEffect(() => {
+    if (!currentUser || !roomId || messages.length === 0) return
+
+    const updateReadReceipt = async () => {
+      const lastMessage = messages[messages.length - 1]
+      if (!lastMessage || lastMessage.user_id === currentUser.id) return
+
+      try {
+        await fetch('/api/chat/update-read-receipt', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            room_id: roomId,
+            last_read_message_id: lastMessage.id,
+          }),
+        })
+      } catch (error) {
+        console.error('Failed to update read receipt:', error)
+      }
+    }
+
+    const timer = setTimeout(updateReadReceipt, 1000)
+    return () => clearTimeout(timer)
+  }, [messages, currentUser, roomId])
 
   useEffect(() => {
     const el = messagesContainerRef.current
@@ -420,6 +523,35 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
     }
   }, [])
 
+  // Setup typing indicator channel
+  useEffect(() => {
+    if (!roomId || !currentUser) return
+
+    const channel = supabase.channel(`typing:${roomId}`)
+    channel.subscribe()
+    typingChannelRef.current = channel
+
+    return () => {
+      if (typingChannelRef.current) {
+        supabase.removeChannel(typingChannelRef.current)
+      }
+    }
+  }, [roomId, currentUser, supabase])
+
+  const broadcastTyping = (isTyping: boolean) => {
+    if (!typingChannelRef.current || !currentUser) return
+
+    typingChannelRef.current.send({
+      type: 'broadcast',
+      event: 'typing',
+      payload: {
+        user_id: currentUser.id,
+        username: currentUser.user_metadata?.username || 'User',
+        is_typing: isTyping,
+      },
+    })
+  }
+
   const tryGzip = async (data: any) => {
     try {
       // @ts-ignore
@@ -431,7 +563,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
         const compressed = await new Response(stream).arrayBuffer()
         return new Uint8Array(compressed)
       }
-    } catch {}
+    } catch { }
     return null
   }
 
@@ -448,7 +580,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
       })
       if (response.ok) {
         const t = Math.round(performance.now() - clientTs)
-        try { console.log('send_latency_ms', t) } catch {}
+        try { console.log('send_latency_ms', t) } catch { }
         setLatencies((prev) => { const arr = prev.slice(-49); arr.push(t); return arr })
         return
       }
@@ -480,7 +612,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
         if (row?.id && tmpId) {
           receivedIdsRef.current.add(row.id)
           const t = Math.round(performance.now() - (row.client_ts || performance.now()))
-          try { console.log('send_latency_ms', t) } catch {}
+          try { console.log('send_latency_ms', t) } catch { }
           setLatencies((prev) => { const arr = prev.slice(-49); arr.push(t); return arr })
           const finalMsg: Message = { ...row, profiles: { username: 'You' } }
           setMessages((prev) => {
@@ -541,6 +673,122 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
     setSelectedFile(file)
   }
 
+  const handleGifSelect = async (gifUrl: string) => {
+    if (!currentUser || sending) return
+
+    setSending(true)
+    const tempId = `tmp_${Date.now()}`
+    const optimistic: Message = {
+      id: tempId,
+      content: '🎬 GIF',
+      created_at: new Date().toISOString(),
+      user_id: currentUser.id,
+      profiles: { username: 'You' },
+      media_url: gifUrl,
+      media_type: 'giphy',
+    }
+    setMessages((prev) => [...prev, optimistic])
+    setTimeout(scrollToBottom, 50)
+
+    try {
+      const response = await fetch('/api/chat/send-message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          room_id: roomId,
+          content: '🎬 GIF',
+          media_url: gifUrl,
+          media_type: 'giphy'
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to send GIF')
+      }
+
+      const data = await response.json()
+      if (data?.id) {
+        receivedIdsRef.current.add(data.id)
+        const finalMsg: Message = { ...data, profiles: { username: 'You' } }
+        setMessages((prev) => {
+          const map = new Map(prev.map((m) => [m.id, m]))
+          map.delete(tempId)
+          map.set(finalMsg.id, finalMsg)
+          return Array.from(map.values())
+        })
+      }
+    } catch (err) {
+      console.error('Error sending GIF:', err)
+      setMessages((prev) => prev.filter((m) => m.id !== tempId))
+    } finally {
+      setSending(false)
+    }
+  }
+
+  const handleVoiceRecording = async (audioBlob: Blob) => {
+    if (!currentUser || sending) return
+
+    setSending(true)
+    setUploadingMedia(true)
+    const tempId = `tmp_${Date.now()}`
+    const optimistic: Message = {
+      id: tempId,
+      content: '🎤 Voice Message',
+      created_at: new Date().toISOString(),
+      user_id: currentUser.id,
+      profiles: { username: 'You' },
+      media_url: 'uploading',
+      media_type: 'voice',
+    }
+    setMessages((prev) => [...prev, optimistic])
+    setTimeout(scrollToBottom, 50)
+
+    try {
+      const formData = new FormData()
+      formData.append('file', audioBlob, 'voice-message.webm')
+      formData.append('room_id', roomId)
+
+      const uploadResponse = await fetch('/api/chat/upload-media', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!uploadResponse.ok) throw new Error('Failed to upload voice message')
+
+      const uploadData = await uploadResponse.json()
+      const response = await fetch('/api/chat/send-message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          room_id: roomId,
+          content: '🎤 Voice Message',
+          media_url: uploadData.media_url,
+          media_type: 'voice'
+        }),
+      })
+
+      if (!response.ok) throw new Error('Failed to send voice message')
+
+      const data = await response.json()
+      if (data?.id) {
+        receivedIdsRef.current.add(data.id)
+        const finalMsg: Message = { ...data, profiles: { username: 'You' } }
+        setMessages((prev) => {
+          const map = new Map(prev.map((m) => [m.id, m]))
+          map.delete(tempId)
+          map.set(finalMsg.id, finalMsg)
+          return Array.from(map.values())
+        })
+      }
+    } catch (err) {
+      console.error('Error sending voice message:', err)
+      setMessages((prev) => prev.filter((m) => m.id !== tempId))
+    } finally {
+      setSending(false)
+      setUploadingMedia(false)
+    }
+  }
+
   const handleSendMessage = async () => {
     if ((!inputValue.trim() && !selectedFile) || !currentUser || sending) return
 
@@ -559,6 +807,14 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
       media_type: undefined,
     }
     setMessages((prev) => [...prev, optimistic])
+
+    // Clear input immediately for instant feedback
+    setInputValue('')
+    setSelectedFile(null)
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+
     setTimeout(scrollToBottom, 50)
 
     try {
@@ -588,7 +844,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
       const content = inputValue.trim() || (selectedFile ? '📷 Photo' : '')
       if (lastInputEventTimeRef.current) {
         const latency = performance.now() - lastInputEventTimeRef.current
-        try { console.log('input_latency_ms', Math.round(latency)) } catch {}
+        try { console.log('input_latency_ms', Math.round(latency)) } catch { }
       }
       const now = performance.now()
       const withinBurst = (lastImmediateSendRef.current && (now - lastImmediateSendRef.current) < 150) || sendQueueRef.current.length > 0
@@ -627,26 +883,22 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
               return Array.from(map.values())
             })
             const t = Math.round(performance.now() - (data.client_ts || now))
-            try { console.log('send_latency_ms', t) } catch {}
+            try { console.log('send_latency_ms', t) } catch { }
             setLatencies((prev) => { const arr = prev.slice(-49); arr.push(t); return arr })
           }
         }
       }
 
-      setInputValue('')
-      setSelectedFile(null)
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ''
-      }
-      } catch (err) {
-        console.error('Error sending message:', err)
-        alert((err as any)?.message || 'Failed to send message. Please try again.')
-        setMessages((prev) => prev.filter((m) => m.id !== tempId))
-      } finally {
-        setSending(false)
-        setUploadingMedia(false)
-      }
+      // Input already cleared
+    } catch (err) {
+      console.error('Error sending message:', err)
+      alert((err as any)?.message || 'Failed to send message. Please try again.')
+      setMessages((prev) => prev.filter((m) => m.id !== tempId))
+    } finally {
+      setSending(false)
+      setUploadingMedia(false)
     }
+  }
 
   const handleDeleteRoom = async () => {
     if (!confirm('Are you sure you want to delete this room? This action cannot be undone.')) {
@@ -684,7 +936,78 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
 
       setMessages((prev) => prev.filter((msg) => msg.id !== messageId))
     } catch (err) {
-      try { console.error('Error deleting message:', err) } catch {}
+      try { console.error('Error deleting message:', err) } catch { }
+    }
+  }
+  const handleReaction = async (messageId: string, emoji: string) => {
+    if (!currentUser) {
+      pushSystemMessage('Create an account to react to messages')
+      return
+    }
+
+    // Optimistic update
+    setMessages((prev) => prev.map((msg) => {
+      if (msg.id === messageId) {
+        const existing = msg.reactions?.find(r => r.user_id === currentUser.id && r.emoji === emoji)
+        const newReactions = existing
+          ? msg.reactions?.filter(r => !(r.user_id === currentUser.id && r.emoji === emoji))
+          : [...(msg.reactions || []), { emoji, user_id: currentUser.id }]
+        return { ...msg, reactions: newReactions }
+      }
+      return msg
+    }))
+
+    try {
+      // Check if reaction exists
+      const { data: existing } = await supabase
+        .from('reactions')
+        .select('id')
+        .eq('message_id', messageId)
+        .eq('user_id', currentUser.id)
+        .eq('emoji', emoji)
+        .single()
+
+      if (existing) {
+        await supabase.from('reactions').delete().eq('id', existing.id)
+      } else {
+        await supabase.from('reactions').insert({
+          message_id: messageId,
+          user_id: currentUser.id,
+          emoji
+        })
+      }
+    } catch (err) {
+      console.error('Error toggling reaction:', err)
+    }
+  }
+
+  const toggleMessageSelection = (messageId: string) => {
+    setSelectedMessageIds(prev => {
+      const next = new Set(prev)
+      if (next.has(messageId)) {
+        next.delete(messageId)
+      } else {
+        next.add(messageId)
+      }
+      return next
+    })
+  }
+
+  const handleBulkDelete = async () => {
+    if (selectedMessageIds.size === 0) return
+    if (!confirm(`Delete ${selectedMessageIds.size} messages?`)) return
+
+    const ids = Array.from(selectedMessageIds)
+    try {
+      await Promise.all(ids.map(id =>
+        fetch(`/api/chat/delete-message?id=${id}`, { method: 'DELETE' })
+      ))
+
+      setMessages(prev => prev.filter(m => !selectedMessageIds.has(m.id)))
+      setSelectedMessageIds(new Set())
+      setSelectionMode(false)
+    } catch (err) {
+      alert('Failed to delete some messages')
     }
   }
 
@@ -703,7 +1026,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
 
   useEffect(() => {
     if (currentUser && !sending && !uploadingMedia) {
-      try { messageInputRef.current?.focus() } catch {}
+      try { messageInputRef.current?.focus() } catch { }
     }
   }, [currentUser, sending, uploadingMedia])
 
@@ -713,7 +1036,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
       if (mem) {
         try {
           console.log('memory_mb', Math.round(mem.usedJSHeapSize / 1048576))
-        } catch {}
+        } catch { }
       }
     }, 5000)
     return () => clearInterval(id)
@@ -759,15 +1082,20 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
   }
 
   return (
-    <div className="h-screen flex flex-col bg-background">
+    <div className="fixed inset-0 flex flex-col bg-background overflow-hidden overscroll-none">
       {/* Header - Mobile responsive */}
-      <header className="border-b border-border sticky top-0 z-40 bg-background/95 backdrop-blur-sm">
+      <header className="border-b border-border flex-shrink-0 z-40 bg-background/95 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-2 sm:px-4 py-2 sm:py-4 flex items-center justify-between gap-1.5 sm:gap-2">
           <div className="flex items-center gap-1.5 sm:gap-4 min-w-0 flex-1">
             <Link href="/" className="hover:opacity-70 transition-opacity flex-shrink-0">
-              <h1 className="text-base sm:text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                ChatBloom
-              </h1>
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-background/50 backdrop-blur rounded-xl flex items-center justify-center text-foreground sm:hidden border border-border/50">
+                  <ChevronLeft className="w-5 h-5" />
+                </div>
+                <h1 className="hidden sm:block text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  Chat2077
+                </h1>
+              </div>
             </Link>
             <div className="hidden sm:flex items-center gap-2 pl-4 border-l border-border">
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center text-lg sm:text-xl flex-shrink-0">
@@ -779,29 +1107,52 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
               </div>
             </div>
             {/* Mobile room info */}
-            <div className="sm:hidden flex items-center gap-1.5 min-w-0 flex-1">
-              <div className="w-7 h-7 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center text-sm flex-shrink-0">
+            <div className="sm:hidden flex items-center gap-2 min-w-0 flex-1">
+              <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center text-sm flex-shrink-0 shadow-sm">
                 {room.emoji || '💬'}
               </div>
-              <div className="min-w-0">
-                <h2 className="font-bold text-xs truncate">{room.name}</h2>
+              <div className="min-w-0 flex flex-col">
+                <h2 className="font-bold text-sm truncate leading-tight">{room.name}</h2>
+                <p className="text-[10px] text-muted-foreground truncate leading-tight">
+                  {room.member_count || 0} online
+                </p>
               </div>
             </div>
           </div>
           <div className="flex items-center gap-0.5 sm:gap-2 flex-shrink-0">
             <ThemeToggle />
             <NotificationsPopover />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full"
+              onClick={() => setSelectionMode(!selectionMode)}
+              title={selectionMode ? "Cancel Selection" : "Select Messages"}
+            >
+              {selectionMode ? <X className="w-5 h-5" /> : <Check className="w-5 h-5" />}
+            </Button>
+            {selectionMode && selectedMessageIds.size > 0 && (
+              <Button
+                variant="destructive"
+                size="icon"
+                className="rounded-full"
+                onClick={handleBulkDelete}
+                title="Delete Selected"
+              >
+                <Trash2 className="w-5 h-5" />
+              </Button>
+            )}
             {process.env.NODE_ENV === 'development' && latencies.length > 0 && (
               <div className="ml-1 sm:ml-2 px-2 py-1 rounded-full text-xs bg-primary/10 text-foreground/70">
-                {`avg ${Math.round(latencies.reduce((a,b)=>a+b,0)/latencies.length)}ms`}
+                {`avg ${Math.round(latencies.reduce((a, b) => a + b, 0) / latencies.length)}ms`}
                 {` • max ${Math.max(...latencies)}ms`}
-                {` • out ${latencies.filter((l)=>l > (latencies.reduce((a,b)=>a+b,0)/latencies.length)*1.7).length}`}
+                {` • out ${latencies.filter((l) => l > (latencies.reduce((a, b) => a + b, 0) / latencies.length) * 1.7).length}`}
               </div>
             )}
             <div className="relative">
-              <Button 
-                variant="ghost" 
-                size="icon" 
+              <Button
+                variant="ghost"
+                size="icon"
                 className="rounded-full h-8 w-8 sm:h-10 sm:w-10"
                 onClick={() => setShowRoomMenu(!showRoomMenu)}
               >
@@ -814,7 +1165,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
               )}
               {showRoomMenu && isRoomOwner && (
                 <>
-                  <div 
+                  <div
                     className="fixed inset-0 z-[5] bg-background/20"
                     onClick={() => setShowRoomMenu(false)}
                   />
@@ -871,7 +1222,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
                                     if (!uid || !roomId) return
                                     try {
                                       await supabase.from('room_members').insert({ room_id: roomId, user_id: uid })
-                                    } catch {}
+                                    } catch { }
                                   }}
                                 >
                                   Add
@@ -893,7 +1244,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
                             className="rounded-full"
                             onClick={() => {
                               const url = `${typeof window !== 'undefined' ? window.location.origin : ''}/room/${roomId}?token=${inviteToken}`
-                              navigator.clipboard.writeText(url).catch(() => {})
+                              navigator.clipboard.writeText(url).catch(() => { })
                             }}
                           >
                             Copy
@@ -949,39 +1300,39 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
                 friends
                   .filter((f) => (f.display_name || f.username || '').toLowerCase().includes(friendSearch.toLowerCase()))
                   .map((f) => {
-                  const id = f.id || f.friend_id
-                  const name = f.display_name || f.username || 'Friend'
-                  const checked = selectedFriendIds.includes(id)
-                  return (
-                    <label key={id} className="flex items-center gap-3 text-sm">
-                      <img src={f.avatar_url || '/placeholder.svg'} alt={name} className="w-6 h-6 rounded-full" />
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        onChange={(e) => {
-                          setSelectedFriendIds((prev) => e.target.checked ? [...prev, id] : prev.filter((x) => x !== id))
-                        }}
-                      />
-                      {name}
-                    </label>
-                  )
-                })
+                    const id = f.id || f.friend_id
+                    const name = f.display_name || f.username || 'Friend'
+                    const checked = selectedFriendIds.includes(id)
+                    return (
+                      <label key={id} className="flex items-center gap-3 text-sm">
+                        <img src={f.avatar_url || '/placeholder.svg'} alt={name} className="w-6 h-6 rounded-full" />
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={(e) => {
+                            setSelectedFriendIds((prev) => e.target.checked ? [...prev, id] : prev.filter((x) => x !== id))
+                          }}
+                        />
+                        {name}
+                      </label>
+                    )
+                  })
               )}
             </div>
             <div className="mt-4 flex items-center justify-end gap-2">
               <Dialog.Close asChild>
                 <Button variant="outline" size="sm" className="rounded-full">Cancel</Button>
               </Dialog.Close>
-                <Button size="sm" className="rounded-full bg-primary" onClick={handleAddSelectedFriends} loading={addingFriends}>Add Selected</Button>
+              <Button size="sm" className="rounded-full bg-primary" onClick={handleAddSelectedFriends} loading={addingFriends}>Add Selected</Button>
             </div>
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
 
-      
+
 
       {/* Messages Container - Mobile responsive */}
-      <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-1.5 sm:p-4 md:p-6 space-y-1 sm:space-y-4">
+      <div ref={messagesContainerRef} className="flex-1 min-h-0 overflow-y-auto p-1.5 sm:p-4 md:p-6 space-y-1 sm:space-y-4">
         <div
           className="max-w-4xl mx-auto"
           onClick={(e) => {
@@ -1013,26 +1364,38 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
                       </Button>
                     </div>
                   )}
-                  {visible.map((msg) => (
+                  {visible.map((msg, index) => (
                     <ChatBubble
                       key={msg.id}
                       message={msg.content}
                       sender={getSenderName(msg)}
                       avatar={getAvatar(msg)}
-                      showAvatar={!(msg.profiles?.username || '').startsWith('Guest')}
-                      isOwn={currentUser?.id === msg.user_id}
+                      showAvatar={!selectionMode && (index === 0 || messages[index - 1].user_id !== msg.user_id)}
+                      showName={index === 0 || messages[index - 1].user_id !== msg.user_id}
+                      isOwn={currentUser && msg.user_id === currentUser.id}
                       timestamp={formatTimestamp(msg.created_at)}
-                      reactions={[]}
+                      reactions={msg.reactions?.reduce((acc: { emoji: string; count: number }[], curr) => {
+                        const existing = acc.find(r => r.emoji === curr.emoji)
+                        if (existing) existing.count++
+                        else acc.push({ emoji: curr.emoji, count: 1 })
+                        return acc
+                      }, [])}
                       messageId={msg.id}
                       onDelete={handleDeleteMessage}
                       mediaUrl={msg.media_url}
                       mediaType={msg.media_type}
+                      onReaction={(emoji) => handleReaction(msg.id, emoji)}
+                      onReply={(replyMsg) => setInputValue(`Replying to ${replyMsg.sender}: `)}
+                      selectionMode={selectionMode}
+                      isSelected={selectedMessageIds.has(msg.id)}
+                      onSelect={() => toggleMessageSelection(msg.id)}
                     />
                   ))}
                 </>
               )
             })()
           )}
+          {currentUser && <TypingIndicator roomId={roomId} currentUserId={currentUser.id} />}
           <div ref={messagesEndRef} />
         </div>
       </div>
@@ -1126,17 +1489,36 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
               >
                 <Paperclip className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
               </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full h-8 w-8 sm:h-10 sm:w-10"
+                onClick={() => setShowGiphyPicker(true)}
+                title="Send GIF"
+              >
+                <ImageIconLucide className="w-4 h-4 sm:w-5 sm:h-5" />
+              </Button>
+              <VoiceRecorder
+                onRecordingComplete={handleVoiceRecording}
+                disabled={sending || uploadingMedia}
+              />
               <Input
                 placeholder="Type a message..."
                 value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
+                onChange={(e) => {
+                  setInputValue(e.target.value)
+                  broadcastTyping(e.target.value.length > 0)
+                  if (e.target.value.length === 0) {
+                    setTimeout(() => broadcastTyping(false), 500)
+                  }
+                }}
                 onKeyDown={handleKeyDown}
                 autoFocus
                 ref={messageInputRef}
                 className="rounded-full px-3 sm:px-6 py-1.5 sm:py-2 text-xs sm:text-base flex-1 min-w-0 h-8 sm:h-10"
-                disabled={sending || uploadingMedia}
               />
               <Button
+                onMouseDown={(e) => e.preventDefault()}
                 onClick={() => {
                   lastInputEventTimeRef.current = performance.now()
                   handleSendMessage()
@@ -1156,6 +1538,13 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
           </div>
         </div>
       )}
+
+      {/* Giphy Picker */}
+      <GiphyPicker
+        open={showGiphyPicker}
+        onOpenChange={setShowGiphyPicker}
+        onSelect={handleGifSelect}
+      />
 
     </div>
   )

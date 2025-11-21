@@ -134,7 +134,7 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
         .order('created_at', { ascending: false })
         .limit(8)
       setOwnedRooms(data || [])
-    } catch {}
+    } catch { }
   }
 
   const loadRecentRooms = async () => {
@@ -150,7 +150,7 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
         .map((r) => ({ joined_at: r.joined_at, room: (r as any).rooms }))
         .filter((x) => x.room)
       setRecentRooms(mapped)
-    } catch {}
+    } catch { }
   }
 
   useEffect(() => {
@@ -348,7 +348,7 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
               💬
             </div>
             <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              ChatBloom
+              Chat2077
             </h1>
           </Link>
           <Button size="sm" className="bg-accent hover:bg-accent/90 rounded-full" onClick={handleLogout}>
@@ -373,14 +373,14 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
             <div className="grid md:grid-cols-3 gap-8 items-center">
               {/* Avatar Section */}
               <div className="flex flex-col items-center">
-              <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-3xl border-4 border-primary/50 overflow-hidden shadow-lg mb-4">
+                <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-3xl border-4 border-primary/50 overflow-hidden shadow-lg mb-4">
                   {isGuestUser ? (
                     <div className="w-full h-full bg-gradient-to-br from-muted to-muted/50" />
                   ) : (
-                    <img 
-                      src={selectedAvatar || "/placeholder.svg"} 
-                      alt="User avatar" 
-                      className="w-full h-full object-cover" 
+                    <img
+                      src={selectedAvatar || "/placeholder.svg"}
+                      alt="User avatar"
+                      className="w-full h-full object-cover"
                     />
                   )}
                   {isEditing && (
@@ -421,11 +421,10 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
                         <button
                           key={avatar}
                           onClick={() => setSelectedAvatar(avatar)}
-                          className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl border-2 overflow-hidden transition-all ${
-                            selectedAvatar === avatar
-                              ? 'border-primary scale-110'
-                              : 'border-border hover:border-primary/50'
-                          }`}
+                          className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl border-2 overflow-hidden transition-all ${selectedAvatar === avatar
+                            ? 'border-primary scale-110'
+                            : 'border-border hover:border-primary/50'
+                            }`}
                         >
                           <img src={avatar || "/placeholder.svg"} alt="Avatar option" className="w-full h-full" />
                         </button>
@@ -445,77 +444,77 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
 
               {/* Profile Info */}
               <div className="md:col-span-2">
-              {isEditing ? (
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-sm font-semibold mb-2 block">Display Name</label>
-                    <Input
-                      value={profile.display_name || ''}
-                      onChange={(e) => setProfile({ ...profile, display_name: e.target.value })}
-                      className="rounded-lg"
-                    />
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {isEditing ? (
+                  <div className="space-y-4">
                     <div>
-                      <label className="text-sm font-semibold mb-2 block">Gender</label>
-                      <select
-                        value={profile.gender || 'other'}
-                        onChange={(e) => setProfile({ ...profile, gender: e.target.value })}
-                        className="w-full px-3 py-2 rounded-lg border border-border bg-background"
-                      >
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="other">Other</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="text-sm font-semibold mb-2 block">Age</label>
+                      <label className="text-sm font-semibold mb-2 block">Display Name</label>
                       <Input
-                        type="number"
-                        value={profile.age || ''}
-                        onChange={(e) => setProfile({ ...profile, age: Number(e.target.value) })}
+                        value={profile.display_name || ''}
+                        onChange={(e) => setProfile({ ...profile, display_name: e.target.value })}
                         className="rounded-lg"
                       />
                     </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-semibold mb-2 block">Gender</label>
+                        <select
+                          value={profile.gender || 'other'}
+                          onChange={(e) => setProfile({ ...profile, gender: e.target.value })}
+                          className="w-full px-3 py-2 rounded-lg border border-border bg-background"
+                        >
+                          <option value="male">Male</option>
+                          <option value="female">Female</option>
+                          <option value="other">Other</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-sm font-semibold mb-2 block">Age</label>
+                        <Input
+                          type="number"
+                          value={profile.age || ''}
+                          onChange={(e) => setProfile({ ...profile, age: Number(e.target.value) })}
+                          className="rounded-lg"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="text-sm font-semibold mb-2 block">Bio</label>
+                      <textarea
+                        value={profile.bio || ''}
+                        onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
+                        className="w-full px-3 py-2 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                        rows={3}
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="rounded-full"
+                        onClick={() => setIsEditing(false)}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
                   </div>
+                ) : (
                   <div>
-                    <label className="text-sm font-semibold mb-2 block">Bio</label>
-                    <textarea
-                      value={profile.bio || ''}
-                      onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
-                      className="w-full px-3 py-2 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary"
-                      rows={3}
-                    />
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="rounded-full"
-                      onClick={() => setIsEditing(false)}
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <div>
-                  <h2 className="text-4xl font-bold mb-2">{profile.display_name || profile.username}</h2>
-                  <p className="text-foreground/70 mb-4">{profile.bio || 'No bio yet'}</p>
-                  <div className="flex gap-4 text-sm text-foreground/70 mb-4">
-                    {profile.gender && <span>Gender: {profile.gender}</span>}
-                    {typeof profile.age === 'number' && <span>Age: {profile.age}</span>}
-                  </div>
-                  <div className="flex flex-wrap items-center gap-2 mb-4">
-                    <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-xs font-semibold">
-                      <Crown className="w-3 h-3" />
-                      <span>Level {profile.level || 1}</span>
+                    <h2 className="text-4xl font-bold mb-2">{profile.display_name || profile.username}</h2>
+                    <p className="text-foreground/70 mb-4">{profile.bio || 'No bio yet'}</p>
+                    <div className="flex gap-4 text-sm text-foreground/70 mb-4">
+                      {profile.gender && <span>Gender: {profile.gender}</span>}
+                      {typeof profile.age === 'number' && <span>Age: {profile.age}</span>}
                     </div>
-                    <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-secondary/10 text-xs font-semibold">
-                      <Trophy className="w-3 h-3" />
-                      <span>{badges.length} Achievements</span>
+                    <div className="flex flex-wrap items-center gap-2 mb-4">
+                      <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-xs font-semibold">
+                        <Crown className="w-3 h-3" />
+                        <span>Level {profile.level || 1}</span>
+                      </div>
+                      <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-secondary/10 text-xs font-semibold">
+                        <Trophy className="w-3 h-3" />
+                        <span>{badges.length} Achievements</span>
+                      </div>
                     </div>
-                  </div>
                     <div className="flex gap-2">
                       <Button
                         size="sm"
@@ -526,9 +525,9 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
                         Edit Profile
                       </Button>
                       <div className="flex items-center gap-2">
-                        <Button 
-                          size="sm" 
-                          variant="outline" 
+                        <Button
+                          size="sm"
+                          variant="outline"
                           className="rounded-full"
                           onClick={() => setShowFriends(!showFriends)}
                         >
@@ -549,7 +548,7 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
           </Card>
         </div>
 
-        
+
 
         {/* Friends Section */}
         <div ref={friendsRef} className="mb-12">
@@ -646,37 +645,37 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
                             </div>
                           </Link>
                           {isRecipient ? (
-                           <div className="flex items-center gap-2">
-                            <Button
-                              size="sm"
-                              onClick={() => handleAcceptRequest(request.id)}
-                              loading={pendingActionId === request.id}
-                              className="rounded-full"
-                            >
-                              <Check className="w-4 h-4" />
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => handleDeclineRequest(request.id)}
-                              loading={pendingActionId === request.id}
-                              className="rounded-full"
-                            >
-                              <X className="w-4 h-4" />
-                            </Button>
-                           </div>
+                            <div className="flex items-center gap-2">
+                              <Button
+                                size="sm"
+                                onClick={() => handleAcceptRequest(request.id)}
+                                loading={pendingActionId === request.id}
+                                className="rounded-full"
+                              >
+                                <Check className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleDeclineRequest(request.id)}
+                                loading={pendingActionId === request.id}
+                                className="rounded-full"
+                              >
+                                <X className="w-4 h-4" />
+                              </Button>
+                            </div>
                           ) : (
-                           <div className="flex items-center gap-2">
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => handleDeclineRequest(request.id)}
-                              loading={pendingActionId === request.id}
-                              className="rounded-full"
-                            >
-                              <X className="w-4 h-4" />
-                            </Button>
-                           </div>
+                            <div className="flex items-center gap-2">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleDeclineRequest(request.id)}
+                                loading={pendingActionId === request.id}
+                                className="rounded-full"
+                              >
+                                <X className="w-4 h-4" />
+                              </Button>
+                            </div>
                           )}
                         </div>
                       )
@@ -711,21 +710,21 @@ export default function ProfileClient({ initialProfile, userId }: { initialProfi
                               <p className="text-xs text-foreground/60">@{friend.username}</p>
                             </div>
                           </Link>
-                           <div className="flex items-center gap-2">
-                             <Link href={`/create-room?dm=${friend.friend_id}`}>
-                               <Button size="sm" variant="outline" className="rounded-full">
-                                 <MessageCircle className="w-4 h-4" />
-                               </Button>
-                             </Link>
-                             <Button
-                               size="sm"
-                               variant="ghost"
-                               onClick={() => setRemoveTarget(friend.friend_id)}
-                               className="rounded-full"
-                             >
-                               <UserX className="w-4 h-4 text-destructive" />
-                             </Button>
-                           </div>
+                          <div className="flex items-center gap-2">
+                            <Link href={`/create-room?dm=${friend.friend_id}`}>
+                              <Button size="sm" variant="outline" className="rounded-full">
+                                <MessageCircle className="w-4 h-4" />
+                              </Button>
+                            </Link>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => setRemoveTarget(friend.friend_id)}
+                              className="rounded-full"
+                            >
+                              <UserX className="w-4 h-4 text-destructive" />
+                            </Button>
+                          </div>
                         </div>
                       ))}
                     </div>

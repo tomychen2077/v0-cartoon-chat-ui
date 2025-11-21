@@ -31,14 +31,14 @@ export default function GuestProfile() {
       setStartingGuest(true)
       let { data, error } = await supabase.auth.signInAnonymously()
       if (error) {
-        try { console.error('[guest] anonymous sign-in error:', error) } catch {}
+        try { console.error('[guest] anonymous sign-in error:', error) } catch { }
         // Retry once after ensuring no existing session
         try {
           await supabase.auth.signOut()
           const retry = await supabase.auth.signInAnonymously()
           data = retry.data
           error = retry.error
-        } catch {}
+        } catch { }
       }
       if (error) {
         const msg = (error as any)?.message || 'Guest sign-in failed. Please sign in to continue.'
@@ -66,8 +66,8 @@ export default function GuestProfile() {
           }
         }, 1500)
       }
-      } catch (e) {
-      try { console.error('[guest] unexpected error:', e) } catch {}
+    } catch (e) {
+      try { console.error('[guest] unexpected error:', e) } catch { }
       const msg = e instanceof Error ? e.message : 'Unexpected error. Please sign in to continue.'
       setGuestError(msg)
       setTimeout(() => {
@@ -76,9 +76,9 @@ export default function GuestProfile() {
           router.replace('/auth')
         }
       }, 1500)
-      } finally {
-        setStartingGuest(false)
-      }
+    } finally {
+      setStartingGuest(false)
+    }
   }
 
   const limitations = [
@@ -132,7 +132,7 @@ export default function GuestProfile() {
             {/* Info */}
             <div className="md:col-span-2">
               <h2 className="text-3xl md:text-4xl font-bold mb-2">{guestUsername}</h2>
-              <p className="text-foreground/70 mb-6">Explore ChatBloom as a guest. Create an account to unlock all features!</p>
+              <p className="text-foreground/70 mb-6">Explore Chat2077 as a guest. Create an account to unlock all features!</p>
 
               {/* Upgrade CTA */}
               <div className="bg-primary/20 border border-primary/40 rounded-xl p-4 mb-6">
@@ -218,7 +218,7 @@ export default function GuestProfile() {
           <Card className="relative p-8 md:p-12 bg-gradient-to-r from-primary to-accent text-white text-center">
             <h3 className="text-3xl font-bold mb-4">Start Your Journey Today</h3>
             <p className="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
-              Create a free account and unlock all the features of ChatBloom. Build friendships, create rooms, and earn rewards!
+              Create a free account and unlock all the features of Chat2077. Build friendships, create rooms, and earn rewards!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" variant="secondary" className="rounded-full font-semibold">

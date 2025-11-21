@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient()
-    
+
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     if (authError || !user) {
       return NextResponse.json(
@@ -38,11 +38,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Validate file type
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+    // Validate file type - support images and audio
+    const validTypes = [
+      'image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp',
+      'audio/webm', 'audio/ogg', 'audio/mpeg', 'audio/mp4', 'audio/wav'
+    ]
     if (!validTypes.includes(file.type)) {
       return NextResponse.json(
-        { error: 'Invalid file type. Only images are allowed.' },
+        { error: 'Invalid file type. Only images and audio files are allowed.' },
         { status: 400 }
       )
     }
@@ -75,8 +78,8 @@ export async function POST(request: NextRequest) {
       .from('chat-media')
       .getPublicUrl(fileName)
 
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       media_url: publicUrl,
       media_type: file.type
     })
@@ -88,4 +91,3 @@ export async function POST(request: NextRequest) {
     )
   }
 }
-

@@ -1,6 +1,6 @@
-# Setup Guide - ChatBloom Features
+# Setup Guide - Chat2077 Features
 
-This guide covers all the setup required for the new features added to ChatBloom.
+This guide covers all the setup required for the new features added to Chat2077.
 
 ## Table of Contents
 1. [Database Migrations](#database-migrations)

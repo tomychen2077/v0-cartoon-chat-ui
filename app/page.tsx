@@ -79,14 +79,14 @@ export default function Home() {
     try {
       let { data, error } = await supabaseDirect.auth.signInAnonymously()
       if (error) {
-        try { console.error('[home] anonymous sign-in error:', error) } catch {}
+        try { console.error('[home] anonymous sign-in error:', error) } catch { }
         // Retry once after ensuring no existing session
         try {
           await supabaseDirect.auth.signOut()
           const retry = await supabaseDirect.auth.signInAnonymously()
           data = retry.data
           error = retry.error
-        } catch {}
+        } catch { }
       }
       if (error) {
         const msg = (error as any)?.message || 'Guest sign-in failed. Please sign in to continue.'
@@ -98,7 +98,7 @@ export default function Home() {
       }
       const u = data?.user
       if (u?.id) {
-        const username = `Guest-${Math.floor(Math.random()*10000)}`
+        const username = `Guest-${Math.floor(Math.random() * 10000)}`
         await supabaseDirect
           .from('profiles')
           .upsert({ id: u.id, username, display_name: username })
@@ -110,7 +110,7 @@ export default function Home() {
         }, 1500)
       }
     } catch (e) {
-      try { console.error('[home] unexpected error:', e) } catch {}
+      try { console.error('[home] unexpected error:', e) } catch { }
       const msg = e instanceof Error ? e.message : 'Unexpected error. Please sign in to continue.'
       setGuestError(msg)
       setTimeout(() => {
@@ -150,7 +150,7 @@ export default function Home() {
           .limit(50)
 
         if (error) throw error
-        
+
         const roomsWithMembers = (rooms || []).map((room: any) => {
           const members = room.room_members?.slice(0, 4).map((rm: any) => rm.profiles).filter(Boolean) || []
           const liveCount = Array.isArray(room.room_members) ? room.room_members.length : members.length
@@ -162,7 +162,7 @@ export default function Home() {
           } : undefined
           return { ...room, members, liveCount, creator }
         })
-        
+
         setPublicRooms(roomsWithMembers)
       } catch (err) {
         console.error('Failed to fetch rooms:', err)
@@ -187,7 +187,7 @@ export default function Home() {
 
     fetchRooms().then(async () => {
       try {
-        
+
 
         const roomIds = (publicRooms || []).map((r) => r.id)
         if (roomIds.length === 0) return
@@ -258,7 +258,7 @@ export default function Home() {
         return () => {
           supabase.removeChannel(channel)
         }
-      } catch {}
+      } catch { }
     })
     checkUser()
 
@@ -285,7 +285,7 @@ export default function Home() {
         }
         setStaleCount(count)
         setShowCleanupWarn(count > 0)
-      } catch {}
+      } catch { }
     }
     checkCleanup()
 
@@ -296,15 +296,15 @@ export default function Home() {
 
     return () => {
       subscription.unsubscribe()
-      try { devCheckAbortRef.current?.abort() } catch {}
-      try { cleanupAbortRef.current?.abort() } catch {}
+      try { devCheckAbortRef.current?.abort() } catch { }
+      try { cleanupAbortRef.current?.abort() } catch { }
     }
   }, [])
 
   useEffect(() => {
     if (!showCleanupWarn) return
     const t = window.setTimeout(() => setShowCleanupWarn(false), 6000)
-    return () => { try { window.clearTimeout(t) } catch {} }
+    return () => { try { window.clearTimeout(t) } catch { } }
   }, [showCleanupWarn])
 
   const runDevCleanup = async () => {
@@ -574,7 +574,7 @@ export default function Home() {
                 <Button variant={capacityFilter === 'full' ? 'default' : 'outline'} size="sm" className="rounded-full px-3" onClick={() => setCapacityFilter('full')}>Full</Button>
               </div>
               <div className="flex gap-2 overflow-x-auto whitespace-nowrap py-1 -mx-1 px-1">
-                {['all','General','Gaming','Art & Design','Technology','Music','Learning','Sports','Food'].map((t) => (
+                {['all', 'General', 'Gaming', 'Art & Design', 'Technology', 'Music', 'Learning', 'Sports', 'Food'].map((t) => (
                   <Button key={t} variant={selectedTopic === t ? 'default' : 'outline'} size="sm" className="rounded-full px-3" onClick={() => setSelectedTopic(t)}>
                     {t === 'all' ? 'All Topics' : t}
                   </Button>
@@ -633,7 +633,7 @@ export default function Home() {
                         </span>
                       </div>
                     )}
-                    
+
                     {/* Member Avatars */}
                     {room.members && room.members.length > 0 && (
                       <div className="flex items-center gap-2 mb-3 sm:mb-4">
@@ -665,7 +665,7 @@ export default function Home() {
                         )}
                       </div>
                     )}
-                    
+
                     <Button
                       size="sm"
                       className="w-full bg-primary hover:bg-primary/90 rounded-full text-xs sm:text-sm"
@@ -687,8 +687,8 @@ export default function Home() {
       {/* Features Section - hidden on mobile */}
       <section className="py-12 md:py-20 bg-primary/5 dark:bg-primary/10 border-t border-border hidden md:block">
         <div className="max-w-7xl mx-auto px-4">
-          <h3 className="text-3xl md:text-4xl font-bold mb-12 text-center">Why ChatBloom?</h3>
-          
+          <h3 className="text-3xl md:text-4xl font-bold mb-12 text-center">Why Chat2077?</h3>
+
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               { icon: MessageCircle, title: 'Group Chats', desc: 'Chat with thousands in public rooms' },

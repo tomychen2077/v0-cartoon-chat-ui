@@ -200,6 +200,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../../app/api/chat/update-read-receipt/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/chat/update-read-receipt">> = Specific
+  const handler = {} as typeof import("../../../app/api/chat/update-read-receipt/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../app/api/chat/upload-media/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/chat/upload-media">> = Specific

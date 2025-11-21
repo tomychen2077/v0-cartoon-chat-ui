@@ -118,17 +118,22 @@ async function POST(request) {
                 status: 400
             });
         }
-        // Validate file type
+        // Validate file type - support images and audio
         const validTypes = [
             'image/jpeg',
             'image/jpg',
             'image/png',
             'image/gif',
-            'image/webp'
+            'image/webp',
+            'audio/webm',
+            'audio/ogg',
+            'audio/mpeg',
+            'audio/mp4',
+            'audio/wav'
         ];
         if (!validTypes.includes(file.type)) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                error: 'Invalid file type. Only images are allowed.'
+                error: 'Invalid file type. Only images and audio files are allowed.'
             }, {
                 status: 400
             });
