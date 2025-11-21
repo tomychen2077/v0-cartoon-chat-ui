@@ -1,14 +1,2335 @@
-[00:00:04.807] Server  LOG      ✓ Ready in 3.8s
-[00:00:09.980] Server  LOG      ○ Compiling / ...
-[00:00:15.528] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:17.291] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:00:17.291] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[00:00:17.291] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763617295750}
-[00:00:47.683] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:48.262] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:00:48.263] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[00:00:48.263] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763617327644}
-[00:00:54.496] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/create-room color: rgb(120, 120, 120) color: inherit {"dp":"/create-room","o":"http://localhost:3000/create-room","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763617333866}
-[00:00:57.632] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763617336996}
-[00:01:03.922] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763617343306}
-[00:01:08.463] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763617347825}
+[00:00:05.884] Server  LOG      ✓ Ready in 4.5s
+[00:00:58.913] Server  LOG      ○ Compiling / ...
+[00:01:02.637] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:03.158] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:01:03.158] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[00:01:03.158] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/?ide_webview_request_time=1763700881571 color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/?ide_webview_request_time=1763700881571","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763700890963}
+[00:01:11.417] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763700899227}
+[00:01:16.427] Browser LOG     memory_mb 22
+[00:01:21.429] Browser LOG     memory_mb 22
+[00:01:26.436] Browser LOG     memory_mb 23
+[00:01:31.424] Browser LOG     memory_mb 23
+[00:01:33.285] Browser LOG     input_latency_ms 0
+[00:01:34.585] Browser LOG     send_latency_ms 1311
+[00:01:36.423] Browser LOG     memory_mb 22
+[00:01:39.953] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763700927742}
+[00:01:43.121] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/44b2b54c-971c-4b65-99bc-e5190ebe8961 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/44b2b54c-971c-4b65-99bc-e5190ebe8961","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763700930918}
+[00:01:48.119] Browser LOG     memory_mb 28
+[00:01:53.129] Browser LOG     memory_mb 20
+[00:01:58.113] Browser LOG     memory_mb 20
+[00:02:03.131] Browser LOG     memory_mb 20
+[00:02:08.131] Browser LOG     memory_mb 20
+[00:02:10.987] Browser LOG     input_latency_ms 0
+[00:02:11.758] Browser LOG     send_latency_ms 770
+[00:02:13.110] Browser LOG     memory_mb 21
+[00:02:17.631] Browser LOG     get confirm result false
+[00:02:18.118] Browser LOG     memory_mb 21
+[00:02:20.167] Browser LOG     input_latency_ms 0
+[00:02:21.182] Browser LOG     send_latency_ms 1017
+[00:02:23.109] Browser LOG     memory_mb 22
+[00:02:28.119] Browser LOG     memory_mb 22
+[00:02:33.115] Browser LOG     memory_mb 22
+[00:02:38.110] Browser LOG     memory_mb 22
+[00:02:43.123] Browser LOG     memory_mb 22
+[00:02:48.136] Browser LOG     memory_mb 22
+[00:02:53.120] Browser LOG     memory_mb 22
+[00:02:58.132] Browser LOG     memory_mb 22
+[00:03:03.119] Browser LOG     memory_mb 22
+[00:03:08.128] Browser LOG     memory_mb 22
+[00:03:13.111] Browser LOG     memory_mb 22
+[00:03:18.129] Browser LOG     memory_mb 22
+[00:03:23.113] Browser LOG     memory_mb 22
+[00:03:28.121] Browser LOG     memory_mb 22
+[00:03:33.129] Browser LOG     memory_mb 22
+[00:03:38.109] Browser LOG     memory_mb 22
+[00:03:43.125] Browser LOG     memory_mb 22
+[00:03:48.121] Browser LOG     memory_mb 22
+[00:03:53.129] Browser LOG     memory_mb 22
+[00:03:58.121] Browser LOG     memory_mb 22
+[00:04:03.128] Browser LOG     memory_mb 22
+[00:04:08.121] Browser LOG     memory_mb 22
+[00:04:13.126] Browser LOG     memory_mb 22
+[00:04:18.137] Browser LOG     memory_mb 22
+[00:04:23.117] Browser LOG     memory_mb 22
+[00:04:28.122] Browser LOG     memory_mb 22
+[00:04:33.120] Browser LOG     memory_mb 22
+[00:04:38.108] Browser LOG     memory_mb 22
+[00:04:43.127] Browser LOG     memory_mb 22
+[00:04:48.128] Browser LOG     memory_mb 22
+[00:04:53.127] Browser LOG     memory_mb 22
+[00:04:58.135] Browser LOG     memory_mb 22
+[00:05:03.127] Browser LOG     memory_mb 22
+[00:05:08.129] Browser LOG     memory_mb 22
+[00:05:13.130] Browser LOG     memory_mb 22
+[00:05:18.115] Browser LOG     memory_mb 22
+[00:05:19.646] Browser LOG     get confirm result false
+[00:05:19.646] Browser LOG     get confirm result false
+[00:05:23.124] Browser LOG     memory_mb 22
+[00:05:28.129] Browser LOG     memory_mb 22
+[00:05:33.130] Browser LOG     memory_mb 22
+[00:05:38.129] Browser LOG     memory_mb 22
+[00:05:43.127] Browser LOG     memory_mb 22
+[00:05:48.120] Browser LOG     memory_mb 22
+[00:05:53.124] Browser LOG     memory_mb 22
+[00:05:58.115] Browser LOG     memory_mb 22
+[00:06:03.137] Browser LOG     memory_mb 22
+[00:06:08.122] Browser LOG     memory_mb 22
+[00:06:13.117] Browser LOG     memory_mb 22
+[00:06:18.120] Browser LOG     memory_mb 22
+[00:06:23.245] Browser LOG     memory_mb 22
+[00:06:28.115] Browser LOG     memory_mb 22
+[00:06:33.115] Browser LOG     memory_mb 22
+[00:06:38.119] Browser LOG     memory_mb 22
+[00:06:43.115] Browser LOG     memory_mb 22
+[00:06:48.132] Browser LOG     memory_mb 22
+[00:06:53.124] Browser LOG     memory_mb 22
+[00:06:58.119] Browser LOG     memory_mb 22
+[00:07:03.128] Browser LOG     memory_mb 23
+[00:07:08.114] Browser LOG     memory_mb 23
+[00:07:13.113] Browser LOG     memory_mb 22
+[00:07:18.127] Browser LOG     memory_mb 22
+[00:07:23.114] Browser LOG     memory_mb 22
+[00:07:28.125] Browser LOG     memory_mb 22
+[00:07:33.121] Browser LOG     memory_mb 22
+[00:07:38.110] Browser LOG     memory_mb 22
+[00:07:43.116] Browser LOG     memory_mb 22
+[00:07:48.112] Browser LOG     memory_mb 22
+[00:07:53.117] Browser LOG     memory_mb 22
+[00:07:58.122] Browser LOG     memory_mb 22
+[00:08:03.109] Browser LOG     memory_mb 22
+[00:08:08.126] Browser LOG     memory_mb 22
+[00:08:13.124] Browser LOG     memory_mb 22
+[00:08:18.122] Browser LOG     memory_mb 22
+[00:08:23.118] Browser LOG     memory_mb 22
+[00:08:28.129] Browser LOG     memory_mb 22
+[00:08:33.123] Browser LOG     memory_mb 23
+[00:08:38.126] Browser LOG     memory_mb 23
+[00:08:43.117] Browser LOG     memory_mb 23
+[00:08:48.133] Browser LOG     memory_mb 23
+[00:08:53.129] Browser LOG     memory_mb 22
+[00:08:58.123] Browser LOG     memory_mb 22
+[00:09:03.121] Browser LOG     memory_mb 22
+[00:09:08.142] Browser LOG     memory_mb 22
+[00:09:13.117] Browser LOG     memory_mb 22
+[00:09:18.120] Browser LOG     memory_mb 22
+[00:09:23.121] Browser LOG     memory_mb 22
+[00:09:28.131] Browser LOG     memory_mb 22
+[00:09:33.115] Browser LOG     memory_mb 22
+[00:09:38.122] Browser LOG     memory_mb 22
+[00:09:43.112] Browser LOG     memory_mb 22
+[00:09:48.123] Browser LOG     memory_mb 22
+[00:09:53.126] Browser LOG     memory_mb 22
+[00:09:58.124] Browser LOG     memory_mb 22
+[00:10:03.118] Browser LOG     memory_mb 23
+[00:10:08.118] Browser LOG     memory_mb 22
+[00:10:13.127] Browser LOG     memory_mb 22
+[00:10:18.119] Browser LOG     memory_mb 22
+[00:10:23.130] Browser LOG     memory_mb 22
+[00:10:28.129] Browser LOG     memory_mb 22
+[00:10:33.130] Browser LOG     memory_mb 22
+[00:10:38.131] Browser LOG     memory_mb 22
+[00:10:43.131] Browser LOG     memory_mb 22
+[00:10:48.129] Browser LOG     memory_mb 22
+[00:10:53.126] Browser LOG     memory_mb 22
+[00:10:58.121] Browser LOG     memory_mb 22
+[00:11:03.128] Browser LOG     memory_mb 22
+[00:11:08.126] Browser LOG     memory_mb 22
+[00:11:13.127] Browser LOG     memory_mb 22
+[00:11:18.128] Browser LOG     memory_mb 22
+[00:11:23.119] Browser LOG     memory_mb 20
+[00:11:28.126] Browser LOG     memory_mb 20
+[00:11:32.490] Browser LOG     input_latency_ms 0
+[00:11:33.110] Browser LOG     memory_mb 20
+[00:11:33.543] Browser LOG     send_latency_ms 1051
+[00:11:38.115] Browser LOG     memory_mb 21
+[00:11:43.193] Browser LOG     memory_mb 20
+[00:11:43.193] Browser LOG     input_latency_ms 0
+[00:11:44.242] Browser LOG     send_latency_ms 1041
+[00:11:46.456] Browser LOG     input_latency_ms 0
+[00:11:47.226] Browser LOG     send_latency_ms 778
+[00:11:48.109] Browser LOG     memory_mb 22
+[00:11:53.134] Browser LOG     memory_mb 22
+[00:11:58.125] Browser LOG     memory_mb 22
+[00:12:03.128] Browser LOG     memory_mb 22
+[00:12:08.125] Browser LOG     memory_mb 22
+[00:12:13.127] Browser LOG     memory_mb 22
+[00:12:18.114] Browser LOG     memory_mb 22
+[00:12:23.133] Browser LOG     memory_mb 22
+[00:12:28.121] Browser LOG     memory_mb 21
+[00:12:33.107] Browser LOG     memory_mb 22
+[00:12:38.107] Browser LOG     memory_mb 22
+[00:12:43.126] Browser LOG     memory_mb 22
+[00:12:48.114] Browser LOG     memory_mb 22
+[00:12:53.135] Browser LOG     memory_mb 22
+[00:12:58.121] Browser LOG     memory_mb 22
+[00:13:02.182] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:13:03.057] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:13:03.057] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[00:13:03.057] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763701610821}
+[00:13:03.121] Browser LOG     memory_mb 23
+[00:13:08.145] Browser LOG     memory_mb 23
+[00:13:13.121] Browser LOG     memory_mb 23
+[00:13:18.119] Browser LOG     memory_mb 23
+[00:13:23.129] Browser LOG     memory_mb 22
+[00:13:23.465] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:13:23.827] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:13:23.827] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[00:13:23.827] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763701631632}
+[00:13:27.862] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/44b2b54c-971c-4b65-99bc-e5190ebe8961 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/44b2b54c-971c-4b65-99bc-e5190ebe8961","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763701635662}
+[00:13:28.130] Browser LOG     memory_mb 22
+[00:13:31.403] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763701639194}
+[00:13:33.119] Browser LOG     memory_mb 22
+[00:13:37.072] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763701644883}
+[00:13:38.112] Browser LOG     memory_mb 22
+[00:13:39.882] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763701647670}
+[00:13:43.126] Browser LOG     memory_mb 22
+[00:13:48.122] Browser LOG     memory_mb 22
+[00:13:53.146] Browser LOG     memory_mb 22
+[00:13:57.606] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:13:58.120] Browser LOG     memory_mb 23
+[00:13:58.842] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:13:58.842] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[00:13:58.842] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763701666644}
+[00:14:00.838] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763701668628}
+[00:14:03.111] Browser LOG     memory_mb 20
+[00:14:03.487] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763701671282}
+[00:14:05.329] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/44b2b54c-971c-4b65-99bc-e5190ebe8961 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/44b2b54c-971c-4b65-99bc-e5190ebe8961","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763701673054}
+[00:14:08.129] Browser LOG     memory_mb 21
+[00:14:10.264] Browser LOG     memory_mb 27
+[00:14:11.749] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763701679536}
+[00:14:13.127] Browser LOG     memory_mb 21
+[00:14:18.124] Browser LOG     memory_mb 21
+[00:14:23.122] Browser LOG     memory_mb 21
+[00:14:27.171] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763701694842}
+[00:14:28.111] Browser LOG     memory_mb 20
+[00:14:32.043] Browser LOG     memory_mb 21
+[00:14:33.128] Browser LOG     memory_mb 20
+[00:14:37.042] Browser LOG     memory_mb 21
+[00:14:38.130] Browser LOG     memory_mb 20
+[00:14:40.066] Server  LOG      ✓ Compiled in 210ms
+[00:14:43.121] Browser LOG     memory_mb 23
+[00:14:43.514] Browser LOG     memory_mb 22
+[00:14:48.129] Browser LOG     memory_mb 23
+[00:14:48.522] Browser LOG     memory_mb 22
+[00:14:53.118] Browser LOG     memory_mb 23
+[00:14:53.552] Browser LOG     memory_mb 22
+[00:14:58.111] Browser LOG     memory_mb 23
+[00:14:58.510] Browser LOG     memory_mb 22
+[00:15:03.138] Browser LOG     memory_mb 24
+[00:15:03.511] Browser LOG     memory_mb 22
+[00:15:08.111] Browser LOG     memory_mb 24
+[00:15:08.522] Browser LOG     memory_mb 22
+[00:15:10.550] Browser LOG     get confirm result false
+[00:15:10.550] Browser LOG     get confirm result false
+[00:15:10.550] Browser LOG     get confirm result false
+[00:15:11.778] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763701739563}
+[00:15:13.516] Browser LOG     memory_mb 22
+[00:15:18.511] Browser LOG     memory_mb 22
+[00:15:19.542] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763701747312}
+[00:15:23.519] Browser LOG     memory_mb 22
+[00:15:24.518] Browser LOG     memory_mb 22
+[00:15:28.511] Browser LOG     memory_mb 22
+[00:15:29.507] Browser LOG     memory_mb 22
+[00:15:33.527] Browser LOG     memory_mb 22
+[00:15:34.509] Browser LOG     memory_mb 23
+[00:15:38.512] Server  LOG      ✓ Compiled in 145ms
+[00:15:39.521] Browser LOG     memory_mb 22
+[00:15:44.513] Browser LOG     memory_mb 22
+[00:15:49.513] Browser LOG     memory_mb 23
+[00:15:54.534] Browser LOG     memory_mb 23
+[00:15:59.507] Browser LOG     memory_mb 22
+[00:16:04.505] Browser LOG     memory_mb 22
+[00:16:09.507] Browser LOG     memory_mb 22
+[00:16:14.520] Browser LOG     memory_mb 22
+[00:16:19.523] Browser LOG     memory_mb 22
+[00:16:24.534] Browser LOG     memory_mb 22
+[00:16:29.520] Browser LOG     memory_mb 22
+[00:16:34.518] Browser LOG     memory_mb 22
+[00:16:39.514] Browser LOG     memory_mb 22
+[00:16:44.513] Browser LOG     memory_mb 22
+[00:16:49.538] Browser LOG     memory_mb 22
+[00:16:54.520] Browser LOG     memory_mb 22
+[00:16:59.502] Browser LOG     memory_mb 23
+[00:17:04.520] Browser LOG     memory_mb 22
+[00:17:09.519] Browser LOG     memory_mb 22
+[00:17:14.513] Browser LOG     memory_mb 22
+[00:17:19.522] Browser LOG     memory_mb 22
+[00:17:24.516] Browser LOG     memory_mb 22
+[00:17:27.266] Server  LOG      ✓ Compiled in 147ms
+[00:17:27.519] Browser LOG     memory_mb 22
+[00:17:29.527] Browser LOG     memory_mb 25
+[00:17:34.510] Browser LOG     memory_mb 25
+[00:17:39.515] Browser LOG     memory_mb 25
+[00:17:44.515] Browser LOG     memory_mb 25
+[00:17:49.515] Browser LOG     memory_mb 25
+[00:17:54.523] Browser LOG     memory_mb 25
+[00:17:59.508] Browser LOG     memory_mb 25
+[00:18:04.519] Browser LOG     memory_mb 25
+[00:18:09.511] Browser LOG     memory_mb 25
+[00:18:14.521] Browser LOG     memory_mb 25
+[00:18:19.517] Browser LOG     memory_mb 25
+[00:18:24.526] Browser LOG     memory_mb 25
+[00:18:27.530] Browser LOG     memory_mb 23
+[00:18:29.520] Browser LOG     memory_mb 25
+[00:18:34.523] Browser LOG     memory_mb 25
+[00:18:35.140] Browser LOG     memory_mb 23
+[00:18:35.248] Browser LOG     memory_mb 24
+[00:18:37.041] Browser LOG     memory_mb 24
+[00:18:39.521] Browser LOG     memory_mb 25
+[00:18:43.522] Browser LOG     memory_mb 24
+[00:18:44.516] Browser LOG     memory_mb 25
+[00:18:48.522] Browser LOG     memory_mb 24
+[00:18:49.525] Browser LOG     memory_mb 25
+[00:18:53.513] Browser LOG     memory_mb 24
+[00:18:54.509] Browser LOG     memory_mb 25
+[00:18:58.529] Browser LOG     memory_mb 24
+[00:18:59.523] Browser LOG     memory_mb 25
+[00:19:03.518] Browser LOG     memory_mb 24
+[00:19:04.518] Browser LOG     memory_mb 25
+[00:19:08.511] Browser LOG     memory_mb 23
+[00:19:09.523] Browser LOG     memory_mb 25
+[00:19:13.525] Browser LOG     memory_mb 23
+[00:19:14.513] Browser LOG     memory_mb 25
+[00:19:18.512] Browser LOG     memory_mb 23
+[00:19:19.520] Browser LOG     memory_mb 26
+[00:19:23.525] Browser LOG     memory_mb 23
+[00:19:24.507] Browser LOG     memory_mb 26
+[00:19:24.910] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763701992696}
+[00:19:26.110] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/auth color: rgb(120, 120, 120) color: inherit {"dp":"/auth","o":"http://localhost:3000/auth","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763701993921}
+[00:19:28.526] Browser LOG     memory_mb 24
+[00:19:30.646] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:19:31.106] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:19:31.106] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[00:19:31.106] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763701998882}
+[00:19:33.517] Browser LOG     memory_mb 24
+[00:19:35.495] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763702003256}
+[00:19:38.523] Browser LOG     memory_mb 24
+[00:19:38.622] Browser LOG     input_latency_ms 1
+[00:19:39.354] Browser LOG     send_latency_ms 755
+[00:19:40.454] Browser LOG     memory_mb 34
+[00:19:43.518] Browser LOG     memory_mb 24
+[00:19:45.453] Browser LOG     memory_mb 39
+[00:19:47.083] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763702014873}
+[00:19:48.524] Browser LOG     memory_mb 23
+[00:19:53.189] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/create-room color: rgb(120, 120, 120) color: inherit {"dp":"/create-room","o":"http://localhost:3000/create-room","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763702020990}
+[00:19:53.517] Browser LOG     memory_mb 23
+[00:19:58.515] Browser LOG     memory_mb 24
+[00:20:03.517] Browser LOG     memory_mb 24
+[00:20:08.594] Browser LOG     memory_mb 24
+[00:20:13.520] Browser LOG     memory_mb 24
+[00:20:14.820] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763702042617}
+[00:20:17.438] Browser LOG     input_latency_ms 0
+[00:20:18.205] Browser LOG     send_latency_ms 771
+[00:20:19.805] Browser LOG     memory_mb 35
+[00:20:20.952] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763702048727}
+[00:20:24.437] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763702052246}
+[00:20:27.825] Browser LOG     input_latency_ms 0
+[00:20:28.584] Browser LOG     send_latency_ms 757
+[00:20:29.452] Browser LOG     memory_mb 37
+[00:20:34.474] Browser LOG     memory_mb 37
+[00:20:39.446] Browser LOG     memory_mb 37
+[00:20:44.452] Browser LOG     memory_mb 37
+[00:20:49.453] Browser LOG     memory_mb 37
+[00:20:54.452] Browser LOG     memory_mb 37
+[00:20:59.459] Browser LOG     memory_mb 37
+[00:21:04.456] Browser LOG     memory_mb 37
+[00:21:09.445] Browser LOG     memory_mb 37
+[00:21:12.899] Browser LOG     memory_mb 24
+[00:21:13.090] Browser LOG     memory_mb 24
+[00:21:14.453] Browser LOG     memory_mb 37
+[00:21:18.517] Browser LOG     memory_mb 24
+[00:21:19.451] Browser LOG     memory_mb 37
+[00:21:23.517] Browser LOG     memory_mb 24
+[00:21:24.450] Browser LOG     memory_mb 37
+[00:21:28.518] Browser LOG     memory_mb 24
+[00:21:29.452] Browser LOG     memory_mb 37
+[00:21:33.518] Browser LOG     memory_mb 24
+[00:21:33.524] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/6ee50edb-f79f-4062-ab62-091383d5e3ae color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/6ee50edb-f79f-4062-ab62-091383d5e3ae","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763702121333}
+[00:21:34.448] Browser LOG     memory_mb 38
+[00:21:35.965] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763702123761}
+[00:21:38.517] Browser LOG     memory_mb 24
+[00:21:39.448] Browser LOG     memory_mb 35
+[00:21:43.515] Browser LOG     memory_mb 24
+[00:21:44.465] Browser LOG     memory_mb 35
+[00:21:48.518] Browser LOG     memory_mb 24
+[00:21:49.461] Browser LOG     memory_mb 35
+[00:21:53.514] Browser LOG     memory_mb 24
+[00:21:54.447] Browser LOG     memory_mb 35
+[00:21:58.514] Browser LOG     memory_mb 24
+[00:21:59.446] Browser LOG     memory_mb 35
+[00:22:03.514] Browser LOG     memory_mb 24
+[00:22:04.447] Browser LOG     memory_mb 35
+[00:22:08.512] Browser LOG     memory_mb 24
+[00:22:09.447] Browser LOG     memory_mb 35
+[00:22:13.514] Browser LOG     memory_mb 24
+[00:22:14.456] Browser LOG     memory_mb 35
+[00:22:19.446] Browser LOG     memory_mb 35
+[00:22:24.446] Browser LOG     memory_mb 35
+[00:22:29.447] Browser LOG     memory_mb 35
+[00:22:34.446] Browser LOG     memory_mb 36
+[00:22:39.461] Browser LOG     memory_mb 36
+[00:22:44.465] Browser LOG     memory_mb 36
+[00:22:49.444] Browser LOG     memory_mb 36
+[00:22:54.443] Browser LOG     memory_mb 36
+[00:22:59.444] Browser LOG     memory_mb 36
+[00:23:04.445] Browser LOG     memory_mb 36
+[00:23:09.446] Browser LOG     memory_mb 36
+[00:23:14.446] Browser LOG     memory_mb 36
+[00:23:19.444] Browser LOG     memory_mb 36
+[00:23:24.444] Browser LOG     memory_mb 35
+[00:23:27.528] Browser LOG     memory_mb 24
+[00:23:29.439] Browser LOG     memory_mb 35
+[00:23:34.441] Browser LOG     memory_mb 35
+[00:23:37.147] Browser LOG     memory_mb 24
+[00:23:37.277] Browser LOG     memory_mb 24
+[00:23:39.448] Browser LOG     memory_mb 35
+[00:23:43.526] Browser LOG     memory_mb 24
+[00:23:44.452] Browser LOG     memory_mb 36
+[00:23:48.521] Browser LOG     memory_mb 24
+[00:23:49.022] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763702256801}
+[00:23:53.512] Browser LOG     memory_mb 24
+[00:23:58.524] Browser LOG     memory_mb 24
+[00:24:01.523] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763702269300}
+[00:24:03.520] Browser LOG     memory_mb 24
+[00:24:04.934] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:24:05.262] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:24:05.262] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","route":"/room/[id]"}
+[00:24:05.262] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763702273005}
+[00:24:08.514] Browser LOG     memory_mb 24
+[00:24:10.143] Browser LOG     memory_mb 41
+[00:24:13.527] Browser LOG     memory_mb 24
+[00:24:15.144] Browser LOG     memory_mb 41
+[00:24:18.513] Browser LOG     memory_mb 24
+[00:24:20.147] Browser LOG     memory_mb 41
+[00:24:23.527] Browser LOG     memory_mb 24
+[00:24:25.155] Browser LOG     memory_mb 41
+[00:24:28.519] Browser LOG     memory_mb 24
+[00:24:30.144] Browser LOG     memory_mb 42
+[00:24:33.520] Browser LOG     memory_mb 23
+[00:24:35.147] Browser LOG     memory_mb 31
+[00:24:38.522] Browser LOG     memory_mb 23
+[00:24:40.153] Browser LOG     memory_mb 30
+[00:24:45.151] Browser LOG     memory_mb 30
+[00:24:50.147] Browser LOG     memory_mb 30
+[00:24:55.149] Browser LOG     memory_mb 30
+[00:25:00.156] Browser LOG     memory_mb 31
+[00:25:05.145] Browser LOG     memory_mb 31
+[00:25:10.153] Browser LOG     memory_mb 31
+[00:25:15.148] Browser LOG     memory_mb 31
+[00:25:20.147] Browser LOG     memory_mb 31
+[00:25:25.157] Browser LOG     memory_mb 31
+[00:25:30.152] Browser LOG     memory_mb 31
+[00:25:35.163] Browser LOG     memory_mb 31
+[00:25:40.138] Browser LOG     memory_mb 31
+[00:25:45.147] Browser LOG     memory_mb 31
+[00:25:50.155] Browser LOG     memory_mb 31
+[00:25:55.148] Browser LOG     memory_mb 31
+[00:26:00.143] Browser LOG     memory_mb 31
+[00:26:05.148] Browser LOG     memory_mb 31
+[00:26:10.149] Browser LOG     memory_mb 31
+[00:26:15.144] Browser LOG     memory_mb 31
+[00:26:20.149] Browser LOG     memory_mb 31
+[00:26:25.156] Browser LOG     memory_mb 31
+[00:26:27.517] Browser LOG     memory_mb 23
+[00:26:30.152] Browser LOG     memory_mb 31
+[00:26:35.144] Browser LOG     memory_mb 31
+[00:26:40.149] Browser LOG     memory_mb 31
+[00:26:45.145] Browser LOG     memory_mb 31
+[00:26:50.151] Browser LOG     memory_mb 31
+[00:26:55.152] Browser LOG     memory_mb 31
+[00:27:00.143] Browser LOG     memory_mb 31
+[00:27:05.157] Browser LOG     memory_mb 31
+[00:27:10.145] Browser LOG     memory_mb 31
+[00:27:15.155] Browser LOG     memory_mb 31
+[00:27:20.148] Browser LOG     memory_mb 31
+[00:27:25.151] Browser LOG     memory_mb 31
+[00:27:27.522] Browser LOG     memory_mb 24
+[00:27:30.151] Browser LOG     memory_mb 31
+[00:27:35.153] Browser LOG     memory_mb 31
+[00:27:40.145] Browser LOG     memory_mb 31
+[00:27:45.144] Browser LOG     memory_mb 31
+[00:27:50.149] Browser LOG     memory_mb 31
+[00:27:55.148] Browser LOG     memory_mb 31
+[00:28:00.151] Browser LOG     memory_mb 31
+[00:28:05.153] Browser LOG     memory_mb 31
+[00:28:10.151] Browser LOG     memory_mb 31
+[00:28:15.138] Browser LOG     memory_mb 31
+[00:28:20.153] Browser LOG     memory_mb 31
+[00:28:25.145] Browser LOG     memory_mb 31
+[00:28:27.511] Browser LOG     memory_mb 23
+[00:28:30.149] Browser LOG     memory_mb 31
+[00:28:35.153] Browser LOG     memory_mb 31
+[00:28:40.157] Browser LOG     memory_mb 31
+[00:28:45.148] Browser LOG     memory_mb 31
+[00:28:50.149] Browser LOG     memory_mb 31
+[00:28:55.159] Browser LOG     memory_mb 31
+[00:29:00.151] Browser LOG     memory_mb 31
+[00:29:05.145] Browser LOG     memory_mb 31
+[00:29:10.144] Browser LOG     memory_mb 31
+[00:29:15.152] Browser LOG     memory_mb 31
+[00:29:20.158] Browser LOG     memory_mb 31
+[00:29:25.159] Browser LOG     memory_mb 31
+[00:29:27.513] Browser LOG     memory_mb 24
+[00:29:30.145] Browser LOG     memory_mb 31
+[00:29:35.143] Browser LOG     memory_mb 31
+[00:29:40.153] Browser LOG     memory_mb 31
+[00:29:45.143] Browser LOG     memory_mb 31
+[00:29:50.151] Browser LOG     memory_mb 31
+[00:29:55.158] Browser LOG     memory_mb 31
+[00:30:00.154] Browser LOG     memory_mb 31
+[00:30:05.143] Browser LOG     memory_mb 31
+[00:30:10.161] Browser LOG     memory_mb 31
+[00:30:15.149] Browser LOG     memory_mb 31
+[00:30:20.139] Browser LOG     memory_mb 31
+[00:30:25.153] Browser LOG     memory_mb 31
+[00:30:27.524] Browser LOG     memory_mb 24
+[00:30:30.145] Browser LOG     memory_mb 31
+[00:30:35.152] Browser LOG     memory_mb 31
+[00:30:40.151] Browser LOG     memory_mb 31
+[00:30:45.148] Browser LOG     memory_mb 31
+[00:30:50.157] Browser LOG     memory_mb 31
+[00:30:55.154] Browser LOG     memory_mb 31
+[00:31:00.153] Browser LOG     memory_mb 31
+[00:31:05.155] Browser LOG     memory_mb 31
+[00:31:10.159] Browser LOG     memory_mb 31
+[00:31:15.148] Browser LOG     memory_mb 31
+[00:31:20.143] Browser LOG     memory_mb 31
+[00:31:25.135] Browser LOG     memory_mb 31
+[00:31:27.513] Browser LOG     memory_mb 23
+[00:31:30.159] Browser LOG     memory_mb 31
+[00:31:35.141] Browser LOG     memory_mb 31
+[00:31:40.153] Browser LOG     memory_mb 31
+[00:31:45.145] Browser LOG     memory_mb 31
+[00:31:50.149] Browser LOG     memory_mb 31
+[00:31:55.144] Browser LOG     memory_mb 31
+[00:32:00.144] Browser LOG     memory_mb 31
+[00:32:05.147] Browser LOG     memory_mb 31
+[00:32:10.144] Browser LOG     memory_mb 31
+[00:32:15.143] Browser LOG     memory_mb 31
+[00:32:20.153] Browser LOG     memory_mb 31
+[00:32:25.134] Browser LOG     memory_mb 31
+[00:32:25.354] Server  LOG      ✓ Compiled in 288ms
+[00:32:27.515] Browser LOG     memory_mb 24
+[00:32:30.143] Browser LOG     memory_mb 34
+[00:32:35.149] Browser LOG     memory_mb 34
+[00:32:40.149] Browser LOG     memory_mb 34
+[00:32:45.152] Browser LOG     memory_mb 34
+[00:32:50.149] Browser LOG     memory_mb 34
+[00:32:55.157] Browser LOG     memory_mb 34
+[00:33:00.149] Browser LOG     memory_mb 34
+[00:33:05.146] Browser LOG     memory_mb 34
+[00:33:10.158] Browser LOG     memory_mb 34
+[00:33:15.154] Browser LOG     memory_mb 34
+[00:33:20.157] Browser LOG     memory_mb 35
+[00:33:25.147] Browser LOG     memory_mb 35
+[00:33:27.523] Browser LOG     memory_mb 27
+[00:33:30.145] Browser LOG     memory_mb 35
+[00:33:35.157] Browser LOG     memory_mb 35
+[00:33:40.144] Browser LOG     memory_mb 35
+[00:33:45.150] Browser LOG     memory_mb 35
+[00:33:50.145] Browser LOG     memory_mb 35
+[00:33:55.149] Browser LOG     memory_mb 35
+[00:34:00.148] Browser LOG     memory_mb 35
+[00:34:05.161] Browser LOG     memory_mb 35
+[00:34:10.160] Browser LOG     memory_mb 35
+[00:34:15.150] Browser LOG     memory_mb 35
+[00:34:20.137] Browser LOG     memory_mb 35
+[00:34:25.146] Browser LOG     memory_mb 35
+[00:34:27.514] Browser LOG     memory_mb 27
+[00:34:30.149] Browser LOG     memory_mb 35
+[00:34:35.150] Browser LOG     memory_mb 35
+[00:34:40.155] Browser LOG     memory_mb 35
+[00:34:45.156] Browser LOG     memory_mb 35
+[00:34:50.140] Browser LOG     memory_mb 35
+[00:34:55.148] Browser LOG     memory_mb 35
+[00:35:00.150] Browser LOG     memory_mb 35
+[00:35:05.154] Browser LOG     memory_mb 35
+[00:35:10.144] Browser LOG     memory_mb 35
+[00:35:15.150] Browser LOG     memory_mb 35
+[00:35:20.148] Browser LOG     memory_mb 35
+[00:35:25.146] Browser LOG     memory_mb 35
+[00:35:27.513] Browser LOG     memory_mb 28
+[00:35:30.153] Browser LOG     memory_mb 35
+[00:35:35.155] Browser LOG     memory_mb 35
+[00:35:40.152] Browser LOG     memory_mb 35
+[00:35:45.150] Browser LOG     memory_mb 35
+[00:35:50.143] Browser LOG     memory_mb 35
+[00:35:55.147] Browser LOG     memory_mb 35
+[00:36:00.148] Browser LOG     memory_mb 35
+[00:36:05.143] Browser LOG     memory_mb 35
+[00:36:10.145] Browser LOG     memory_mb 35
+[00:36:15.145] Browser LOG     memory_mb 36
+[00:36:20.149] Browser LOG     memory_mb 36
+[00:36:25.148] Browser LOG     memory_mb 36
+[00:36:27.527] Browser LOG     memory_mb 28
+[00:36:30.157] Browser LOG     memory_mb 34
+[00:36:35.146] Browser LOG     memory_mb 34
+[00:36:40.155] Browser LOG     memory_mb 34
+[00:36:45.148] Browser LOG     memory_mb 34
+[00:36:50.152] Browser LOG     memory_mb 34
+[00:36:55.151] Browser LOG     memory_mb 34
+[00:37:00.151] Browser LOG     memory_mb 34
+[00:37:05.154] Browser LOG     memory_mb 34
+[00:37:10.150] Browser LOG     memory_mb 34
+[00:37:15.149] Browser LOG     memory_mb 34
+[00:37:20.158] Browser LOG     memory_mb 34
+[00:37:25.145] Browser LOG     memory_mb 34
+[00:37:27.524] Browser LOG     memory_mb 28
+[00:37:30.159] Browser LOG     memory_mb 35
+[00:37:35.145] Browser LOG     memory_mb 35
+[00:37:40.144] Browser LOG     memory_mb 35
+[00:37:45.157] Browser LOG     memory_mb 35
+[00:37:50.159] Browser LOG     memory_mb 35
+[00:37:55.160] Browser LOG     memory_mb 35
+[00:38:00.140] Browser LOG     memory_mb 35
+[00:38:05.152] Browser LOG     memory_mb 35
+[00:38:10.148] Browser LOG     memory_mb 35
+[00:38:15.151] Browser LOG     memory_mb 35
+[00:38:20.145] Browser LOG     memory_mb 35
+[00:38:25.153] Browser LOG     memory_mb 35
+[00:38:27.523] Browser LOG     memory_mb 27
+[00:38:30.154] Browser LOG     memory_mb 34
+[00:38:35.163] Browser LOG     memory_mb 34
+[00:38:40.153] Browser LOG     memory_mb 34
+[00:38:45.144] Browser LOG     memory_mb 34
+[00:38:50.152] Browser LOG     memory_mb 34
+[00:38:55.146] Browser LOG     memory_mb 34
+[00:39:00.145] Browser LOG     memory_mb 34
+[00:39:05.157] Browser LOG     memory_mb 34
+[00:39:10.148] Browser LOG     memory_mb 34
+[00:39:15.144] Browser LOG     memory_mb 34
+[00:39:20.153] Browser LOG     memory_mb 34
+[00:39:25.149] Browser LOG     memory_mb 34
+[00:39:27.523] Browser LOG     memory_mb 27
+[00:39:30.151] Browser LOG     memory_mb 35
+[00:39:35.145] Browser LOG     memory_mb 35
+[00:39:40.144] Browser LOG     memory_mb 35
+[00:39:45.141] Browser LOG     memory_mb 35
+[00:39:50.151] Browser LOG     memory_mb 35
+[00:39:55.154] Browser LOG     memory_mb 35
+[00:40:00.154] Browser LOG     memory_mb 35
+[00:40:05.152] Browser LOG     memory_mb 35
+[00:40:10.149] Browser LOG     memory_mb 35
+[00:40:15.155] Browser LOG     memory_mb 35
+[00:40:20.147] Browser LOG     memory_mb 35
+[00:40:25.143] Browser LOG     memory_mb 35
+[00:40:27.529] Browser LOG     memory_mb 25
+[00:40:30.157] Browser LOG     memory_mb 35
+[00:40:35.155] Browser LOG     memory_mb 35
+[00:40:40.150] Browser LOG     memory_mb 35
+[00:40:45.150] Browser LOG     memory_mb 35
+[00:40:50.143] Browser LOG     memory_mb 34
+[00:40:55.146] Browser LOG     memory_mb 34
+[00:41:00.163] Browser LOG     memory_mb 34
+[00:41:05.143] Browser LOG     memory_mb 34
+[00:41:10.152] Browser LOG     memory_mb 34
+[00:41:15.145] Browser LOG     memory_mb 34
+[00:41:20.146] Browser LOG     memory_mb 34
+[00:41:25.146] Browser LOG     memory_mb 34
+[00:41:27.529] Browser LOG     memory_mb 25
+[00:41:30.151] Browser LOG     memory_mb 34
+[00:41:35.152] Browser LOG     memory_mb 34
+[00:41:40.152] Browser LOG     memory_mb 35
+[00:41:45.148] Browser LOG     memory_mb 35
+[00:41:50.145] Browser LOG     memory_mb 35
+[00:41:55.148] Browser LOG     memory_mb 35
+[00:42:00.156] Browser LOG     memory_mb 35
+[00:42:05.149] Browser LOG     memory_mb 35
+[00:42:10.145] Browser LOG     memory_mb 35
+[00:42:15.150] Browser LOG     memory_mb 35
+[00:42:20.144] Browser LOG     memory_mb 35
+[00:42:25.144] Browser LOG     memory_mb 35
+[00:42:27.514] Browser LOG     memory_mb 25
+[00:42:30.147] Browser LOG     memory_mb 35
+[00:42:35.143] Browser LOG     memory_mb 35
+[00:42:40.154] Browser LOG     memory_mb 35
+[00:42:45.153] Browser LOG     memory_mb 35
+[00:42:50.149] Browser LOG     memory_mb 35
+[00:42:55.154] Browser LOG     memory_mb 35
+[00:43:00.152] Browser LOG     memory_mb 35
+[00:43:05.152] Browser LOG     memory_mb 35
+[00:43:10.153] Browser LOG     memory_mb 35
+[00:43:15.155] Browser LOG     memory_mb 35
+[00:43:20.143] Browser LOG     memory_mb 34
+[00:43:25.156] Browser LOG     memory_mb 34
+[00:43:27.522] Browser LOG     memory_mb 25
+[00:43:30.139] Browser LOG     memory_mb 34
+[00:43:35.144] Browser LOG     memory_mb 34
+[00:43:40.146] Browser LOG     memory_mb 34
+[00:43:45.156] Browser LOG     memory_mb 35
+[00:43:50.151] Browser LOG     memory_mb 35
+[00:43:55.150] Browser LOG     memory_mb 35
+[00:44:00.142] Browser LOG     memory_mb 35
+[00:44:05.156] Browser LOG     memory_mb 35
+[00:44:10.141] Browser LOG     memory_mb 35
+[00:44:15.146] Browser LOG     memory_mb 35
+[00:44:20.161] Browser LOG     memory_mb 35
+[00:44:25.149] Browser LOG     memory_mb 35
+[00:44:27.513] Browser LOG     memory_mb 25
+[00:44:30.151] Browser LOG     memory_mb 35
+[00:44:35.150] Browser LOG     memory_mb 35
+[00:44:40.145] Browser LOG     memory_mb 35
+[00:44:45.142] Browser LOG     memory_mb 35
+[00:44:50.136] Browser LOG     memory_mb 35
+[00:44:55.150] Browser LOG     memory_mb 35
+[00:45:00.142] Browser LOG     memory_mb 35
+[00:45:05.147] Browser LOG     memory_mb 35
+[00:45:10.152] Browser LOG     memory_mb 35
+[00:45:15.158] Browser LOG     memory_mb 35
+[00:45:20.155] Browser LOG     memory_mb 35
+[00:45:25.143] Browser LOG     memory_mb 35
+[00:45:27.522] Browser LOG     memory_mb 25
+[00:45:30.159] Browser LOG     memory_mb 34
+[00:45:35.145] Browser LOG     memory_mb 34
+[00:45:40.139] Browser LOG     memory_mb 34
+[00:45:45.140] Browser LOG     memory_mb 34
+[00:45:50.143] Browser LOG     memory_mb 34
+[00:45:55.148] Browser LOG     memory_mb 34
+[00:46:00.147] Browser LOG     memory_mb 34
+[00:46:05.151] Browser LOG     memory_mb 34
+[00:46:10.152] Browser LOG     memory_mb 34
+[00:46:15.156] Browser LOG     memory_mb 35
+[00:46:20.151] Browser LOG     memory_mb 35
+[00:46:25.152] Browser LOG     memory_mb 35
+[00:46:27.522] Browser LOG     memory_mb 25
+[00:46:30.150] Browser LOG     memory_mb 35
+[00:46:35.139] Browser LOG     memory_mb 35
+[00:46:40.154] Browser LOG     memory_mb 35
+[00:46:45.147] Browser LOG     memory_mb 35
+[00:46:50.151] Browser LOG     memory_mb 35
+[00:46:55.157] Browser LOG     memory_mb 35
+[00:47:00.146] Browser LOG     memory_mb 35
+[00:47:05.156] Browser LOG     memory_mb 35
+[00:47:10.154] Browser LOG     memory_mb 35
+[00:47:15.151] Browser LOG     memory_mb 35
+[00:47:20.149] Browser LOG     memory_mb 35
+[00:47:25.150] Browser LOG     memory_mb 35
+[00:47:27.515] Browser LOG     memory_mb 25
+[00:47:30.142] Browser LOG     memory_mb 35
+[00:47:35.142] Browser LOG     memory_mb 35
+[00:47:40.158] Browser LOG     memory_mb 35
+[00:47:45.154] Browser LOG     memory_mb 35
+[00:47:50.152] Browser LOG     memory_mb 35
+[00:47:55.149] Browser LOG     memory_mb 34
+[00:48:00.153] Browser LOG     memory_mb 34
+[00:48:05.150] Browser LOG     memory_mb 34
+[00:48:10.153] Browser LOG     memory_mb 34
+[00:48:15.150] Browser LOG     memory_mb 34
+[00:48:20.146] Browser LOG     memory_mb 34
+[00:48:25.150] Browser LOG     memory_mb 34
+[00:48:27.525] Browser LOG     memory_mb 25
+[00:48:30.154] Browser LOG     memory_mb 35
+[00:48:35.149] Browser LOG     memory_mb 35
+[00:48:40.162] Browser LOG     memory_mb 35
+[00:48:45.149] Browser LOG     memory_mb 35
+[00:48:50.144] Browser LOG     memory_mb 35
+[00:48:55.153] Browser LOG     memory_mb 35
+[00:49:00.144] Browser LOG     memory_mb 35
+[00:49:05.145] Browser LOG     memory_mb 35
+[00:49:10.150] Browser LOG     memory_mb 35
+[00:49:15.158] Browser LOG     memory_mb 35
+[00:49:20.150] Browser LOG     memory_mb 35
+[00:49:25.156] Browser LOG     memory_mb 35
+[00:49:27.513] Browser LOG     memory_mb 25
+[00:49:30.141] Browser LOG     memory_mb 35
+[00:49:35.156] Browser LOG     memory_mb 35
+[00:49:40.153] Browser LOG     memory_mb 35
+[00:49:45.152] Browser LOG     memory_mb 35
+[00:49:50.150] Browser LOG     memory_mb 35
+[00:49:55.148] Browser LOG     memory_mb 35
+[00:50:00.147] Browser LOG     memory_mb 35
+[00:50:05.149] Browser LOG     memory_mb 35
+[00:50:10.151] Browser LOG     memory_mb 34
+[00:50:15.141] Browser LOG     memory_mb 34
+[00:50:20.152] Browser LOG     memory_mb 34
+[00:50:25.146] Browser LOG     memory_mb 34
+[00:50:27.518] Browser LOG     memory_mb 25
+[00:50:30.137] Browser LOG     memory_mb 35
+[00:50:35.150] Browser LOG     memory_mb 35
+[00:50:40.142] Browser LOG     memory_mb 32
+[00:50:45.152] Browser LOG     memory_mb 32
+[00:50:50.147] Browser LOG     memory_mb 32
+[00:50:55.141] Browser LOG     memory_mb 32
+[00:50:58.281] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/guest color: rgb(120, 120, 120) color: inherit {"dp":"/guest","o":"http://localhost:3000/guest","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763703886058}
+[00:51:07.962] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763703895737}
+[00:51:11.906] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763703899715}
+[00:51:15.184] Browser LOG     input_latency_ms 1
+[00:51:15.941] Browser LOG     send_latency_ms 763
+[00:51:16.908] Browser LOG     memory_mb 36
+[00:51:18.045] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763703905833}
+[00:51:27.517] Browser LOG     memory_mb 25
+[00:52:27.511] Browser LOG     memory_mb 25
+[00:52:34.591] Browser LOG     memory_mb 25
+[00:52:34.695] Browser LOG     memory_mb 25
+[00:52:38.566] Browser LOG     memory_mb 25
+[00:52:43.554] Browser LOG     memory_mb 25
+[00:52:48.524] Browser LOG     memory_mb 25
+[00:52:53.525] Browser LOG     memory_mb 25
+[00:52:58.528] Browser LOG     memory_mb 25
+[00:53:03.529] Browser LOG     memory_mb 25
+[00:53:08.524] Browser LOG     memory_mb 25
+[00:53:13.520] Browser LOG     memory_mb 25
+[00:53:18.511] Browser LOG     memory_mb 26
+[00:53:23.515] Browser LOG     memory_mb 26
+[00:53:28.520] Browser LOG     memory_mb 26
+[00:53:33.516] Browser LOG     memory_mb 26
+[00:55:03.753] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:55:04.149] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:55:04.149] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[00:55:04.149] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763704131954}
+[00:55:14.944] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:55:15.279] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:55:15.279] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[00:55:15.279] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763704143092}
+[00:55:27.515] Browser LOG     memory_mb 26
+[00:55:35.395] Server  LOG      ✓ Compiled in 260ms
+[00:56:27.517] Browser LOG     memory_mb 25
+[00:57:27.523] Browser LOG     memory_mb 26
+[00:58:18.857] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:58:19.185] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:58:19.185] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[00:58:19.185] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763704326991}
+[00:58:27.522] Browser LOG     memory_mb 26
+[00:58:30.916] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:58:31.250] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:58:31.250] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[00:58:31.250] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763704339054}
+[00:59:03.348] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763704371146}
+[00:59:08.379] Browser LOG     memory_mb 41
+[00:59:08.734] Browser LOG     input_latency_ms 1
+[00:59:09.494] Browser LOG     send_latency_ms 763
+[00:59:13.336] Browser LOG     memory_mb 41
+[00:59:14.695] Browser LOG     input_latency_ms 0
+[00:59:15.738] Browser LOG     send_latency_ms 1048
+[00:59:18.351] Browser LOG     memory_mb 35
+[00:59:23.357] Browser LOG     memory_mb 35
+[00:59:27.518] Browser LOG     memory_mb 26
+[00:59:28.356] Browser LOG     memory_mb 36
+[00:59:33.356] Browser LOG     memory_mb 36
+[00:59:38.348] Browser LOG     memory_mb 36
+[00:59:43.359] Browser LOG     memory_mb 36
+[00:59:48.355] Browser LOG     memory_mb 36
+[00:59:53.360] Browser LOG     memory_mb 36
+[00:59:58.358] Browser LOG     memory_mb 36
+[01:00:03.364] Browser LOG     memory_mb 36
+[01:00:08.358] Browser LOG     memory_mb 41
+[01:00:13.359] Browser LOG     memory_mb 41
+[01:00:18.355] Browser LOG     memory_mb 41
+[01:00:23.356] Browser LOG     memory_mb 41
+[01:00:27.525] Browser LOG     memory_mb 26
+[01:00:28.361] Browser LOG     memory_mb 41
+[01:00:33.363] Browser LOG     memory_mb 41
+[01:00:38.352] Browser LOG     memory_mb 41
+[01:00:43.357] Browser LOG     memory_mb 41
+[01:00:48.353] Browser LOG     memory_mb 41
+[01:00:53.352] Browser LOG     memory_mb 41
+[01:00:58.362] Browser LOG     memory_mb 41
+[01:01:03.355] Browser LOG     memory_mb 41
+[01:01:08.358] Browser LOG     memory_mb 41
+[01:01:12.854] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:01:13.154] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:01:13.154] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","route":"/room/[id]"}
+[01:01:13.154] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763704500961}
+[01:01:18.085] Browser LOG     memory_mb 52
+[01:01:23.085] Browser LOG     memory_mb 52
+[01:01:27.517] Browser LOG     memory_mb 26
+[01:01:28.099] Browser LOG     memory_mb 52
+[01:01:33.088] Browser LOG     memory_mb 52
+[01:01:38.095] Browser LOG     memory_mb 52
+[01:01:43.083] Browser LOG     memory_mb 23
+[01:01:48.089] Browser LOG     memory_mb 23
+[01:01:51.074] Browser LOG     input_latency_ms 1
+[01:01:52.121] Browser LOG     send_latency_ms 1057
+[01:01:53.098] Browser LOG     memory_mb 21
+[01:01:58.083] Browser LOG     memory_mb 21
+[01:02:03.095] Browser LOG     memory_mb 20
+[01:02:08.092] Browser LOG     memory_mb 20
+[01:02:13.080] Browser LOG     memory_mb 20
+[01:02:18.090] Browser LOG     memory_mb 20
+[01:02:23.091] Browser LOG     memory_mb 21
+[01:02:27.512] Browser LOG     memory_mb 26
+[01:02:28.088] Browser LOG     memory_mb 21
+[01:02:33.087] Browser LOG     memory_mb 21
+[01:02:38.082] Browser LOG     memory_mb 21
+[01:02:43.080] Browser LOG     memory_mb 21
+[01:02:48.080] Browser LOG     memory_mb 21
+[01:02:53.092] Browser LOG     memory_mb 21
+[01:02:58.091] Browser LOG     memory_mb 21
+[01:03:03.085] Browser LOG     memory_mb 21
+[01:03:08.078] Browser LOG     memory_mb 21
+[01:03:13.095] Browser LOG     memory_mb 21
+[01:03:18.091] Browser LOG     memory_mb 21
+[01:03:23.091] Browser LOG     memory_mb 21
+[01:03:27.515] Browser LOG     memory_mb 26
+[01:03:28.083] Browser LOG     memory_mb 21
+[01:03:33.077] Browser LOG     memory_mb 21
+[01:03:38.078] Browser LOG     memory_mb 21
+[01:03:43.080] Browser LOG     memory_mb 21
+[01:03:48.083] Browser LOG     memory_mb 21
+[01:03:53.104] Browser LOG     memory_mb 21
+[01:03:58.086] Browser LOG     memory_mb 21
+[01:04:03.083] Browser LOG     memory_mb 21
+[01:04:08.090] Browser LOG     memory_mb 21
+[01:04:13.088] Browser LOG     memory_mb 21
+[01:04:18.081] Browser LOG     memory_mb 21
+[01:04:23.093] Browser LOG     memory_mb 21
+[01:04:27.523] Browser LOG     memory_mb 26
+[01:04:28.076] Browser LOG     memory_mb 21
+[01:04:33.088] Browser LOG     memory_mb 21
+[01:04:38.089] Browser LOG     memory_mb 20
+[01:04:43.087] Browser LOG     memory_mb 20
+[01:04:48.087] Browser LOG     memory_mb 20
+[01:04:53.094] Browser LOG     memory_mb 20
+[01:04:58.084] Browser LOG     memory_mb 20
+[01:05:03.086] Browser LOG     memory_mb 21
+[01:05:08.080] Browser LOG     memory_mb 21
+[01:05:13.083] Browser LOG     memory_mb 21
+[01:05:18.074] Browser LOG     memory_mb 21
+[01:05:23.090] Browser LOG     memory_mb 21
+[01:05:27.515] Browser LOG     memory_mb 27
+[01:05:28.084] Browser LOG     memory_mb 21
+[01:05:33.084] Browser LOG     memory_mb 24
+[01:05:38.087] Browser LOG     memory_mb 21
+[01:05:43.076] Browser LOG     memory_mb 21
+[01:05:48.086] Browser LOG     memory_mb 21
+[01:05:53.082] Browser LOG     memory_mb 21
+[01:05:56.753] Server  LOG      ✓ Compiled in 158ms
+[01:05:56.886] Browser ERROR   uncaughtError: ReferenceError: disableMenu is not defined
+[01:05:58.517] Browser LOG     memory_mb 26
+[01:05:58.517] Browser ERROR   uncaughtError: ReferenceError: disableMenu is not defined
+[01:06:10.779] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:06:11.042] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:06:11.042] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","route":"/room/[id]"}
+[01:06:11.042] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763704798854}
+[01:06:12.122] Browser ERROR   uncaughtError: ReferenceError: disableMenu is not defined
+[01:06:19.949] Server  LOG      ✓ Compiled in 142ms
+[01:06:19.982] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[01:06:19.992] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[01:06:20.746] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763704807990}
+[01:06:21.695] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:06:21.770] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:06:21.988] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:06:21.988] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","route":"/room/[id]"}
+[01:06:21.988] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763704809799}
+[01:06:22.575] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:06:22.575] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","route":"/room/[id]"}
+[01:06:22.575] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763704810031}
+[01:06:22.865] Browser ERROR   uncaughtError: ReferenceError: disableMenu is not defined
+[01:06:28.515] Browser LOG     memory_mb 36
+[01:06:31.829] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:06:32.098] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:06:32.098] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","route":"/room/[id]"}
+[01:06:32.098] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763704819906}
+[01:06:33.054] Browser ERROR   uncaughtError: ReferenceError: disableMenu is not defined
+[01:06:33.515] Browser LOG     memory_mb 37
+[01:06:34.284] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:06:34.531] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:06:34.531] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","route":"/room/[id]"}
+[01:06:34.531] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763704822335}
+[01:06:35.299] Browser ERROR   uncaughtError: ReferenceError: disableMenu is not defined
+[01:06:35.810] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:06:36.081] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:06:36.081] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","route":"/room/[id]"}
+[01:06:36.081] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763704823893}
+[01:06:36.726] Browser ERROR   uncaughtError: ReferenceError: disableMenu is not defined
+[01:06:38.513] Browser LOG     memory_mb 38
+[01:06:39.754] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:06:40.014] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:06:40.014] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","route":"/room/[id]"}
+[01:06:40.014] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763704827827}
+[01:06:40.805] Browser ERROR   uncaughtError: ReferenceError: disableMenu is not defined
+[01:06:42.088] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:06:42.330] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:06:42.330] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","route":"/room/[id]"}
+[01:06:42.330] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763704830137}
+[01:06:43.026] Browser ERROR   uncaughtError: ReferenceError: disableMenu is not defined
+[01:06:43.511] Browser LOG     memory_mb 38
+[01:06:45.354] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:06:46.060] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:06:46.060] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","route":"/room/[id]"}
+[01:06:46.060] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100?ide_webview_request_time=1763704832227 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100?ide_webview_request_time=1763704832227","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763704833871}
+[01:06:46.943] Browser ERROR   uncaughtError: ReferenceError: disableMenu is not defined
+[01:06:47.530] Browser LOG     memory_mb 38
+[01:06:53.103] Browser LOG     memory_mb 21
+[01:06:58.517] Browser LOG     memory_mb 21
+[01:07:03.515] Browser LOG     memory_mb 21
+[01:07:08.525] Browser LOG     memory_mb 21
+[01:07:13.512] Browser LOG     memory_mb 21
+[01:07:18.516] Browser LOG     memory_mb 21
+[01:07:23.523] Browser LOG     memory_mb 21
+[01:07:28.517] Browser LOG     memory_mb 21
+[01:07:32.672] Browser LOG     memory_mb 21
+[01:07:38.513] Browser LOG     memory_mb 21
+[01:07:43.584] Browser LOG     memory_mb 21
+[01:07:48.528] Browser LOG     memory_mb 21
+[01:07:53.528] Browser LOG     memory_mb 21
+[01:07:58.524] Browser LOG     memory_mb 21
+[01:08:03.523] Browser LOG     memory_mb 21
+[01:08:08.515] Browser LOG     memory_mb 21
+[01:08:13.004] Browser LOG     memory_mb 21
+[01:08:18.522] Browser LOG     memory_mb 22
+[01:08:23.525] Browser LOG     memory_mb 22
+[01:08:28.531] Browser LOG     memory_mb 22
+[01:08:33.518] Browser LOG     memory_mb 21
+[01:08:38.540] Browser LOG     memory_mb 21
+[01:08:43.528] Browser LOG     memory_mb 21
+[01:08:48.514] Browser LOG     memory_mb 21
+[01:08:51.181] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[01:08:51.214] Server  LOG      ✓ Compiled in 124ms
+[01:08:52.878] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:08:53.153] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:08:53.153] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","route":"/room/[id]"}
+[01:08:53.153] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100?ide_webview_request_time=1763704832227 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100?ide_webview_request_time=1763704832227","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763704960961}
+[01:08:53.514] Browser LOG     memory_mb 21
+[01:08:58.099] Browser LOG     memory_mb 28
+[01:08:58.519] Browser LOG     memory_mb 21
+[01:09:03.102] Browser LOG     memory_mb 28
+[01:09:03.513] Browser LOG     memory_mb 21
+[01:09:08.101] Browser LOG     memory_mb 28
+[01:09:08.511] Browser LOG     memory_mb 21
+[01:09:13.102] Browser LOG     memory_mb 31
+[01:09:13.520] Browser LOG     memory_mb 21
+[01:09:18.103] Browser LOG     memory_mb 31
+[01:09:23.098] Browser LOG     memory_mb 22
+[01:09:28.092] Browser LOG     memory_mb 22
+[01:09:33.102] Browser LOG     memory_mb 22
+[01:09:38.094] Browser LOG     memory_mb 22
+[01:09:43.091] Browser LOG     memory_mb 22
+[01:09:47.850] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763705015623}
+[01:09:52.258] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763705020064}
+[01:09:57.112] Browser LOG     input_latency_ms 1
+[01:09:57.265] Browser LOG     memory_mb 23
+[01:09:57.874] Browser LOG     send_latency_ms 762
+[01:10:02.255] Browser LOG     memory_mb 24
+[01:10:03.515] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763705031305}
+[01:10:15.047] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763705042857}
+[01:10:20.049] Browser LOG     memory_mb 24
+[01:10:25.061] Browser LOG     memory_mb 22
+[01:10:27.526] Browser LOG     memory_mb 21
+[01:10:30.046] Browser LOG     memory_mb 22
+[01:10:35.054] Browser LOG     memory_mb 23
+[01:10:40.069] Browser LOG     memory_mb 23
+[01:10:45.046] Browser LOG     memory_mb 23
+[01:10:50.066] Browser LOG     memory_mb 23
+[01:10:55.060] Browser LOG     memory_mb 23
+[01:10:57.962] Server  LOG      ✓ Compiled in 195ms
+[01:11:00.052] Browser LOG     memory_mb 26
+[01:11:05.068] Browser LOG     memory_mb 26
+[01:11:10.060] Browser LOG     memory_mb 26
+[01:11:15.072] Browser LOG     memory_mb 26
+[01:11:20.071] Browser LOG     memory_mb 26
+[01:11:25.079] Browser LOG     memory_mb 26
+[01:11:27.517] Browser LOG     memory_mb 20
+[01:11:30.057] Browser LOG     memory_mb 26
+[01:11:35.065] Browser LOG     memory_mb 25
+[01:11:40.057] Browser LOG     memory_mb 25
+[01:11:45.069] Browser LOG     memory_mb 25
+[01:11:47.328] Browser LOG     memory_mb 21
+[01:11:47.439] Browser LOG     memory_mb 21
+[01:11:50.057] Browser LOG     memory_mb 25
+[01:11:53.524] Browser LOG     memory_mb 22
+[01:11:55.057] Browser LOG     memory_mb 26
+[01:11:58.525] Browser LOG     memory_mb 22
+[01:12:00.056] Browser LOG     memory_mb 26
+[01:12:03.526] Browser LOG     memory_mb 22
+[01:12:05.066] Browser LOG     memory_mb 26
+[01:12:08.529] Browser LOG     memory_mb 22
+[01:12:10.058] Browser LOG     memory_mb 26
+[01:12:13.523] Browser LOG     memory_mb 22
+[01:12:15.056] Browser LOG     memory_mb 26
+[01:12:18.557] Browser LOG     memory_mb 22
+[01:12:20.071] Browser LOG     memory_mb 26
+[01:12:23.523] Browser LOG     memory_mb 22
+[01:12:25.056] Browser LOG     memory_mb 26
+[01:12:28.001] Browser LOG     memory_mb 22
+[01:12:30.067] Browser LOG     memory_mb 26
+[01:12:33.515] Browser LOG     memory_mb 22
+[01:12:35.070] Browser LOG     memory_mb 26
+[01:12:38.526] Browser LOG     memory_mb 22
+[01:12:40.063] Browser LOG     memory_mb 25
+[01:12:43.517] Browser LOG     memory_mb 21
+[01:12:45.057] Browser LOG     memory_mb 25
+[01:12:48.514] Browser LOG     memory_mb 21
+[01:12:50.065] Browser LOG     memory_mb 25
+[01:12:53.524] Browser LOG     memory_mb 21
+[01:12:55.053] Browser LOG     memory_mb 25
+[01:12:58.534] Browser LOG     memory_mb 21
+[01:13:00.067] Browser LOG     memory_mb 25
+[01:13:03.527] Browser LOG     memory_mb 21
+[01:13:05.065] Browser LOG     memory_mb 26
+[01:13:08.518] Browser LOG     memory_mb 21
+[01:13:10.052] Browser LOG     memory_mb 26
+[01:13:13.515] Browser LOG     memory_mb 21
+[01:13:15.067] Browser LOG     memory_mb 26
+[01:13:18.516] Browser LOG     memory_mb 21
+[01:13:20.059] Browser LOG     memory_mb 26
+[01:13:23.522] Browser LOG     memory_mb 21
+[01:13:25.069] Browser LOG     memory_mb 26
+[01:13:28.515] Browser LOG     memory_mb 22
+[01:13:30.072] Browser LOG     memory_mb 26
+[01:13:35.070] Browser LOG     memory_mb 26
+[01:13:40.048] Browser LOG     memory_mb 26
+[01:13:45.049] Browser LOG     memory_mb 26
+[01:13:50.064] Browser LOG     memory_mb 26
+[01:13:55.064] Browser LOG     memory_mb 26
+[01:14:00.049] Browser LOG     memory_mb 26
+[01:14:02.146] Browser LOG     memory_mb 22
+[01:14:05.057] Browser LOG     memory_mb 26
+[01:14:08.841] Browser LOG     memory_mb 22
+[01:14:10.067] Browser LOG     memory_mb 25
+[01:14:13.513] Browser LOG     memory_mb 22
+[01:14:15.068] Browser LOG     memory_mb 24
+[01:14:18.384] Browser LOG     input_latency_ms 0
+[01:14:18.515] Browser LOG     memory_mb 22
+[01:14:19.418] Browser LOG     send_latency_ms 1044
+[01:14:20.073] Browser LOG     memory_mb 27
+[01:14:21.403] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763705289180}
+[01:14:23.512] Browser LOG     memory_mb 22
+[01:14:24.978] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763705292789}
+[01:14:28.517] Browser LOG     memory_mb 22
+[01:14:29.979] Browser LOG     memory_mb 26
+[01:14:30.629] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763705298414}
+[01:14:33.512] Browser LOG     memory_mb 22
+[01:14:33.745] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763705301550}
+[01:14:38.525] Browser LOG     memory_mb 22
+[01:14:38.757] Browser LOG     memory_mb 29
+[01:14:43.514] Browser LOG     memory_mb 22
+[01:14:43.752] Browser LOG     memory_mb 29
+[01:14:48.524] Browser LOG     memory_mb 22
+[01:14:48.763] Browser LOG     memory_mb 29
+[01:14:53.513] Browser LOG     memory_mb 22
+[01:14:53.748] Browser LOG     memory_mb 29
+[01:14:58.523] Browser LOG     memory_mb 22
+[01:14:58.757] Browser LOG     memory_mb 29
+[01:15:03.761] Browser LOG     memory_mb 29
+[01:15:08.757] Browser LOG     memory_mb 29
+[01:15:13.752] Browser LOG     memory_mb 29
+[01:15:18.759] Browser LOG     memory_mb 29
+[01:15:23.745] Browser LOG     memory_mb 29
+[01:15:28.745] Browser LOG     memory_mb 29
+[01:15:33.747] Browser LOG     memory_mb 29
+[01:15:38.752] Browser LOG     memory_mb 29
+[01:15:43.749] Browser LOG     memory_mb 29
+[01:15:48.750] Browser LOG     memory_mb 29
+[01:15:53.762] Browser LOG     memory_mb 29
+[01:15:58.741] Browser LOG     memory_mb 29
+[01:16:03.755] Browser LOG     memory_mb 29
+[01:16:08.748] Browser LOG     memory_mb 29
+[01:16:13.753] Browser LOG     memory_mb 29
+[01:16:18.760] Browser LOG     memory_mb 29
+[01:16:23.760] Browser LOG     memory_mb 29
+[01:16:27.527] Browser LOG     memory_mb 21
+[01:16:28.765] Browser LOG     memory_mb 29
+[01:16:33.756] Browser LOG     memory_mb 29
+[01:16:38.742] Browser LOG     memory_mb 29
+[01:16:42.546] Browser LOG     memory_mb 21
+[01:16:42.655] Browser LOG     memory_mb 21
+[01:16:43.760] Browser LOG     memory_mb 29
+[01:16:48.519] Browser LOG     memory_mb 21
+[01:16:48.752] Browser LOG     memory_mb 30
+[01:16:53.533] Browser LOG     memory_mb 21
+[01:16:53.782] Browser LOG     memory_mb 30
+[01:16:55.462] Server  LOG      ✓ Compiled in 512ms
+[01:16:58.512] Browser LOG     memory_mb 21
+[01:16:58.742] Browser LOG     memory_mb 23
+[01:17:03.513] Browser LOG     memory_mb 21
+[01:17:03.753] Browser LOG     memory_mb 23
+[01:17:08.513] Browser LOG     memory_mb 21
+[01:17:08.748] Browser LOG     memory_mb 23
+[01:17:13.523] Browser LOG     memory_mb 21
+[01:17:13.742] Browser LOG     memory_mb 23
+[01:17:18.525] Browser LOG     memory_mb 21
+[01:17:18.745] Browser LOG     memory_mb 23
+[01:17:23.514] Browser LOG     memory_mb 21
+[01:17:23.747] Browser LOG     memory_mb 23
+[01:17:24.866] Server  LOG      ✓ Compiled in 305ms
+[01:17:28.518] Browser LOG     memory_mb 22
+[01:17:28.762] Browser LOG     memory_mb 25
+[01:17:33.528] Browser LOG     memory_mb 22
+[01:17:33.758] Browser LOG     memory_mb 25
+[01:17:38.526] Browser LOG     memory_mb 22
+[01:17:38.749] Browser LOG     memory_mb 25
+[01:17:43.521] Browser LOG     memory_mb 22
+[01:17:43.759] Browser LOG     memory_mb 25
+[01:17:48.525] Browser LOG     memory_mb 22
+[01:17:48.755] Browser LOG     memory_mb 25
+[01:17:53.747] Browser LOG     memory_mb 25
+[01:17:58.749] Browser LOG     memory_mb 25
+[01:17:59.290] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:17:59.891] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:17:59.891] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[01:17:59.891] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763705507688}
+[01:18:03.753] Browser LOG     memory_mb 25
+[01:18:08.757] Browser LOG     memory_mb 25
+[01:18:13.745] Browser LOG     memory_mb 25
+[01:18:18.751] Browser LOG     memory_mb 25
+[01:18:23.758] Browser LOG     memory_mb 25
+[01:18:28.761] Browser LOG     memory_mb 25
+[01:18:33.748] Browser LOG     memory_mb 25
+[01:18:38.761] Browser LOG     memory_mb 25
+[01:18:43.757] Browser LOG     memory_mb 25
+[01:18:48.757] Browser LOG     memory_mb 25
+[01:18:53.761] Browser LOG     memory_mb 25
+[01:18:58.757] Browser LOG     memory_mb 25
+[01:19:03.755] Browser LOG     memory_mb 25
+[01:19:08.757] Browser LOG     memory_mb 25
+[01:19:13.741] Browser LOG     memory_mb 25
+[01:19:18.745] Browser LOG     memory_mb 25
+[01:19:19.499] Browser LOG     memory_mb 22
+[01:19:19.625] Browser LOG     memory_mb 22
+[01:19:23.520] Browser LOG     memory_mb 22
+[01:19:23.758] Browser LOG     memory_mb 26
+[01:19:27.602] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:19:27.873] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:19:27.873] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","route":"/room/[id]"}
+[01:19:27.873] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763705595682}
+[01:19:28.524] Browser LOG     memory_mb 22
+[01:19:32.802] Browser LOG     memory_mb 33
+[01:19:33.519] Browser LOG     memory_mb 22
+[01:19:37.787] Browser LOG     memory_mb 33
+[01:19:38.523] Browser LOG     memory_mb 22
+[01:19:42.803] Browser LOG     memory_mb 33
+[01:19:43.514] Browser LOG     memory_mb 22
+[01:19:47.798] Browser LOG     memory_mb 33
+[01:19:48.526] Browser LOG     memory_mb 22
+[01:19:52.791] Browser LOG     memory_mb 34
+[01:19:53.526] Browser LOG     memory_mb 22
+[01:19:57.791] Browser LOG     memory_mb 29
+[01:19:58.521] Browser LOG     memory_mb 22
+[01:20:02.801] Browser LOG     memory_mb 29
+[01:20:03.513] Browser LOG     memory_mb 22
+[01:20:07.801] Browser LOG     memory_mb 29
+[01:20:08.523] Browser LOG     memory_mb 22
+[01:20:12.794] Browser LOG     memory_mb 29
+[01:20:13.512] Browser LOG     memory_mb 22
+[01:20:17.796] Browser LOG     memory_mb 29
+[01:20:18.511] Browser LOG     memory_mb 22
+[01:20:22.795] Browser LOG     memory_mb 29
+[01:20:27.101] Browser LOG     memory_mb 22
+[01:20:27.788] Browser LOG     memory_mb 29
+[01:20:32.190] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:20:32.393] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:20:32.393] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","route":"/room/[id]"}
+[01:20:32.393] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763705660201}
+[01:20:33.520] Browser LOG     memory_mb 22
+[01:20:37.180] Browser LOG     memory_mb 22
+[01:20:37.368] Browser LOG     memory_mb 30
+[01:20:42.351] Browser LOG     memory_mb 30
+[01:20:43.518] Browser LOG     memory_mb 22
+[01:20:47.352] Browser LOG     memory_mb 31
+[01:20:48.516] Browser LOG     memory_mb 22
+[01:20:52.348] Browser LOG     memory_mb 31
+[01:20:52.917] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763705680727}
+[01:20:53.520] Browser LOG     memory_mb 22
+[01:20:55.768] Browser LOG     input_latency_ms 1
+[01:20:56.517] Browser LOG     send_latency_ms 758
+[01:20:57.352] Browser LOG     memory_mb 32
+[01:20:57.432] Browser LOG     memory_mb 22
+[01:20:59.519] Browser LOG     memory_mb 75
+[01:21:02.361] Browser LOG     memory_mb 19
+[01:21:02.929] Browser LOG     memory_mb 75
+[01:21:03.514] Browser LOG     memory_mb 22
+[01:21:06.224] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:21:06.496] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:21:06.496] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","route":"/room/[id]"}
+[01:21:06.496] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763705694308}
+[01:21:08.523] Browser LOG     memory_mb 22
+[01:21:08.735] Browser LOG     input_latency_ms 1
+[01:21:09.500] Browser LOG     send_latency_ms 758
+[01:21:09.515] Browser LOG     memory_mb 76
+[01:21:11.499] Browser LOG     memory_mb 27
+[01:21:11.499] Browser LOG     input_latency_ms 0
+[01:21:12.248] Browser LOG     send_latency_ms 750
+[01:21:13.525] Browser LOG     memory_mb 22
+[01:21:14.513] Browser LOG     memory_mb 75
+[01:21:16.451] Browser LOG     memory_mb 26
+[01:21:18.516] Browser LOG     memory_mb 22
+[01:21:19.521] Browser LOG     memory_mb 75
+[01:21:21.458] Browser LOG     memory_mb 26
+[01:21:23.529] Browser LOG     memory_mb 23
+[01:21:24.513] Browser LOG     memory_mb 75
+[01:21:26.459] Browser LOG     memory_mb 26
+[01:21:28.517] Browser LOG     memory_mb 22
+[01:21:29.523] Browser LOG     memory_mb 75
+[01:21:31.459] Browser LOG     memory_mb 20
+[01:21:33.527] Browser LOG     memory_mb 22
+[01:21:34.514] Browser LOG     memory_mb 75
+[01:21:36.443] Browser LOG     memory_mb 19
+[01:21:38.514] Browser LOG     memory_mb 22
+[01:21:39.510] Browser LOG     memory_mb 76
+[01:21:41.464] Browser LOG     memory_mb 19
+[01:21:43.522] Browser LOG     memory_mb 22
+[01:21:44.527] Browser LOG     memory_mb 76
+[01:21:46.459] Browser LOG     memory_mb 19
+[01:21:48.521] Browser LOG     memory_mb 22
+[01:21:49.513] Browser LOG     memory_mb 76
+[01:21:51.462] Browser LOG     memory_mb 19
+[01:21:53.522] Browser LOG     memory_mb 22
+[01:21:54.521] Browser LOG     memory_mb 76
+[01:21:56.445] Browser LOG     memory_mb 19
+[01:21:59.516] Browser LOG     memory_mb 76
+[01:22:00.258] Server  LOG      ✓ Compiled in 180ms
+[01:22:01.452] Browser LOG     memory_mb 23
+[01:22:06.446] Browser LOG     memory_mb 23
+[01:22:11.445] Browser LOG     memory_mb 23
+[01:22:16.462] Browser LOG     memory_mb 23
+[01:22:21.465] Browser LOG     memory_mb 23
+[01:22:26.456] Browser LOG     memory_mb 23
+[01:22:27.525] Browser LOG     memory_mb 22
+[01:22:31.463] Browser LOG     memory_mb 23
+[01:22:36.459] Browser LOG     memory_mb 23
+[01:22:41.456] Browser LOG     memory_mb 23
+[01:22:46.464] Browser LOG     memory_mb 23
+[01:22:51.471] Browser LOG     memory_mb 24
+[01:22:56.453] Browser LOG     memory_mb 23
+[01:23:01.464] Browser LOG     memory_mb 23
+[01:23:06.455] Browser LOG     memory_mb 23
+[01:23:11.455] Browser LOG     memory_mb 23
+[01:23:16.443] Browser LOG     memory_mb 23
+[01:23:21.463] Browser LOG     memory_mb 23
+[01:23:26.457] Browser LOG     memory_mb 23
+[01:23:27.527] Browser LOG     memory_mb 25
+[01:23:27.527] Browser LOG     memory_mb 78
+[01:23:31.458] Browser LOG     memory_mb 23
+[01:23:36.460] Browser LOG     memory_mb 23
+[01:23:41.455] Browser LOG     memory_mb 23
+[01:23:46.461] Browser LOG     memory_mb 23
+[01:23:51.466] Browser LOG     memory_mb 23
+[01:23:56.444] Browser LOG     memory_mb 23
+[01:24:01.468] Browser LOG     memory_mb 23
+[01:24:06.449] Browser LOG     memory_mb 23
+[01:24:11.463] Browser LOG     memory_mb 23
+[01:24:16.453] Browser LOG     memory_mb 23
+[01:24:21.463] Browser LOG     memory_mb 23
+[01:24:26.461] Browser LOG     memory_mb 23
+[01:24:27.522] Browser LOG     memory_mb 79
+[01:24:27.522] Browser LOG     memory_mb 26
+[01:24:31.449] Browser LOG     memory_mb 23
+[01:24:36.470] Browser LOG     memory_mb 23
+[01:24:41.458] Browser LOG     memory_mb 23
+[01:24:46.466] Browser LOG     memory_mb 23
+[01:24:51.451] Browser LOG     memory_mb 23
+[01:24:56.469] Browser LOG     memory_mb 23
+[01:25:01.462] Browser LOG     memory_mb 23
+[01:25:06.463] Browser LOG     memory_mb 23
+[01:25:11.459] Browser LOG     memory_mb 23
+[01:25:16.459] Browser LOG     memory_mb 23
+[01:25:21.459] Browser LOG     memory_mb 23
+[01:25:26.461] Browser LOG     memory_mb 23
+[01:25:27.514] Browser LOG     memory_mb 79
+[01:25:27.514] Browser LOG     memory_mb 23
+[01:25:31.460] Browser LOG     memory_mb 23
+[01:25:36.455] Browser LOG     memory_mb 23
+[01:25:40.618] Server  LOG      ✓ Compiled in 218ms
+[01:25:41.446] Browser LOG     memory_mb 23
+[01:25:46.458] Browser LOG     memory_mb 23
+[01:25:51.459] Browser LOG     memory_mb 23
+[01:25:56.443] Browser LOG     memory_mb 24
+[01:26:01.458] Browser LOG     memory_mb 24
+[01:26:06.456] Browser LOG     memory_mb 24
+[01:26:12.194] Browser LOG     memory_mb 23
+[01:26:12.497] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:26:12.789] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:26:12.789] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","route":"/room/[id]"}
+[01:26:12.789] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763706000599}
+[01:26:17.728] Browser LOG     memory_mb 20
+[01:26:18.725] Browser LOG     input_latency_ms 1
+[01:26:19.592] Browser LOG     send_latency_ms 866
+[01:26:22.271] Browser LOG     input_latency_ms 0
+[01:26:22.710] Browser LOG     memory_mb 22
+[01:26:23.186] Browser LOG     send_latency_ms 912
+[01:26:24.744] Browser LOG     input_latency_ms 0
+[01:26:25.541] Browser LOG     send_latency_ms 800
+[01:26:26.861] Browser LOG     input_latency_ms 0
+[01:26:27.512] Browser LOG     memory_mb 23
+[01:26:27.512] Browser LOG     memory_mb 76
+[01:26:27.709] Browser LOG     send_latency_ms 798
+[01:26:27.709] Browser LOG     memory_mb 21
+[01:26:28.841] Browser LOG     input_latency_ms 0
+[01:26:29.637] Browser LOG     send_latency_ms 798
+[01:26:32.257] Browser LOG     input_latency_ms 0
+[01:26:32.721] Browser LOG     memory_mb 23
+[01:26:33.075] Browser LOG     send_latency_ms 818
+[01:26:34.424] Browser LOG     input_latency_ms 0
+[01:26:35.191] Browser LOG     send_latency_ms 765
+[01:26:36.377] Browser LOG     input_latency_ms 0
+[01:26:37.166] Browser LOG     send_latency_ms 786
+[01:26:37.709] Browser LOG     memory_mb 24
+[01:26:38.108] Browser LOG     input_latency_ms 0
+[01:26:38.891] Browser LOG     send_latency_ms 790
+[01:26:39.893] Browser LOG     input_latency_ms 0
+[01:26:40.655] Browser LOG     send_latency_ms 760
+[01:26:42.508] Browser LOG     input_latency_ms 0
+[01:26:42.708] Browser LOG     memory_mb 24
+[01:26:43.269] Browser LOG     send_latency_ms 762
+[01:26:47.725] Browser LOG     memory_mb 20
+[01:26:49.291] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:26:49.506] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:26:49.506] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","route":"/room/[id]"}
+[01:26:49.506] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763706037315}
+[01:26:54.460] Browser LOG     memory_mb 27
+[01:26:56.291] Server  LOG      ✓ Compiled in 140ms
+[01:26:59.457] Browser LOG     memory_mb 27
+[01:27:04.448] Browser LOG     memory_mb 27
+[01:27:09.464] Browser LOG     memory_mb 27
+[01:27:14.457] Browser LOG     memory_mb 27
+[01:27:19.460] Browser LOG     memory_mb 20
+[01:27:24.460] Browser LOG     memory_mb 19
+[01:27:27.519] Browser LOG     memory_mb 77
+[01:27:27.519] Browser LOG     memory_mb 23
+[01:27:29.451] Browser LOG     memory_mb 19
+[01:27:34.613] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:27:34.931] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:27:34.931] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","route":"/room/[id]"}
+[01:27:34.931] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763706082744}
+[01:27:39.864] Browser LOG     memory_mb 20
+[01:27:44.888] Browser LOG     memory_mb 20
+[01:27:49.873] Browser LOG     memory_mb 20
+[01:27:50.425] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763706098212}
+[01:27:59.951] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763706107758}
+[01:28:02.979] Browser LOG     input_latency_ms 0
+[01:28:03.764] Browser LOG     send_latency_ms 786
+[01:28:04.952] Browser LOG     memory_mb 27
+[01:28:09.961] Browser LOG     memory_mb 24
+[01:28:14.959] Browser LOG     memory_mb 24
+[01:28:19.962] Browser LOG     memory_mb 24
+[01:28:21.814] Browser LOG     memory_mb 24
+[01:28:21.972] Browser LOG     memory_mb 24
+[01:28:22.247] Browser LOG     memory_mb 80
+[01:28:22.247] Browser LOG     memory_mb 80
+[01:28:22.918] Browser LOG     memory_mb 77
+[01:28:24.952] Browser LOG     memory_mb 24
+[01:28:28.513] Browser LOG     memory_mb 77
+[01:28:28.514] Browser LOG     memory_mb 24
+[01:28:29.955] Browser LOG     memory_mb 24
+[01:28:33.631] Browser LOG     memory_mb 24
+[01:28:34.512] Browser LOG     memory_mb 77
+[01:28:34.961] Browser LOG     memory_mb 24
+[01:28:38.521] Browser LOG     memory_mb 24
+[01:28:39.516] Browser LOG     memory_mb 77
+[01:28:39.948] Browser LOG     memory_mb 24
+[01:28:43.516] Browser LOG     memory_mb 24
+[01:28:44.514] Browser LOG     memory_mb 77
+[01:28:44.948] Browser LOG     memory_mb 24
+[01:28:48.568] Browser LOG     memory_mb 24
+[01:28:49.516] Browser LOG     memory_mb 77
+[01:28:49.964] Browser LOG     memory_mb 24
+[01:28:53.525] Browser LOG     memory_mb 24
+[01:28:54.512] Browser LOG     memory_mb 77
+[01:28:54.962] Browser LOG     memory_mb 24
+[01:28:58.522] Browser LOG     memory_mb 24
+[01:28:59.517] Browser LOG     memory_mb 77
+[01:28:59.965] Browser LOG     memory_mb 24
+[01:29:03.525] Browser LOG     memory_mb 24
+[01:29:04.516] Browser LOG     memory_mb 77
+[01:29:04.964] Browser LOG     memory_mb 24
+[01:29:08.514] Browser LOG     memory_mb 24
+[01:29:09.523] Browser LOG     memory_mb 77
+[01:29:09.959] Browser LOG     memory_mb 24
+[01:29:13.512] Browser LOG     memory_mb 24
+[01:29:14.529] Browser LOG     memory_mb 77
+[01:29:14.967] Browser LOG     memory_mb 24
+[01:29:18.515] Browser LOG     memory_mb 24
+[01:29:19.514] Browser LOG     memory_mb 77
+[01:29:19.967] Browser LOG     memory_mb 24
+[01:29:23.525] Browser LOG     memory_mb 24
+[01:29:24.513] Browser LOG     memory_mb 77
+[01:29:24.977] Browser LOG     memory_mb 24
+[01:29:28.512] Browser LOG     memory_mb 24
+[01:29:29.955] Browser LOG     memory_mb 24
+[01:29:33.516] Browser LOG     memory_mb 24
+[01:29:34.965] Browser LOG     memory_mb 24
+[01:29:38.520] Browser LOG     memory_mb 24
+[01:29:39.969] Browser LOG     memory_mb 24
+[01:29:43.523] Browser LOG     memory_mb 24
+[01:29:44.960] Browser LOG     memory_mb 24
+[01:29:48.526] Browser LOG     memory_mb 24
+[01:29:49.952] Browser LOG     memory_mb 24
+[01:29:53.528] Browser LOG     memory_mb 24
+[01:29:54.961] Browser LOG     memory_mb 24
+[01:29:58.520] Browser LOG     memory_mb 24
+[01:29:59.963] Browser LOG     memory_mb 24
+[01:30:03.522] Browser LOG     memory_mb 24
+[01:30:04.970] Browser LOG     memory_mb 24
+[01:30:09.953] Browser LOG     memory_mb 24
+[01:30:14.969] Browser LOG     memory_mb 24
+[01:30:16.119] Browser LOG     memory_mb 78
+[01:30:19.517] Browser LOG     memory_mb 77
+[01:30:19.957] Browser LOG     memory_mb 24
+[01:30:24.520] Browser LOG     memory_mb 77
+[01:30:24.955] Browser LOG     memory_mb 24
+[01:30:29.523] Browser LOG     memory_mb 77
+[01:30:29.967] Browser LOG     memory_mb 24
+[01:30:34.523] Browser LOG     memory_mb 77
+[01:30:34.968] Browser LOG     memory_mb 24
+[01:30:39.514] Browser LOG     memory_mb 77
+[01:30:39.958] Browser LOG     memory_mb 24
+[01:30:44.525] Browser LOG     memory_mb 77
+[01:30:44.963] Browser LOG     memory_mb 24
+[01:30:49.517] Browser LOG     memory_mb 77
+[01:30:49.967] Browser LOG     memory_mb 24
+[01:30:54.518] Browser LOG     memory_mb 77
+[01:30:54.956] Browser LOG     memory_mb 24
+[01:30:59.519] Browser LOG     memory_mb 77
+[01:30:59.955] Browser LOG     memory_mb 24
+[01:31:04.524] Browser LOG     memory_mb 77
+[01:31:04.954] Browser LOG     memory_mb 24
+[01:31:09.521] Browser LOG     memory_mb 77
+[01:31:09.967] Browser LOG     memory_mb 24
+[01:31:14.518] Browser LOG     memory_mb 77
+[01:31:14.967] Browser LOG     memory_mb 24
+[01:31:19.953] Browser LOG     memory_mb 24
+[01:31:24.961] Browser LOG     memory_mb 24
+[01:31:27.518] Browser LOG     memory_mb 23
+[01:31:29.951] Browser LOG     memory_mb 24
+[01:31:34.969] Browser LOG     memory_mb 24
+[01:31:39.963] Browser LOG     memory_mb 24
+[01:31:44.967] Browser LOG     memory_mb 24
+[01:31:49.964] Browser LOG     memory_mb 24
+[01:31:54.971] Browser LOG     memory_mb 24
+[01:31:59.963] Browser LOG     memory_mb 24
+[01:32:04.964] Browser LOG     memory_mb 24
+[01:32:09.951] Browser LOG     memory_mb 24
+[01:32:12.043] Browser LOG     memory_mb 23
+[01:32:12.148] Browser LOG     memory_mb 24
+[01:32:14.965] Browser LOG     memory_mb 24
+[01:32:18.525] Browser LOG     memory_mb 24
+[01:32:19.962] Browser LOG     memory_mb 24
+[01:32:23.519] Browser LOG     memory_mb 24
+[01:32:24.963] Browser LOG     memory_mb 24
+[01:32:27.513] Browser LOG     memory_mb 77
+[01:32:28.523] Browser LOG     memory_mb 24
+[01:32:29.962] Browser LOG     memory_mb 24
+[01:32:33.511] Browser LOG     memory_mb 24
+[01:32:34.962] Browser LOG     memory_mb 24
+[01:32:38.519] Browser LOG     memory_mb 24
+[01:32:39.962] Browser LOG     memory_mb 24
+[01:32:43.514] Browser LOG     memory_mb 23
+[01:32:44.958] Browser LOG     memory_mb 24
+[01:32:48.522] Browser LOG     memory_mb 23
+[01:32:49.963] Browser LOG     memory_mb 24
+[01:32:53.512] Browser LOG     memory_mb 23
+[01:32:54.971] Browser LOG     memory_mb 24
+[01:32:58.519] Browser LOG     memory_mb 23
+[01:32:59.963] Browser LOG     memory_mb 24
+[01:33:03.515] Browser LOG     memory_mb 23
+[01:33:04.969] Browser LOG     memory_mb 24
+[01:33:08.525] Browser LOG     memory_mb 23
+[01:33:09.971] Browser LOG     memory_mb 24
+[01:33:13.521] Browser LOG     memory_mb 23
+[01:33:14.967] Browser LOG     memory_mb 24
+[01:33:19.967] Browser LOG     memory_mb 24
+[01:33:24.972] Browser LOG     memory_mb 24
+[01:33:27.524] Browser LOG     memory_mb 77
+[01:33:29.968] Browser LOG     memory_mb 24
+[01:33:34.958] Browser LOG     memory_mb 24
+[01:33:39.968] Browser LOG     memory_mb 24
+[01:33:44.955] Browser LOG     memory_mb 24
+[01:33:49.969] Browser LOG     memory_mb 24
+[01:33:54.960] Browser LOG     memory_mb 25
+[01:33:59.965] Browser LOG     memory_mb 25
+[01:34:04.972] Browser LOG     memory_mb 25
+[01:34:09.971] Browser LOG     memory_mb 26
+[01:34:14.961] Browser LOG     memory_mb 26
+[01:34:19.973] Browser LOG     memory_mb 26
+[01:34:24.958] Browser LOG     memory_mb 26
+[01:34:27.521] Browser LOG     memory_mb 77
+[01:34:27.522] Browser LOG     memory_mb 23
+[01:34:29.961] Browser LOG     memory_mb 26
+[01:34:34.963] Browser LOG     memory_mb 26
+[01:34:39.956] Browser LOG     memory_mb 26
+[01:34:44.959] Browser LOG     memory_mb 26
+[01:34:49.965] Browser LOG     memory_mb 26
+[01:34:54.956] Browser LOG     memory_mb 26
+[01:34:59.968] Browser LOG     memory_mb 26
+[01:35:04.960] Browser LOG     memory_mb 26
+[01:35:09.957] Browser LOG     memory_mb 26
+[01:35:14.966] Browser LOG     memory_mb 26
+[01:35:19.953] Browser LOG     memory_mb 26
+[01:35:24.955] Browser LOG     memory_mb 26
+[01:35:27.525] Browser LOG     memory_mb 23
+[01:35:27.526] Browser LOG     memory_mb 77
+[01:35:29.967] Browser LOG     memory_mb 26
+[01:35:34.960] Browser LOG     memory_mb 26
+[01:35:39.969] Browser LOG     memory_mb 26
+[01:35:44.966] Browser LOG     memory_mb 26
+[01:35:49.959] Browser LOG     memory_mb 26
+[01:35:54.967] Browser LOG     memory_mb 26
+[01:35:59.963] Browser LOG     memory_mb 26
+[01:36:04.967] Browser LOG     memory_mb 26
+[01:36:09.972] Browser LOG     memory_mb 26
+[01:36:14.947] Browser LOG     memory_mb 26
+[01:36:19.976] Browser LOG     memory_mb 26
+[01:36:24.965] Browser LOG     memory_mb 27
+[01:36:27.516] Browser LOG     memory_mb 24
+[01:36:27.516] Browser LOG     memory_mb 77
+[01:36:29.963] Browser LOG     memory_mb 27
+[01:36:34.959] Browser LOG     memory_mb 27
+[01:36:39.970] Browser LOG     memory_mb 27
+[01:36:41.165] Browser LOG     memory_mb 24
+[01:36:41.279] Browser LOG     memory_mb 24
+[01:36:43.525] Browser LOG     memory_mb 24
+[01:36:44.949] Browser LOG     memory_mb 26
+[01:36:48.517] Browser LOG     memory_mb 23
+[01:36:49.964] Browser LOG     memory_mb 26
+[01:36:53.511] Browser LOG     memory_mb 23
+[01:36:54.960] Browser LOG     memory_mb 26
+[01:36:58.523] Browser LOG     memory_mb 23
+[01:36:59.960] Browser LOG     memory_mb 26
+[01:37:03.512] Browser LOG     memory_mb 23
+[01:37:04.977] Browser LOG     memory_mb 26
+[01:37:08.512] Browser LOG     memory_mb 23
+[01:37:09.961] Browser LOG     memory_mb 26
+[01:37:13.514] Browser LOG     memory_mb 23
+[01:37:14.961] Browser LOG     memory_mb 26
+[01:37:18.524] Browser LOG     memory_mb 24
+[01:37:19.968] Browser LOG     memory_mb 26
+[01:37:23.524] Browser LOG     memory_mb 24
+[01:37:24.960] Browser LOG     memory_mb 26
+[01:37:27.525] Browser LOG     memory_mb 77
+[01:37:28.525] Browser LOG     memory_mb 24
+[01:37:29.956] Browser LOG     memory_mb 26
+[01:37:33.513] Browser LOG     memory_mb 24
+[01:37:34.965] Browser LOG     memory_mb 26
+[01:37:37.187] Browser LOG     memory_mb 24
+[01:37:39.967] Browser LOG     memory_mb 26
+[01:37:42.192] Browser LOG     memory_mb 24
+[01:37:44.961] Browser LOG     memory_mb 26
+[01:37:47.174] Browser LOG     memory_mb 24
+[01:37:49.947] Browser LOG     memory_mb 26
+[01:37:52.174] Browser LOG     memory_mb 24
+[01:37:54.970] Browser LOG     memory_mb 26
+[01:37:56.602] Server  WARN     ⚠ Cross origin request detected from 192.168.100.53 to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+[01:37:56.682] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:37:57.174] Browser LOG     memory_mb 24
+[01:37:58.253] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:37:58.253] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[01:37:58.253] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.100.53:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763706707493}
+[01:37:59.957] Browser LOG     memory_mb 26
+[01:38:02.181] Browser LOG     memory_mb 24
+[01:38:04.957] Browser LOG     memory_mb 26
+[01:38:05.213] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://192.168.100.53:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763706714349}
+[01:38:07.187] Browser LOG     memory_mb 24
+[01:38:09.948] Browser LOG     memory_mb 26
+[01:38:10.123] Browser LOG     memory_mb 21
+[01:38:13.546] Browser LOG     memory_mb 24
+[01:38:14.689] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/guest color: rgb(120, 120, 120) color: inherit {"dp":"/guest","o":"http://192.168.100.53:3000/guest","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763706723887}
+[01:38:14.959] Browser LOG     memory_mb 26
+[01:38:16.709] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://192.168.100.53:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763706725936}
+[01:38:18.520] Browser LOG     memory_mb 23
+[01:38:19.959] Browser LOG     memory_mb 26
+[01:38:21.704] Browser LOG     memory_mb 21
+[01:38:23.516] Browser LOG     memory_mb 23
+[01:38:24.388] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/guest color: rgb(120, 120, 120) color: inherit {"dp":"/guest","o":"http://192.168.100.53:3000/guest","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763706733627}
+[01:38:24.961] Browser LOG     memory_mb 26
+[01:38:27.182] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.100.53:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763706736398}
+[01:38:27.526] Browser LOG     memory_mb 77
+[01:38:28.523] Browser LOG     memory_mb 24
+[01:38:29.964] Browser LOG     memory_mb 26
+[01:38:31.434] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://192.168.100.53:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763706740671}
+[01:38:33.520] Browser LOG     memory_mb 24
+[01:38:34.955] Browser LOG     memory_mb 26
+[01:38:36.435] Browser LOG     memory_mb 21
+[01:38:38.522] Browser LOG     memory_mb 24
+[01:38:39.958] Browser LOG     memory_mb 26
+[01:38:41.432] Browser LOG     memory_mb 21
+[01:38:43.515] Browser LOG     memory_mb 24
+[01:38:44.963] Browser LOG     memory_mb 26
+[01:38:45.209] Browser LOG     input_latency_ms 2
+[01:38:46.465] Browser LOG     send_latency_ms 1154
+[01:38:46.465] Browser LOG     memory_mb 21
+[01:38:46.895] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. e4e57d6a-03d8-452f-ab9b-4f17541add22
+[01:38:48.513] Browser LOG     memory_mb 24
+[01:38:49.968] Browser LOG     memory_mb 26
+[01:38:50.826] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.100.53:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763706760044}
+[01:38:53.523] Browser LOG     memory_mb 23
+[01:38:54.193] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/guest color: rgb(120, 120, 120) color: inherit {"dp":"/guest","o":"http://192.168.100.53:3000/guest","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763706763431}
+[01:38:54.960] Browser LOG     memory_mb 26
+[01:38:55.278] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://192.168.100.53:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763706764511}
+[01:38:56.221] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.100.53:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763706765420}
+[01:38:58.520] Browser LOG     memory_mb 24
+[01:38:59.963] Browser LOG     memory_mb 26
+[01:39:03.515] Browser LOG     memory_mb 24
+[01:39:04.954] Browser LOG     memory_mb 26
+[01:39:08.528] Browser LOG     memory_mb 24
+[01:39:09.963] Browser LOG     memory_mb 26
+[01:39:14.965] Browser LOG     memory_mb 26
+[01:39:19.963] Browser LOG     memory_mb 26
+[01:39:24.963] Browser LOG     memory_mb 26
+[01:39:27.529] Browser LOG     memory_mb 77
+[01:39:29.951] Browser LOG     memory_mb 26
+[01:39:34.968] Browser LOG     memory_mb 26
+[01:39:39.957] Browser LOG     memory_mb 26
+[01:39:44.959] Browser LOG     memory_mb 26
+[01:39:49.959] Browser LOG     memory_mb 26
+[01:39:54.957] Browser LOG     memory_mb 26
+[01:39:59.969] Browser LOG     memory_mb 26
+[01:40:04.968] Browser LOG     memory_mb 26
+[01:40:09.959] Browser LOG     memory_mb 26
+[01:40:14.960] Browser LOG     memory_mb 26
+[01:40:19.958] Browser LOG     memory_mb 26
+[01:40:24.967] Browser LOG     memory_mb 26
+[01:40:27.520] Browser LOG     memory_mb 24
+[01:40:27.521] Browser LOG     memory_mb 77
+[01:40:29.951] Browser LOG     memory_mb 26
+[01:40:34.958] Browser LOG     memory_mb 26
+[01:40:39.975] Browser LOG     memory_mb 26
+[01:40:44.959] Browser LOG     memory_mb 26
+[01:40:49.957] Browser LOG     memory_mb 26
+[01:40:54.965] Browser LOG     memory_mb 26
+[01:40:59.959] Browser LOG     memory_mb 26
+[01:41:04.958] Browser LOG     memory_mb 26
+[01:41:09.977] Browser LOG     memory_mb 26
+[01:41:14.967] Browser LOG     memory_mb 26
+[01:41:19.960] Browser LOG     memory_mb 26
+[01:41:24.957] Browser LOG     memory_mb 26
+[01:41:27.528] Browser LOG     memory_mb 78
+[01:41:27.529] Browser LOG     memory_mb 23
+[01:41:29.968] Browser LOG     memory_mb 26
+[01:41:34.959] Browser LOG     memory_mb 26
+[01:41:39.966] Browser LOG     memory_mb 26
+[01:41:41.544] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:41:42.127] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:41:42.127] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[01:41:42.127] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.100.53:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763706931357}
+[01:41:44.966] Browser LOG     memory_mb 26
+[01:41:49.968] Browser LOG     memory_mb 26
+[01:41:54.973] Browser LOG     memory_mb 26
+[01:42:27.520] Browser LOG     memory_mb 77
+[01:42:27.521] Browser LOG     memory_mb 24
+[01:42:30.831] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:42:31.304] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:42:31.304] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[01:42:31.304] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.100.53:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763706980542}
+[01:42:50.341] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://192.168.100.53:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763706999576}
+[01:42:54.816] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.100.53:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763707003960}
+[01:42:58.641] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://192.168.100.53:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763707007878}
+[01:43:03.281] Server  LOG      ✓ Compiled in 743ms
+[01:43:08.532] Browser LOG     memory_mb 21
+[01:43:08.920] Browser LOG     input_latency_ms 2
+[01:43:09.656] Browser LOG     send_latency_ms 777
+[01:43:12.512] Browser LOG     memory_mb 78
+[01:43:12.512] Browser LOG     memory_mb 82
+[01:43:12.512] Browser LOG     memory_mb 24
+[01:43:12.512] Browser LOG     memory_mb 27
+[01:43:13.530] Browser LOG     memory_mb 21
+[01:43:14.785] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:43:15.096] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:43:15.096] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","route":"/room/[id]"}
+[01:43:15.096] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763707022897}
+[01:43:17.523] Browser LOG     memory_mb 81
+[01:43:17.523] Browser LOG     memory_mb 28
+[01:43:18.530] Browser LOG     memory_mb 21
+[01:43:18.953] Browser LOG     input_latency_ms 1
+[01:43:19.702] Browser LOG     send_latency_ms 744
+[01:43:20.029] Browser LOG     memory_mb 21
+[01:43:22.512] Browser LOG     memory_mb 81
+[01:43:22.512] Browser LOG     memory_mb 28
+[01:43:23.531] Browser LOG     memory_mb 21
+[01:43:23.546] Browser LOG     input_latency_ms 0
+[01:43:24.325] Browser LOG     send_latency_ms 755
+[01:43:25.038] Browser LOG     memory_mb 27
+[01:43:26.047] Browser LOG     input_latency_ms 0
+[01:43:26.791] Browser LOG     send_latency_ms 736
+[01:43:27.523] Browser LOG     memory_mb 81
+[01:43:27.523] Browser LOG     memory_mb 28
+[01:43:28.532] Browser LOG     memory_mb 21
+[01:43:29.500] Browser LOG     input_latency_ms 0
+[01:43:30.030] Browser LOG     memory_mb 22
+[01:43:30.507] Browser LOG     send_latency_ms 1036
+[01:43:32.521] Browser LOG     memory_mb 28
+[01:43:32.523] Browser LOG     memory_mb 81
+[01:43:32.630] Browser LOG     input_latency_ms 0
+[01:43:33.295] Browser LOG     send_latency_ms 753
+[01:43:33.530] Browser LOG     memory_mb 21
+[01:43:35.019] Browser LOG     memory_mb 23
+[01:43:38.530] Browser LOG     memory_mb 21
+[01:43:40.031] Browser LOG     memory_mb 23
+[01:43:44.058] Browser LOG     memory_mb 21
+[01:43:45.023] Browser LOG     memory_mb 20
+[01:43:46.906] Server  LOG      ✓ Compiled in 176ms
+[01:43:47.116] Browser ERROR   uncaughtError: ReferenceError: handleKeyPress is not defined
+[01:43:48.113] Browser ERROR   uncaughtError: ReferenceError: handleKeyPress is not defined
+[01:43:48.530] Browser LOG     memory_mb 81
+[01:43:48.530] Browser ERROR   uncaughtError: ReferenceError: handleKeyPress is not defined
+[01:43:57.109] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[01:43:57.117] Server  LOG      ✓ Compiled in 172ms
+[01:43:57.143] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[01:43:57.267] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763707065075}
+[01:43:58.821] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763707065225}
+[01:43:59.038] Server  ERROR   Error: aborted
+[01:43:59.041] Server  ERROR    ⨯ "uncaughtException:" Error: aborted
+[01:43:59.043] Server  ERROR    ⨯ "uncaughtException: " Error: aborted
+[01:43:59.411] Server  ERROR   Error: aborted
+[01:43:59.417] Server  ERROR    ⨯ "unhandledRejection:" Error: aborted
+[01:43:59.420] Server  ERROR    ⨯ "unhandledRejection: " Error: aborted
+[01:43:59.805] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:44:00.345] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:44:00.345] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","route":"/room/[id]"}
+[01:44:00.345] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763707068151}
+[01:44:00.928] Browser ERROR   uncaughtError: ReferenceError: handleKeyPress is not defined
+[01:44:01.938] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:44:03.522] Browser LOG     memory_mb 27
+[01:44:03.522] Browser LOG     memory_mb 25
+[01:44:03.526] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:44:03.526] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","route":"/room/[id]"}
+[01:44:03.526] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763707070553}
+[01:44:03.526] Browser ERROR   uncaughtError: ReferenceError: handleKeyPress is not defined
+[01:44:08.511] Browser LOG     memory_mb 26
+[01:44:12.532] Server  LOG      ✓ Compiled in 146ms
+[01:44:12.551] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[01:44:12.558] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[01:44:14.810] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:44:15.148] Browser LOG     memory_mb 26
+[01:44:15.313] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:44:15.313] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","route":"/room/[id]"}
+[01:44:15.313] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763707083123}
+[01:44:15.916] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:44:16.721] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:44:16.721] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","route":"/room/[id]"}
+[01:44:16.721] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763707084217}
+[01:44:18.522] Browser LOG     memory_mb 27
+[01:44:20.278] Browser LOG     memory_mb 22
+[01:44:22.521] Browser LOG     memory_mb 96
+[01:44:23.529] Browser LOG     memory_mb 27
+[01:44:25.280] Browser LOG     memory_mb 22
+[01:44:27.519] Browser LOG     memory_mb 96
+[01:44:30.276] Browser LOG     memory_mb 22
+[01:44:32.516] Browser LOG     memory_mb 65
+[01:44:35.267] Browser LOG     memory_mb 22
+[01:44:37.516] Browser LOG     memory_mb 65
+[01:44:40.273] Browser LOG     memory_mb 22
+[01:44:42.519] Browser LOG     memory_mb 65
+[01:44:45.272] Browser LOG     memory_mb 22
+[01:44:50.260] Browser LOG     memory_mb 22
+[01:44:55.283] Browser LOG     memory_mb 22
+[01:45:00.272] Browser LOG     memory_mb 22
+[01:45:05.269] Browser LOG     memory_mb 22
+[01:45:10.278] Browser LOG     memory_mb 22
+[01:45:11.969] Browser LOG     input_latency_ms 1
+[01:45:12.740] Browser LOG     send_latency_ms 778
+[01:45:14.157] Browser LOG     input_latency_ms 0
+[01:45:14.908] Browser LOG     send_latency_ms 752
+[01:45:15.283] Browser LOG     memory_mb 22
+[01:45:19.511] Browser LOG     memory_mb 65
+[01:45:20.272] Browser LOG     memory_mb 22
+[01:45:21.588] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:45:21.830] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:45:21.830] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","route":"/room/[id]"}
+[01:45:21.830] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://192.168.100.53:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763707151068}
+[01:45:25.291] Browser LOG     memory_mb 22
+[01:45:25.530] Browser LOG     input_latency_ms 1
+[01:45:26.304] Browser LOG     send_latency_ms 777
+[01:45:26.821] Browser LOG     memory_mb 21
+[01:45:27.522] Browser LOG     memory_mb 66
+[01:45:27.522] Browser LOG     memory_mb 27
+[01:45:27.992] Browser LOG     input_latency_ms 0
+[01:45:28.820] Browser LOG     send_latency_ms 799
+[01:45:30.285] Browser LOG     memory_mb 24
+[01:45:31.781] Browser LOG     memory_mb 21
+[01:45:33.048] Browser LOG     input_latency_ms 0
+[01:45:34.144] Browser LOG     send_latency_ms 1104
+[01:45:35.273] Browser LOG     memory_mb 26
+[01:45:36.778] Browser LOG     memory_mb 21
+[01:45:40.279] Browser LOG     memory_mb 26
+[01:45:41.788] Browser LOG     memory_mb 21
+[01:45:45.273] Browser LOG     memory_mb 26
+[01:45:46.780] Browser LOG     memory_mb 21
+[01:45:47.684] Browser LOG     input_latency_ms 0
+[01:45:48.890] Browser LOG     send_latency_ms 1013
+[01:45:50.283] Browser LOG     memory_mb 26
+[01:45:51.780] Browser LOG     memory_mb 21
+[01:45:55.277] Browser LOG     memory_mb 26
+[01:45:56.780] Browser LOG     memory_mb 21
+[01:46:00.274] Browser LOG     memory_mb 26
+[01:46:01.779] Browser LOG     memory_mb 21
+[01:46:05.276] Browser LOG     memory_mb 26
+[01:46:06.779] Browser LOG     memory_mb 21
+[01:46:10.285] Browser LOG     memory_mb 26
+[01:46:11.780] Browser LOG     memory_mb 21
+[01:46:15.279] Browser LOG     memory_mb 26
+[01:46:16.779] Browser LOG     memory_mb 21
+[01:46:20.272] Browser LOG     memory_mb 26
+[01:46:25.273] Browser LOG     memory_mb 26
+[01:46:27.516] Browser LOG     memory_mb 27
+[01:46:27.517] Browser LOG     memory_mb 66
+[01:46:30.271] Browser LOG     memory_mb 26
+[01:46:35.274] Browser LOG     memory_mb 26
+[01:46:40.274] Browser LOG     memory_mb 26
+[01:46:45.270] Browser LOG     memory_mb 26
+[01:46:50.272] Browser LOG     memory_mb 27
+[01:46:55.271] Browser LOG     memory_mb 27
+[01:47:00.268] Browser LOG     memory_mb 27
+[01:47:05.276] Browser LOG     memory_mb 27
+[01:47:05.727] Browser LOG     memory_mb 21
+[01:47:05.727] Browser LOG     memory_mb 21
+[01:47:05.727] Browser LOG     memory_mb 21
+[01:47:06.327] Browser LOG     memory_mb 21
+[01:47:08.325] Browser LOG     input_latency_ms 1
+[01:47:09.369] Browser LOG     send_latency_ms 1280
+[01:47:10.267] Browser LOG     memory_mb 27
+[01:47:11.324] Browser LOG     memory_mb 21
+[01:47:15.277] Browser LOG     memory_mb 26
+[01:47:16.325] Browser LOG     memory_mb 21
+[01:47:20.271] Browser LOG     memory_mb 27
+[01:47:21.326] Browser LOG     memory_mb 21
+[01:47:25.278] Browser LOG     memory_mb 27
+[01:47:26.324] Browser LOG     memory_mb 21
+[01:47:27.523] Browser LOG     memory_mb 28
+[01:47:27.524] Browser LOG     memory_mb 66
+[01:47:30.269] Browser LOG     memory_mb 27
+[01:47:31.325] Browser LOG     memory_mb 21
+[01:47:35.278] Browser LOG     memory_mb 27
+[01:47:36.325] Browser LOG     memory_mb 21
+[01:47:40.282] Browser LOG     memory_mb 27
+[01:47:41.326] Browser LOG     memory_mb 21
+[01:47:45.271] Browser LOG     memory_mb 27
+[01:47:46.326] Browser LOG     memory_mb 21
+[01:47:50.284] Browser LOG     memory_mb 27
+[01:47:51.325] Browser LOG     memory_mb 21
+[01:47:51.889] Browser LOG     memory_mb 27
+[01:47:52.021] Browser LOG     memory_mb 28
+[01:47:52.459] Browser LOG     memory_mb 24
+[01:47:55.261] Browser LOG     memory_mb 27
+[01:47:56.325] Browser LOG     memory_mb 21
+[01:47:58.514] Browser LOG     memory_mb 24
+[01:48:00.277] Browser LOG     memory_mb 27
+[01:48:03.212] Browser LOG     memory_mb 21
+[01:48:03.512] Browser LOG     memory_mb 24
+[01:48:05.270] Browser LOG     memory_mb 27
+[01:48:08.513] Browser LOG     memory_mb 24
+[01:48:10.271] Browser LOG     memory_mb 20
+[01:48:13.528] Browser LOG     memory_mb 24
+[01:48:15.271] Browser LOG     memory_mb 20
+[01:48:18.511] Browser LOG     memory_mb 24
+[01:48:20.275] Browser LOG     memory_mb 20
+[01:48:23.520] Browser LOG     memory_mb 24
+[01:48:25.266] Browser LOG     memory_mb 20
+[01:48:27.521] Browser LOG     memory_mb 66
+[01:48:28.532] Browser LOG     memory_mb 24
+[01:48:30.274] Browser LOG     memory_mb 20
+[01:48:33.515] Browser LOG     memory_mb 24
+[01:48:35.274] Browser LOG     memory_mb 21
+[01:48:37.460] Browser LOG     memory_mb 24
+[01:48:40.268] Browser LOG     memory_mb 21
+[01:48:43.521] Browser LOG     memory_mb 24
+[01:48:45.277] Browser LOG     memory_mb 21
+[01:48:48.527] Browser LOG     memory_mb 24
+[01:48:50.271] Browser LOG     memory_mb 21
+[01:48:53.522] Browser LOG     memory_mb 24
+[01:48:55.275] Browser LOG     memory_mb 21
+[01:48:58.517] Browser LOG     memory_mb 24
+[01:49:00.284] Browser LOG     memory_mb 21
+[01:49:03.522] Browser LOG     memory_mb 24
+[01:49:05.280] Browser LOG     memory_mb 21
+[01:49:08.523] Browser LOG     memory_mb 24
+[01:49:10.280] Browser LOG     memory_mb 21
+[01:49:12.627] Browser LOG     memory_mb 24
+[01:49:15.278] Browser LOG     memory_mb 21
+[01:49:18.521] Browser LOG     memory_mb 24
+[01:49:20.268] Browser LOG     memory_mb 20
+[01:49:23.521] Browser LOG     memory_mb 24
+[01:49:25.285] Browser LOG     memory_mb 21
+[01:49:27.514] Browser LOG     memory_mb 63
+[01:49:28.523] Browser LOG     memory_mb 24
+[01:49:30.283] Browser LOG     memory_mb 21
+[01:49:32.036] Browser LOG     memory_mb 21
+[01:49:32.036] Browser LOG     memory_mb 21
+[01:49:32.036] Browser LOG     memory_mb 21
+[01:49:32.036] Browser LOG     memory_mb 21
+[01:49:32.036] Browser LOG     memory_mb 21
+[01:49:32.037] Browser LOG     memory_mb 21
+[01:49:32.037] Browser LOG     memory_mb 21
+[01:49:32.037] Browser LOG     memory_mb 21
+[01:49:32.037] Browser LOG     input_latency_ms 0
+[01:49:32.500] Browser LOG     send_latency_ms 1119
+[01:49:33.518] Browser LOG     memory_mb 24
+[01:49:35.269] Browser LOG     memory_mb 21
+[01:49:35.465] Browser LOG     memory_mb 21
+[01:49:38.520] Browser LOG     memory_mb 24
+[01:49:40.278] Browser LOG     memory_mb 21
+[01:49:40.460] Browser LOG     memory_mb 21
+[01:49:43.518] Browser LOG     memory_mb 24
+[01:49:45.280] Browser LOG     memory_mb 22
+[01:49:45.461] Browser LOG     memory_mb 21
+[01:49:48.519] Browser LOG     memory_mb 24
+[01:49:50.271] Browser LOG     memory_mb 22
+[01:49:50.462] Browser LOG     memory_mb 21
+[01:49:53.526] Browser LOG     memory_mb 24
+[01:49:55.279] Browser LOG     memory_mb 22
+[01:49:55.463] Browser LOG     memory_mb 21
+[01:49:58.521] Browser LOG     memory_mb 24
+[01:50:00.285] Browser LOG     memory_mb 22
+[01:50:00.461] Browser LOG     memory_mb 21
+[01:50:03.512] Browser LOG     memory_mb 24
+[01:50:05.274] Browser LOG     memory_mb 22
+[01:50:06.137] Browser LOG     memory_mb 21
+[01:50:08.514] Browser LOG     memory_mb 24
+[01:50:10.267] Browser LOG     memory_mb 22
+[01:50:10.597] Browser LOG     memory_mb 21
+[01:50:13.520] Browser LOG     memory_mb 24
+[01:50:15.280] Browser LOG     memory_mb 22
+[01:50:15.597] Browser LOG     memory_mb 21
+[01:50:20.270] Browser LOG     memory_mb 22
+[01:50:20.598] Browser LOG     memory_mb 21
+[01:50:25.280] Browser LOG     memory_mb 22
+[01:50:25.598] Browser LOG     memory_mb 21
+[01:50:27.518] Browser LOG     memory_mb 63
+[01:50:30.273] Browser LOG     memory_mb 22
+[01:50:30.640] Browser LOG     memory_mb 21
+[01:50:35.270] Browser LOG     memory_mb 22
+[01:50:35.640] Browser LOG     memory_mb 21
+[01:50:40.273] Browser LOG     memory_mb 22
+[01:50:40.640] Browser LOG     memory_mb 21
+[01:50:45.274] Browser LOG     memory_mb 22
+[01:50:50.276] Browser LOG     memory_mb 22
+[01:50:55.283] Browser LOG     memory_mb 22
+[01:50:57.076] Browser LOG     memory_mb 21
+[01:51:00.267] Browser LOG     memory_mb 22
+[01:51:05.270] Browser LOG     memory_mb 22
+[01:51:08.628] Browser LOG     memory_mb 21
+[01:51:08.628] Browser LOG     memory_mb 21
+[01:51:10.273] Browser LOG     memory_mb 22
+[01:51:13.551] Browser LOG     memory_mb 21
+[01:51:15.280] Browser LOG     memory_mb 22
+[01:51:18.554] Browser LOG     memory_mb 21
+[01:51:20.276] Browser LOG     memory_mb 23
+[01:51:23.552] Browser LOG     memory_mb 21
+[01:51:25.284] Browser LOG     memory_mb 23
+[01:51:27.517] Browser LOG     memory_mb 24
+[01:51:27.517] Browser LOG     memory_mb 63
+[01:51:28.686] Browser LOG     memory_mb 21
+[01:51:28.686] Browser LOG     input_latency_ms 0
+[01:51:29.848] Browser LOG     send_latency_ms 1124
+[01:51:30.345] Browser LOG     memory_mb 22
+[01:51:33.551] Browser LOG     memory_mb 21
+[01:51:34.779] Browser LOG     input_latency_ms 0
+[01:51:35.285] Browser LOG     memory_mb 22
+[01:51:35.830] Browser LOG     send_latency_ms 1044
+[01:51:38.091] Browser LOG     input_latency_ms 0
+[01:51:38.552] Browser LOG     memory_mb 21
+[01:51:38.952] Browser LOG     send_latency_ms 814
+[01:51:40.264] Browser LOG     memory_mb 25
+[01:51:42.705] Browser LOG     memory_mb 24
+[01:51:42.799] Browser LOG     memory_mb 25
+[01:51:43.553] Browser LOG     memory_mb 21
+[01:51:45.272] Browser LOG     memory_mb 25
+[01:51:48.512] Browser LOG     memory_mb 25
+[01:51:48.553] Browser LOG     memory_mb 21
+[01:51:50.271] Browser LOG     memory_mb 25
+[01:51:53.526] Browser LOG     memory_mb 25
+[01:51:53.608] Browser LOG     memory_mb 21
+[01:51:55.296] Browser LOG     memory_mb 25
+[01:51:58.527] Browser LOG     memory_mb 24
+[01:51:58.551] Browser LOG     memory_mb 21
+[01:52:00.281] Browser LOG     memory_mb 25
+[01:52:01.739] Server  LOG      ✓ Compiled in 267ms
+[01:52:03.511] Browser LOG     memory_mb 28
+[01:52:03.553] Browser LOG     memory_mb 21
+[01:52:05.275] Browser LOG     memory_mb 24
+[01:52:08.516] Browser LOG     memory_mb 28
+[01:52:10.280] Browser LOG     memory_mb 24
+[01:52:10.859] Browser LOG     memory_mb 21
+[01:52:13.518] Browser LOG     memory_mb 28
+[01:52:15.286] Browser LOG     memory_mb 24
+[01:52:18.525] Browser LOG     memory_mb 28
+[01:52:20.282] Browser LOG     memory_mb 25
+[01:52:23.511] Browser LOG     memory_mb 29
+[01:52:25.275] Browser LOG     memory_mb 25
+[01:52:27.524] Browser LOG     memory_mb 63
+[01:52:28.515] Browser LOG     memory_mb 29
+[01:52:30.275] Browser LOG     memory_mb 25
+[01:52:33.525] Browser LOG     memory_mb 29
+[01:52:35.271] Browser LOG     memory_mb 25
+[01:52:38.513] Browser LOG     memory_mb 29
+[01:52:40.274] Browser LOG     memory_mb 25
+[01:52:43.521] Browser LOG     memory_mb 29
+[01:52:45.279] Browser LOG     memory_mb 25
+[01:52:50.274] Browser LOG     memory_mb 25
+[01:52:55.276] Browser LOG     memory_mb 25
+[01:53:00.270] Browser LOG     memory_mb 25
+[01:53:05.284] Browser LOG     memory_mb 25
+[01:53:10.276] Browser LOG     memory_mb 25
+[01:53:15.271] Browser LOG     memory_mb 25
+[01:53:20.273] Browser LOG     memory_mb 25
+[01:53:25.273] Browser LOG     memory_mb 25
+[01:53:27.517] Browser LOG     memory_mb 67
+[01:53:30.283] Browser LOG     memory_mb 24
+[01:53:35.269] Browser LOG     memory_mb 24
+[01:53:40.275] Browser LOG     memory_mb 24
+[01:53:42.721] Server  LOG      ✓ Compiled in 147ms
+[01:53:45.285] Browser LOG     memory_mb 29
+[01:53:50.273] Browser LOG     memory_mb 28
+[01:53:55.269] Browser LOG     memory_mb 29
+[01:53:56.690] Browser LOG     memory_mb 21
+[01:53:56.690] Browser LOG     memory_mb 21
+[01:53:56.690] Browser LOG     memory_mb 21
+[01:53:56.690] Browser LOG     memory_mb 21
+[01:53:56.690] Browser LOG     memory_mb 21
+[01:53:56.690] Browser LOG     memory_mb 21
+[01:53:56.690] Browser LOG     memory_mb 21
+[01:53:56.690] Browser LOG     input_latency_ms 2
+[01:53:56.690] Browser LOG     memory_mb 21
+[01:53:56.690] Browser LOG     send_latency_ms 768
+[01:53:58.995] Browser LOG     memory_mb 21
+[01:54:00.269] Browser LOG     memory_mb 29
+[01:54:03.996] Browser LOG     memory_mb 21
+[01:54:05.266] Browser LOG     memory_mb 29
+[01:54:08.998] Browser LOG     memory_mb 21
+[01:54:10.273] Browser LOG     memory_mb 29
+[01:54:13.993] Browser LOG     memory_mb 21
+[01:54:15.264] Browser LOG     memory_mb 29
+[01:54:17.055] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:54:17.437] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:54:17.437] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","route":"/room/[id]"}
+[01:54:17.437] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://192.168.100.53:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763707686674}
+[01:54:20.268] Browser LOG     memory_mb 30
+[01:54:22.387] Browser LOG     memory_mb 21
+[01:54:22.860] Browser LOG     input_latency_ms 2
+[01:54:23.659] Browser LOG     send_latency_ms 797
+[01:54:25.306] Browser LOG     memory_mb 22
+[01:54:27.392] Browser LOG     memory_mb 21
+[01:54:27.522] Browser LOG     memory_mb 67
+[01:54:27.523] Browser LOG     memory_mb 29
+[01:54:30.278] Browser LOG     memory_mb 22
+[01:54:32.394] Browser LOG     memory_mb 21
+[01:54:35.272] Browser LOG     memory_mb 22
+[01:54:35.605] Browser LOG     input_latency_ms 1
+[01:54:36.806] Browser LOG     send_latency_ms 1182
+[01:54:37.353] Browser LOG     memory_mb 21
+[01:54:38.883] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:54:39.116] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:54:39.116] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","route":"/room/[id]"}
+[01:54:39.116] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://192.168.100.53:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763707708351}
+[01:54:40.286] Browser LOG     memory_mb 24
+[01:54:43.427] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.100.53:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763707712635}
+[01:54:45.130] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:54:45.273] Browser LOG     memory_mb 24
+[01:54:45.531] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:54:45.531] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[01:54:45.531] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.100.53:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763707714714}
+[01:54:48.106] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://192.168.100.53:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763707717340}
+[01:54:50.270] Browser LOG     memory_mb 24
+[01:54:51.819] Browser LOG     input_latency_ms 2
+[01:54:52.596] Browser LOG     send_latency_ms 767
+[01:54:53.106] Browser LOG     memory_mb 21
+[01:54:55.265] Browser LOG     memory_mb 25
+[01:54:58.108] Browser LOG     memory_mb 21
+[01:55:00.274] Browser LOG     memory_mb 25
+[01:55:03.108] Browser LOG     memory_mb 21
+[01:55:05.271] Browser LOG     memory_mb 25
+[01:55:08.108] Browser LOG     memory_mb 21
+[01:55:10.275] Browser LOG     memory_mb 25
+[01:55:13.107] Browser LOG     memory_mb 21
+[01:55:15.031] Browser LOG     input_latency_ms 1
+[01:55:15.264] Browser LOG     memory_mb 25
+[01:55:16.067] Browser LOG     send_latency_ms 1023
+[01:55:18.107] Browser LOG     memory_mb 21
+[01:55:20.276] Browser LOG     memory_mb 27
+[01:55:25.225] Browser LOG     memory_mb 21
+[01:55:25.262] Browser LOG     memory_mb 27
+[01:55:27.520] Browser LOG     memory_mb 26
+[01:55:27.520] Browser LOG     memory_mb 66
+[01:55:30.267] Browser LOG     memory_mb 28
+[01:55:35.260] Browser LOG     memory_mb 28
+[01:55:39.513] Browser LOG     memory_mb 26
+[01:55:39.699] Browser LOG     memory_mb 26
+[01:55:40.269] Browser LOG     memory_mb 28
+[01:55:42.466] Browser LOG     memory_mb 26
+[01:55:45.273] Browser LOG     memory_mb 28
+[01:55:47.459] Browser LOG     memory_mb 26
+[01:55:50.270] Browser LOG     memory_mb 28
+[01:55:52.458] Browser LOG     memory_mb 26
+[01:55:55.275] Browser LOG     memory_mb 28
+[01:55:57.459] Browser LOG     memory_mb 26
+[01:56:00.275] Browser LOG     memory_mb 28
+[01:56:02.116] Browser LOG     memory_mb 21
+[01:56:02.116] Browser LOG     memory_mb 21
+[01:56:02.116] Browser LOG     memory_mb 21
+[01:56:02.116] Browser LOG     memory_mb 21
+[01:56:02.458] Browser LOG     memory_mb 26
+[01:56:03.635] Browser LOG     memory_mb 21
+[01:56:05.273] Browser LOG     memory_mb 28
+[01:56:07.460] Browser LOG     memory_mb 26
+[01:56:10.274] Browser LOG     memory_mb 28
+[01:56:12.454] Browser LOG     memory_mb 26
+[01:56:15.275] Browser LOG     memory_mb 28
+[01:56:17.463] Browser LOG     memory_mb 26
+[01:56:20.289] Browser LOG     memory_mb 28
+[01:56:22.456] Browser LOG     memory_mb 26
+[01:56:25.275] Browser LOG     memory_mb 28
+[01:56:27.468] Browser LOG     memory_mb 26
+[01:56:27.517] Browser LOG     memory_mb 66
+[01:56:30.273] Browser LOG     memory_mb 28
+[01:56:32.454] Browser LOG     memory_mb 26
+[01:56:35.287] Browser LOG     memory_mb 28
+[01:56:37.473] Browser LOG     memory_mb 26
+[01:56:40.274] Browser LOG     memory_mb 28
+[01:56:42.459] Browser LOG     memory_mb 26
+[01:56:45.272] Browser LOG     memory_mb 28
+[01:56:47.459] Browser LOG     memory_mb 26
+[01:56:50.270] Browser LOG     memory_mb 29
+[01:56:52.465] Browser LOG     memory_mb 26
+[01:56:55.272] Browser LOG     memory_mb 29
+[01:56:57.464] Browser LOG     memory_mb 26
+[01:57:00.282] Browser LOG     memory_mb 29
+[01:57:02.457] Browser LOG     memory_mb 26
+[01:57:05.274] Browser LOG     memory_mb 29
+[01:57:07.462] Browser LOG     memory_mb 26
+[01:57:10.277] Browser LOG     memory_mb 29
+[01:57:12.461] Browser LOG     memory_mb 26
+[01:57:15.287] Browser LOG     memory_mb 29
+[01:57:17.465] Browser LOG     memory_mb 26
+[01:57:20.266] Browser LOG     memory_mb 29
+[01:57:22.466] Browser LOG     memory_mb 26
+[01:57:25.362] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:57:25.664] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:57:25.664] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","route":"/room/[id]"}
+[01:57:25.664] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763707873476}
+[01:57:27.458] Browser LOG     memory_mb 26
+[01:57:27.524] Browser LOG     memory_mb 66
+[01:57:28.454] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763707876237}
+[01:57:32.470] Browser LOG     memory_mb 26
+[01:57:37.020] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763707884829}
+[01:57:37.454] Browser LOG     memory_mb 26
+[01:57:40.603] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763707888388}
+[01:57:42.459] Browser LOG     memory_mb 25
+[01:57:45.301] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/auth color: rgb(120, 120, 120) color: inherit {"dp":"/auth","o":"http://localhost:3000/auth","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763707893103}
+[01:57:47.455] Browser LOG     memory_mb 25
+[01:57:49.889] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:57:50.274] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:57:50.274] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[01:57:50.274] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763707898077}
+[01:57:52.458] Browser LOG     memory_mb 26
+[01:57:55.883] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/profile color: rgb(120, 120, 120) color: inherit {"dp":"/profile","o":"http://localhost:3000/profile","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763707903658}
+[01:57:57.465] Browser LOG     memory_mb 25
+[01:58:02.466] Browser LOG     memory_mb 25
+[01:58:03.409] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763707911194}
+[01:58:07.462] Browser LOG     memory_mb 25
+[01:58:09.813] Browser LOG     memory_mb 66
+[01:58:09.921] Browser LOG     memory_mb 66
+[01:58:11.285] Browser LOG     memory_mb 66
+[01:58:13.518] Browser LOG     memory_mb 26
+[01:58:17.519] Browser LOG     memory_mb 66
+[01:58:18.519] Browser LOG     memory_mb 26
+[01:58:22.525] Browser LOG     memory_mb 66
+[01:58:23.517] Browser LOG     memory_mb 26
+[01:58:27.521] Browser LOG     memory_mb 66
+[01:58:28.517] Browser LOG     memory_mb 26
+[01:58:32.466] Browser LOG     memory_mb 26
+[01:58:32.517] Browser LOG     memory_mb 66
+[01:58:35.690] Server  LOG      ✓ Compiled in 358ms
+[01:58:37.516] Browser LOG     memory_mb 65
+[01:58:38.516] Browser LOG     memory_mb 28
+[01:58:42.517] Browser LOG     memory_mb 65
+[01:58:43.516] Browser LOG     memory_mb 28
+[01:58:47.515] Browser LOG     memory_mb 65
+[01:58:48.515] Browser LOG     memory_mb 28
+[01:58:52.522] Browser LOG     memory_mb 65
+[01:58:53.523] Browser LOG     memory_mb 28
+[01:58:57.619] Browser LOG     memory_mb 65
+[01:58:57.743] Server  LOG      ✓ Compiled in 178ms
+[01:58:58.516] Browser LOG     memory_mb 28
+[01:59:02.514] Browser LOG     memory_mb 68
+[01:59:03.524] Browser LOG     memory_mb 28
+[01:59:07.524] Browser LOG     memory_mb 68
+[01:59:08.513] Browser LOG     memory_mb 28
+[01:59:13.555] Browser LOG     memory_mb 28
+[01:59:18.522] Browser LOG     memory_mb 28
+[01:59:23.525] Browser LOG     memory_mb 28
+[01:59:27.523] Browser LOG     memory_mb 68
+[01:59:28.522] Browser LOG     memory_mb 28
+[01:59:33.522] Browser LOG     memory_mb 28
+[02:00:04.883] Browser LOG     memory_mb 21
+[02:00:04.884] Browser LOG     memory_mb 21
+[02:00:04.884] Browser LOG     memory_mb 21
+[02:00:04.884] Browser LOG     memory_mb 21
+[02:00:04.884] Browser LOG     memory_mb 21
+[02:00:04.884] Browser LOG     memory_mb 21
+[02:00:04.884] Browser LOG     memory_mb 21
+[02:00:09.848] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:00:10.190] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[02:00:10.190] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","route":"/room/[id]"}
+[02:00:10.190] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://192.168.100.53:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763708039395}
+[02:00:15.084] Browser LOG     memory_mb 21
+[02:00:17.334] Browser LOG     input_latency_ms 1
+[02:00:18.339] Browser LOG     send_latency_ms 1018
+[02:00:20.083] Browser LOG     memory_mb 21
+[02:00:25.084] Browser LOG     memory_mb 21
+[02:00:27.516] Browser LOG     memory_mb 68
+[02:00:30.085] Browser LOG     memory_mb 21
+[02:00:35.085] Browser LOG     memory_mb 21
+[02:00:40.085] Browser LOG     memory_mb 21
+[02:00:45.085] Browser LOG     memory_mb 21
+[02:00:45.607] Browser LOG     input_latency_ms 1
+[02:00:46.871] Browser LOG     send_latency_ms 1080
+[02:00:48.788] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.100.53:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763708077888}
+[02:00:52.496] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://192.168.100.53:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763708081729}
+[02:00:57.568] Browser LOG     memory_mb 21
+[02:01:00.887] Browser LOG     input_latency_ms 1
+[02:01:02.191] Browser LOG     send_latency_ms 1320
+[02:01:02.987] Browser LOG     memory_mb 21
+[02:01:02.987] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 1817920b-9b39-40c0-b298-5b0252622d8c
+[02:01:07.495] Browser LOG     memory_mb 21
+[02:01:12.495] Browser LOG     memory_mb 21
+[02:01:17.494] Browser LOG     memory_mb 21
+[02:01:17.840] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 1817920b-9b39-40c0-b298-5b0252622d8c
+[02:01:22.027] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 1817920b-9b39-40c0-b298-5b0252622d8c
+[02:01:22.641] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 1817920b-9b39-40c0-b298-5b0252622d8c
+[02:01:22.641] Browser LOG     memory_mb 21
+[02:01:27.507] Browser LOG     memory_mb 21
+[02:01:27.522] Browser LOG     memory_mb 68
+[02:01:27.523] Browser LOG     memory_mb 28
+[02:01:29.996] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 1817920b-9b39-40c0-b298-5b0252622d8c
+[02:01:32.495] Browser LOG     memory_mb 21
+[02:01:35.093] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:01:35.316] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[02:01:35.316] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","route":"/room/[id]"}
+[02:01:35.316] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://192.168.100.53:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763708124551}
+[02:01:40.293] Browser LOG     memory_mb 21
+[02:01:42.933] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://localhost:3000/room/a43a1ab3-d99d-46a7-b6b5-481e35e477ab","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763708130740}
+[02:01:45.287] Browser LOG     memory_mb 21
+[02:01:45.617] Browser LOG     input_latency_ms 1
+[02:01:46.364] Browser LOG     send_latency_ms 752
+[02:01:47.934] Browser LOG     memory_mb 32
+[02:01:50.284] Browser LOG     memory_mb 21
+[02:01:52.949] Browser LOG     memory_mb 32
+[02:01:55.285] Browser LOG     memory_mb 21
+[02:01:57.935] Browser LOG     memory_mb 32
+[02:02:00.284] Browser LOG     memory_mb 21
+[02:02:02.931] Browser LOG     memory_mb 32
+[02:02:03.675] Server  LOG      ✓ Compiled in 409ms
+[02:02:05.283] Browser LOG     memory_mb 21
+[02:02:07.952] Browser LOG     memory_mb 36
+[02:02:10.351] Browser LOG     memory_mb 21
+[02:02:12.564] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:02:12.811] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[02:02:12.811] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","route":"/room/[id]"}
+[02:02:12.811] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.100.53:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100 color: rgb(120, 120, 120) color: inherit {"dp":"/room/[id]","o":"http://192.168.100.53:3000/room/ed042948-36d3-4f5e-a6f2-6e08910b1100","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763708162044}
+[02:02:12.954] Browser LOG     memory_mb 36
+[02:02:16.862] Browser LOG     input_latency_ms 1
+[02:02:17.600] Browser LOG     send_latency_ms 783
+[02:02:17.767] Browser LOG     memory_mb 21
+[02:02:17.957] Browser LOG     memory_mb 36
+[02:02:19.638] Browser LOG     input_latency_ms 0
+[02:02:20.391] Browser LOG     send_latency_ms 769
+[02:02:22.767] Browser LOG     memory_mb 21
+[02:02:22.949] Browser LOG     memory_mb 36
+[02:02:26.509] Browser LOG     memory_mb 68
+[02:02:26.615] Browser LOG     memory_mb 64
+[02:02:27.521] Browser LOG     memory_mb 29
+[02:02:27.767] Browser LOG     memory_mb 21
+[02:02:27.946] Browser LOG     memory_mb 36
+[02:02:31.856] Browser LOG     memory_mb 64
+[02:02:32.767] Browser LOG     memory_mb 21
+[02:02:32.957] Browser LOG     memory_mb 36
+[02:02:37.766] Browser LOG     memory_mb 21
+[02:02:37.949] Browser LOG     memory_mb 35
+[02:02:42.767] Browser LOG     memory_mb 21
+[02:02:42.962] Browser LOG     memory_mb 35
+[02:02:47.773] Browser LOG     memory_mb 21
+[02:02:47.960] Browser LOG     memory_mb 35
+[02:02:52.947] Browser LOG     memory_mb 36
+[02:02:54.642] Browser LOG     memory_mb 21
+[02:02:57.945] Browser LOG     memory_mb 36

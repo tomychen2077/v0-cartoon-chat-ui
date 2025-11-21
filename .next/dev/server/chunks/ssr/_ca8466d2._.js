@@ -264,7 +264,7 @@ function ChatBubbleComponent({ message, sender, avatar, showAvatar = true, isOwn
         }
     };
     const handleDelete = ()=>{
-        if (messageId && onDelete && confirm('Are you sure you want to delete this message?')) {
+        if (messageId && onDelete) {
             onDelete(messageId);
             setShowMenu(false);
         }
@@ -1163,6 +1163,7 @@ function ChatRoom({ params }) {
     const flushTimerRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
     const lastInputEventTimeRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
     const fileInputRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const messageInputRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
     const receivedIdsRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(new Set());
     const lastImmediateSendRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
     const [latencies, setLatencies] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
@@ -1880,11 +1881,12 @@ function ChatRoom({ params }) {
             }
             setMessages((prev)=>prev.filter((msg)=>msg.id !== messageId));
         } catch (err) {
-            console.error('Error deleting message:', err);
-            alert('Failed to delete message. Please try again.');
+            try {
+                console.error('Error deleting message:', err);
+            } catch  {}
         }
     };
-    const handleKeyPress = (e)=>{
+    const handleKeyDown = (e)=>{
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             lastInputEventTimeRef.current = performance.now();
@@ -1898,6 +1900,17 @@ function ChatRoom({ params }) {
             minute: '2-digit'
         });
     };
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        if (currentUser && !sending && !uploadingMedia) {
+            try {
+                messageInputRef.current?.focus();
+            } catch  {}
+        }
+    }, [
+        currentUser,
+        sending,
+        uploadingMedia
+    ]);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         const id = setInterval(()=>{
             const mem = performance.memory;
@@ -1942,7 +1955,7 @@ function ChatRoom({ params }) {
                         className: "w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin mx-auto mb-4"
                     }, void 0, false, {
                         fileName: "[project]/app/room/[id]/page.tsx",
-                        lineNumber: 735,
+                        lineNumber: 741,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1950,18 +1963,18 @@ function ChatRoom({ params }) {
                         children: "Loading chat room..."
                     }, void 0, false, {
                         fileName: "[project]/app/room/[id]/page.tsx",
-                        lineNumber: 736,
+                        lineNumber: 742,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/room/[id]/page.tsx",
-                lineNumber: 734,
+                lineNumber: 740,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/room/[id]/page.tsx",
-            lineNumber: 733,
+            lineNumber: 739,
             columnNumber: 7
         }, this);
     }
@@ -1976,7 +1989,7 @@ function ChatRoom({ params }) {
                         children: "Room not found"
                     }, void 0, false, {
                         fileName: "[project]/app/room/[id]/page.tsx",
-                        lineNumber: 746,
+                        lineNumber: 752,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -1985,23 +1998,23 @@ function ChatRoom({ params }) {
                             children: "Go Home"
                         }, void 0, false, {
                             fileName: "[project]/app/room/[id]/page.tsx",
-                            lineNumber: 748,
+                            lineNumber: 754,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/room/[id]/page.tsx",
-                        lineNumber: 747,
+                        lineNumber: 753,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/room/[id]/page.tsx",
-                lineNumber: 745,
+                lineNumber: 751,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/room/[id]/page.tsx",
-            lineNumber: 744,
+            lineNumber: 750,
             columnNumber: 7
         }, this);
     }
@@ -2024,12 +2037,12 @@ function ChatRoom({ params }) {
                                         children: "ChatBloom"
                                     }, void 0, false, {
                                         fileName: "[project]/app/room/[id]/page.tsx",
-                                        lineNumber: 762,
+                                        lineNumber: 768,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                    lineNumber: 761,
+                                    lineNumber: 767,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2040,7 +2053,7 @@ function ChatRoom({ params }) {
                                             children: room.emoji || '💬'
                                         }, void 0, false, {
                                             fileName: "[project]/app/room/[id]/page.tsx",
-                                            lineNumber: 767,
+                                            lineNumber: 773,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2051,7 +2064,7 @@ function ChatRoom({ params }) {
                                                     children: room.name
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                                    lineNumber: 771,
+                                                    lineNumber: 777,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2059,19 +2072,19 @@ function ChatRoom({ params }) {
                                                     children: room.topic
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                                    lineNumber: 772,
+                                                    lineNumber: 778,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/room/[id]/page.tsx",
-                                            lineNumber: 770,
+                                            lineNumber: 776,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                    lineNumber: 766,
+                                    lineNumber: 772,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2082,7 +2095,7 @@ function ChatRoom({ params }) {
                                             children: room.emoji || '💬'
                                         }, void 0, false, {
                                             fileName: "[project]/app/room/[id]/page.tsx",
-                                            lineNumber: 777,
+                                            lineNumber: 783,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2092,24 +2105,24 @@ function ChatRoom({ params }) {
                                                 children: room.name
                                             }, void 0, false, {
                                                 fileName: "[project]/app/room/[id]/page.tsx",
-                                                lineNumber: 781,
+                                                lineNumber: 787,
                                                 columnNumber: 17
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/room/[id]/page.tsx",
-                                            lineNumber: 780,
+                                            lineNumber: 786,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                    lineNumber: 776,
+                                    lineNumber: 782,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/room/[id]/page.tsx",
-                            lineNumber: 760,
+                            lineNumber: 766,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2117,12 +2130,12 @@ function ChatRoom({ params }) {
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$theme$2d$toggle$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ThemeToggle"], {}, void 0, false, {
                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                    lineNumber: 786,
+                                    lineNumber: 792,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$notifications$2d$popover$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["NotificationsPopover"], {}, void 0, false, {
                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                    lineNumber: 787,
+                                    lineNumber: 793,
                                     columnNumber: 13
                                 }, this),
                                 ("TURBOPACK compile-time value", "development") === 'development' && latencies.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2134,7 +2147,7 @@ function ChatRoom({ params }) {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                    lineNumber: 789,
+                                    lineNumber: 795,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2149,12 +2162,12 @@ function ChatRoom({ params }) {
                                                 className: "w-3.5 h-3.5 sm:w-5 sm:h-5"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/room/[id]/page.tsx",
-                                                lineNumber: 802,
+                                                lineNumber: 808,
                                                 columnNumber: 17
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/room/[id]/page.tsx",
-                                            lineNumber: 796,
+                                            lineNumber: 802,
                                             columnNumber: 15
                                         }, this),
                                         currentUser && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -2165,7 +2178,7 @@ function ChatRoom({ params }) {
                                             children: "Leave"
                                         }, void 0, false, {
                                             fileName: "[project]/app/room/[id]/page.tsx",
-                                            lineNumber: 805,
+                                            lineNumber: 811,
                                             columnNumber: 17
                                         }, this),
                                         showRoomMenu && isRoomOwner && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -2175,7 +2188,7 @@ function ChatRoom({ params }) {
                                                     onClick: ()=>setShowRoomMenu(false)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                                    lineNumber: 811,
+                                                    lineNumber: 817,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2190,19 +2203,19 @@ function ChatRoom({ params }) {
                                                                         className: "w-4 h-4"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/room/[id]/page.tsx",
-                                                                        lineNumber: 818,
+                                                                        lineNumber: 824,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     "Edit Room"
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/room/[id]/page.tsx",
-                                                                lineNumber: 817,
+                                                                lineNumber: 823,
                                                                 columnNumber: 23
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/room/[id]/page.tsx",
-                                                            lineNumber: 816,
+                                                            lineNumber: 822,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2214,7 +2227,7 @@ function ChatRoom({ params }) {
                                                             children: "Add Friends"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/room/[id]/page.tsx",
-                                                            lineNumber: 822,
+                                                            lineNumber: 828,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2226,14 +2239,14 @@ function ChatRoom({ params }) {
                                                                     className: "w-4 h-4"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                                                    lineNumber: 833,
+                                                                    lineNumber: 839,
                                                                     columnNumber: 23
                                                                 }, this),
                                                                 inviteCreating ? 'Creating…' : 'Create Invite Link'
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/room/[id]/page.tsx",
-                                                            lineNumber: 828,
+                                                            lineNumber: 834,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2247,14 +2260,14 @@ function ChatRoom({ params }) {
                                                                     className: "w-4 h-4"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                                                    lineNumber: 843,
+                                                                    lineNumber: 849,
                                                                     columnNumber: 23
                                                                 }, this),
                                                                 "Delete Room"
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/room/[id]/page.tsx",
-                                                            lineNumber: 836,
+                                                            lineNumber: 842,
                                                             columnNumber: 21
                                                         }, this),
                                                         inviteError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2262,7 +2275,7 @@ function ChatRoom({ params }) {
                                                             children: inviteError
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/room/[id]/page.tsx",
-                                                            lineNumber: 847,
+                                                            lineNumber: 853,
                                                             columnNumber: 23
                                                         }, this),
                                                         showAddFriends && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2273,7 +2286,7 @@ function ChatRoom({ params }) {
                                                                     children: "Select friends to add"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                                                    lineNumber: 851,
+                                                                    lineNumber: 857,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2283,7 +2296,7 @@ function ChatRoom({ params }) {
                                                                         children: "No accepted friends found."
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/room/[id]/page.tsx",
-                                                                        lineNumber: 854,
+                                                                        lineNumber: 860,
                                                                         columnNumber: 29
                                                                     }, this) : friends.map((f)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                             className: "flex items-center justify-between text-xs",
@@ -2292,7 +2305,7 @@ function ChatRoom({ params }) {
                                                                                     children: f.display_name || f.username || 'Friend'
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                                                                    lineNumber: 858,
+                                                                                    lineNumber: 864,
                                                                                     columnNumber: 33
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -2312,24 +2325,24 @@ function ChatRoom({ params }) {
                                                                                     children: "Add"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                                                                    lineNumber: 859,
+                                                                                    lineNumber: 865,
                                                                                     columnNumber: 33
                                                                                 }, this)
                                                                             ]
                                                                         }, f.id || f.friend_id, true, {
                                                                             fileName: "[project]/app/room/[id]/page.tsx",
-                                                                            lineNumber: 857,
+                                                                            lineNumber: 863,
                                                                             columnNumber: 31
                                                                         }, this))
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                                                    lineNumber: 852,
+                                                                    lineNumber: 858,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/room/[id]/page.tsx",
-                                                            lineNumber: 850,
+                                                            lineNumber: 856,
                                                             columnNumber: 23
                                                         }, this),
                                                         inviteToken && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2340,7 +2353,7 @@ function ChatRoom({ params }) {
                                                                     children: "Invite Link"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                                                    lineNumber: 881,
+                                                                    lineNumber: 887,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2351,7 +2364,7 @@ function ChatRoom({ params }) {
                                                                             value: `${("TURBOPACK compile-time falsy", 0) ? "TURBOPACK unreachable" : ''}/room/${roomId}?token=${inviteToken}`
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/room/[id]/page.tsx",
-                                                                            lineNumber: 883,
+                                                                            lineNumber: 889,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -2365,25 +2378,25 @@ function ChatRoom({ params }) {
                                                                             children: "Copy"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/room/[id]/page.tsx",
-                                                                            lineNumber: 884,
+                                                                            lineNumber: 890,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                                                    lineNumber: 882,
+                                                                    lineNumber: 888,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/room/[id]/page.tsx",
-                                                            lineNumber: 880,
+                                                            lineNumber: 886,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                                    lineNumber: 815,
+                                                    lineNumber: 821,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
@@ -2391,24 +2404,24 @@ function ChatRoom({ params }) {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                    lineNumber: 795,
+                                    lineNumber: 801,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/room/[id]/page.tsx",
-                            lineNumber: 785,
+                            lineNumber: 791,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/room/[id]/page.tsx",
-                    lineNumber: 759,
+                    lineNumber: 765,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/room/[id]/page.tsx",
-                lineNumber: 758,
+                lineNumber: 764,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$dialog$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Root"], {
@@ -2422,7 +2435,7 @@ function ChatRoom({ params }) {
                             className: "fixed inset-0 bg-background/50 backdrop-blur-sm z-[60]"
                         }, void 0, false, {
                             fileName: "[project]/app/room/[id]/page.tsx",
-                            lineNumber: 908,
+                            lineNumber: 914,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$dialog$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Content"], {
@@ -2433,7 +2446,7 @@ function ChatRoom({ params }) {
                                     children: "Add Friends"
                                 }, void 0, false, {
                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                    lineNumber: 910,
+                                    lineNumber: 916,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$dialog$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Description"], {
@@ -2441,7 +2454,7 @@ function ChatRoom({ params }) {
                                     children: "Select friends to add to this private room."
                                 }, void 0, false, {
                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                    lineNumber: 911,
+                                    lineNumber: 917,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -2451,7 +2464,7 @@ function ChatRoom({ params }) {
                                     className: "mb-2"
                                 }, void 0, false, {
                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                    lineNumber: 912,
+                                    lineNumber: 918,
                                     columnNumber: 13
                                 }, this),
                                 friends.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2477,14 +2490,14 @@ function ChatRoom({ params }) {
                                                     }
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                                    lineNumber: 921,
+                                                    lineNumber: 927,
                                                     columnNumber: 19
                                                 }, this),
                                                 "Select All"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/room/[id]/page.tsx",
-                                            lineNumber: 920,
+                                            lineNumber: 926,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -2495,13 +2508,13 @@ function ChatRoom({ params }) {
                                             children: "Select None"
                                         }, void 0, false, {
                                             fileName: "[project]/app/room/[id]/page.tsx",
-                                            lineNumber: 936,
+                                            lineNumber: 942,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                    lineNumber: 919,
+                                    lineNumber: 925,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2511,7 +2524,7 @@ function ChatRoom({ params }) {
                                         children: "No accepted friends found."
                                     }, void 0, false, {
                                         fileName: "[project]/app/room/[id]/page.tsx",
-                                        lineNumber: 941,
+                                        lineNumber: 947,
                                         columnNumber: 17
                                     }, this) : friends.filter((f)=>(f.display_name || f.username || '').toLowerCase().includes(friendSearch.toLowerCase())).map((f)=>{
                                         const id = f.id || f.friend_id;
@@ -2526,7 +2539,7 @@ function ChatRoom({ params }) {
                                                     className: "w-6 h-6 rounded-full"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                                    lineNumber: 951,
+                                                    lineNumber: 957,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2540,20 +2553,20 @@ function ChatRoom({ params }) {
                                                     }
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                                    lineNumber: 952,
+                                                    lineNumber: 958,
                                                     columnNumber: 23
                                                 }, this),
                                                 name
                                             ]
                                         }, id, true, {
                                             fileName: "[project]/app/room/[id]/page.tsx",
-                                            lineNumber: 950,
+                                            lineNumber: 956,
                                             columnNumber: 21
                                         }, this);
                                     })
                                 }, void 0, false, {
                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                    lineNumber: 939,
+                                    lineNumber: 945,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2568,12 +2581,12 @@ function ChatRoom({ params }) {
                                                 children: "Cancel"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/room/[id]/page.tsx",
-                                                lineNumber: 967,
+                                                lineNumber: 973,
                                                 columnNumber: 17
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/room/[id]/page.tsx",
-                                            lineNumber: 966,
+                                            lineNumber: 972,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -2584,41 +2597,31 @@ function ChatRoom({ params }) {
                                             children: "Add Selected"
                                         }, void 0, false, {
                                             fileName: "[project]/app/room/[id]/page.tsx",
-                                            lineNumber: 969,
+                                            lineNumber: 975,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                    lineNumber: 965,
+                                    lineNumber: 971,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/room/[id]/page.tsx",
-                            lineNumber: 909,
+                            lineNumber: 915,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/room/[id]/page.tsx",
-                    lineNumber: 907,
+                    lineNumber: 913,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/room/[id]/page.tsx",
-                lineNumber: 906,
+                lineNumber: 912,
                 columnNumber: 7
-            }, this),
-            joinError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                role: "alert",
-                "aria-live": "polite",
-                className: "fixed top-4 left-1/2 -translate-x-1/2 z-[1000] bg-destructive text-destructive-foreground px-4 py-2 rounded-full shadow-lg",
-                children: joinError
-            }, void 0, false, {
-                fileName: "[project]/app/room/[id]/page.tsx",
-                lineNumber: 976,
-                columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 ref: messagesContainerRef,
@@ -2644,12 +2647,12 @@ function ChatRoom({ params }) {
                                 children: "No messages yet. Be the first to say something!"
                             }, void 0, false, {
                                 fileName: "[project]/app/room/[id]/page.tsx",
-                                lineNumber: 999,
+                                lineNumber: 1001,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/room/[id]/page.tsx",
-                            lineNumber: 998,
+                            lineNumber: 1000,
                             columnNumber: 13
                         }, this) : (()=>{
                             const start = Math.max(0, messages.length - visibleCount);
@@ -2666,12 +2669,12 @@ function ChatRoom({ params }) {
                                             children: "Load older messages"
                                         }, void 0, false, {
                                             fileName: "[project]/app/room/[id]/page.tsx",
-                                            lineNumber: 1009,
+                                            lineNumber: 1011,
                                             columnNumber: 23
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/room/[id]/page.tsx",
-                                        lineNumber: 1008,
+                                        lineNumber: 1010,
                                         columnNumber: 21
                                     }, this),
                                     visible.map((msg)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$chat$2d$bubble$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ChatBubble"], {
@@ -2688,7 +2691,7 @@ function ChatRoom({ params }) {
                                             mediaType: msg.media_type
                                         }, msg.id, false, {
                                             fileName: "[project]/app/room/[id]/page.tsx",
-                                            lineNumber: 1015,
+                                            lineNumber: 1017,
                                             columnNumber: 21
                                         }, this))
                                 ]
@@ -2698,86 +2701,93 @@ function ChatRoom({ params }) {
                             ref: messagesEndRef
                         }, void 0, false, {
                             fileName: "[project]/app/room/[id]/page.tsx",
-                            lineNumber: 1034,
+                            lineNumber: 1036,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/room/[id]/page.tsx",
-                    lineNumber: 983,
+                    lineNumber: 985,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/room/[id]/page.tsx",
-                lineNumber: 982,
+                lineNumber: 984,
                 columnNumber: 7
             }, this),
             !currentUser ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "border-t border-border bg-background p-2 sm:p-4 text-center",
-                children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                        className: "text-foreground/60 mb-1.5 sm:mb-2 text-xs sm:text-base",
-                        children: "Sign in or continue as a guest user."
-                    }, void 0, false, {
-                        fileName: "[project]/app/room/[id]/page.tsx",
-                        lineNumber: 1041,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex items-center justify-center gap-2",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
-                                href: "/auth",
-                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
-                                    size: "sm",
-                                    className: "text-xs sm:text-sm h-7 sm:h-9",
-                                    children: "Sign In"
+                className: "fixed inset-0 z-[100] flex items-center justify-center p-4",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
+                    className: "w-full max-w-sm bg-card border-border p-4 sm:p-6 text-center",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                            className: "text-foreground/60 mb-2 text-sm sm:text-base",
+                            children: "Sign in or continue as a guest user."
+                        }, void 0, false, {
+                            fileName: "[project]/app/room/[id]/page.tsx",
+                            lineNumber: 1044,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex flex-col sm:flex-row items-center justify-center gap-2",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                                    href: "/auth",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
+                                        size: "sm",
+                                        className: "w-full sm:w-auto h-9 rounded-full",
+                                        children: "Sign In"
+                                    }, void 0, false, {
+                                        fileName: "[project]/app/room/[id]/page.tsx",
+                                        lineNumber: 1047,
+                                        columnNumber: 17
+                                    }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                    lineNumber: 1044,
+                                    lineNumber: 1046,
                                     columnNumber: 15
-                                }, this)
-                            }, void 0, false, {
-                                fileName: "[project]/app/room/[id]/page.tsx",
-                                lineNumber: 1043,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
-                                href: "/guest",
-                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
-                                    variant: "outline",
-                                    size: "sm",
-                                    className: "h-7 sm:h-9 rounded-full",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$message$2d$circle$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MessageCircle$3e$__["MessageCircle"], {
-                                            className: "w-4 h-4 mr-2"
-                                        }, void 0, false, {
-                                            fileName: "[project]/app/room/[id]/page.tsx",
-                                            lineNumber: 1048,
-                                            columnNumber: 17
-                                        }, this),
-                                        "Join as Guest"
-                                    ]
-                                }, void 0, true, {
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                                    href: "/guest",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
+                                        variant: "outline",
+                                        size: "sm",
+                                        className: "w-full sm:w-auto h-9 rounded-full",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$message$2d$circle$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MessageCircle$3e$__["MessageCircle"], {
+                                                className: "w-4 h-4 mr-2"
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/room/[id]/page.tsx",
+                                                lineNumber: 1051,
+                                                columnNumber: 19
+                                            }, this),
+                                            "Join as Guest"
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/app/room/[id]/page.tsx",
+                                        lineNumber: 1050,
+                                        columnNumber: 17
+                                    }, this)
+                                }, void 0, false, {
                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                    lineNumber: 1047,
+                                    lineNumber: 1049,
                                     columnNumber: 15
                                 }, this)
-                            }, void 0, false, {
-                                fileName: "[project]/app/room/[id]/page.tsx",
-                                lineNumber: 1046,
-                                columnNumber: 13
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/app/room/[id]/page.tsx",
-                        lineNumber: 1042,
-                        columnNumber: 11
-                    }, this)
-                ]
-            }, void 0, true, {
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/app/room/[id]/page.tsx",
+                            lineNumber: 1045,
+                            columnNumber: 13
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/app/room/[id]/page.tsx",
+                    lineNumber: 1043,
+                    columnNumber: 11
+                }, this)
+            }, void 0, false, {
                 fileName: "[project]/app/room/[id]/page.tsx",
-                lineNumber: 1040,
+                lineNumber: 1042,
                 columnNumber: 9
             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "border-t border-border bg-background sticky bottom-0 p-2 sm:p-4 md:p-6",
@@ -2797,17 +2807,17 @@ function ChatRoom({ params }) {
                                         children: emoji
                                     }, emoji, false, {
                                         fileName: "[project]/app/room/[id]/page.tsx",
-                                        lineNumber: 1062,
+                                        lineNumber: 1066,
                                         columnNumber: 21
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/app/room/[id]/page.tsx",
-                                lineNumber: 1060,
+                                lineNumber: 1064,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/room/[id]/page.tsx",
-                            lineNumber: 1059,
+                            lineNumber: 1063,
                             columnNumber: 15
                         }, this),
                         selectedFile && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2821,7 +2831,7 @@ function ChatRoom({ params }) {
                                         className: "w-full h-full object-cover"
                                     }, void 0, false, {
                                         fileName: "[project]/app/room/[id]/page.tsx",
-                                        lineNumber: 1081,
+                                        lineNumber: 1085,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2834,23 +2844,23 @@ function ChatRoom({ params }) {
                                             className: "w-3 h-3"
                                         }, void 0, false, {
                                             fileName: "[project]/app/room/[id]/page.tsx",
-                                            lineNumber: 1093,
+                                            lineNumber: 1097,
                                             columnNumber: 21
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/room/[id]/page.tsx",
-                                        lineNumber: 1086,
+                                        lineNumber: 1090,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/room/[id]/page.tsx",
-                                lineNumber: 1080,
+                                lineNumber: 1084,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/room/[id]/page.tsx",
-                            lineNumber: 1079,
+                            lineNumber: 1083,
                             columnNumber: 15
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2864,7 +2874,7 @@ function ChatRoom({ params }) {
                                     className: "hidden"
                                 }, void 0, false, {
                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                    lineNumber: 1101,
+                                    lineNumber: 1105,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -2876,12 +2886,12 @@ function ChatRoom({ params }) {
                                         className: "w-3.5 h-3.5 sm:w-5 sm:h-5"
                                     }, void 0, false, {
                                         fileName: "[project]/app/room/[id]/page.tsx",
-                                        lineNumber: 1114,
+                                        lineNumber: 1118,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                    lineNumber: 1108,
+                                    lineNumber: 1112,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -2900,24 +2910,26 @@ function ChatRoom({ params }) {
                                         className: "w-3.5 h-3.5 sm:w-5 sm:h-5"
                                     }, void 0, false, {
                                         fileName: "[project]/app/room/[id]/page.tsx",
-                                        lineNumber: 1123,
+                                        lineNumber: 1127,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                    lineNumber: 1116,
+                                    lineNumber: 1120,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
                                     placeholder: "Type a message...",
                                     value: inputValue,
                                     onChange: (e)=>setInputValue(e.target.value),
-                                    onKeyPress: handleKeyPress,
+                                    onKeyDown: handleKeyDown,
+                                    autoFocus: true,
+                                    ref: messageInputRef,
                                     className: "rounded-full px-3 sm:px-6 py-1.5 sm:py-2 text-xs sm:text-base flex-1 min-w-0 h-8 sm:h-10",
                                     disabled: sending || uploadingMedia
                                 }, void 0, false, {
                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                    lineNumber: 1125,
+                                    lineNumber: 1129,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -2933,41 +2945,41 @@ function ChatRoom({ params }) {
                                         className: "w-3.5 h-3.5 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin"
                                     }, void 0, false, {
                                         fileName: "[project]/app/room/[id]/page.tsx",
-                                        lineNumber: 1144,
+                                        lineNumber: 1150,
                                         columnNumber: 19
                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$send$2d$horizontal$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__SendHorizontal$3e$__["SendHorizontal"], {
                                         className: "w-3.5 h-3.5 sm:w-5 sm:h-5"
                                     }, void 0, false, {
                                         fileName: "[project]/app/room/[id]/page.tsx",
-                                        lineNumber: 1146,
+                                        lineNumber: 1152,
                                         columnNumber: 19
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/room/[id]/page.tsx",
-                                    lineNumber: 1133,
+                                    lineNumber: 1139,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/room/[id]/page.tsx",
-                            lineNumber: 1100,
+                            lineNumber: 1104,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/room/[id]/page.tsx",
-                    lineNumber: 1056,
+                    lineNumber: 1060,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/room/[id]/page.tsx",
-                lineNumber: 1055,
+                lineNumber: 1059,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/room/[id]/page.tsx",
-        lineNumber: 756,
+        lineNumber: 762,
         columnNumber: 5
     }, this);
 }

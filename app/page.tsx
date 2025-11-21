@@ -524,26 +524,32 @@ export default function Home() {
         </div>
       )}
       {showCleanupWarn && (
-        <div role="alert" aria-live="polite" className="fixed top-14 left-1/2 -translate-x-1/2 z-[1000] bg-destructive text-destructive-foreground px-4 py-2 rounded-full shadow-lg">
-          <span>Presence cleanup not detected ({staleCount}) – dev only</span>
-          {process.env.NODE_ENV === 'development' && (
-            <button
-              onClick={runDevCleanup}
-              disabled={cleanupRunning}
-              className="ml-3 inline-flex items-center rounded-full border border-destructive-foreground/30 px-3 py-1 text-xs hover:bg-destructive-foreground hover:text-destructive"
-            >
-              {cleanupRunning ? 'Cleaning…' : 'Run cleanup'}
-            </button>
-          )}
-          {process.env.NODE_ENV === 'development' && (
-            <button
-              onClick={runDevMessageCleanup}
-              disabled={cleanupRunning}
-              className="ml-2 inline-flex items-center rounded-full border border-destructive-foreground/30 px-3 py-1 text-xs hover:bg-destructive-foreground hover:text-destructive"
-            >
-              {cleanupRunning ? 'Cleaning…' : 'Cleanup Old Chats (30d)'}
-            </button>
-          )}
+        <div className="fixed inset-x-0 bottom-4 z-[1000] px-4">
+          <Card className="max-w-md mx-auto p-3 sm:p-4 bg-card">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+              <span className="text-sm">Presence cleanup not detected ({staleCount}) – dev only</span>
+              <div className="flex items-center gap-2">
+                {process.env.NODE_ENV === 'development' && (
+                  <button
+                    onClick={runDevCleanup}
+                    disabled={cleanupRunning}
+                    className="inline-flex items-center rounded-full border border-border px-3 py-1 text-xs hover:bg-accent"
+                  >
+                    {cleanupRunning ? 'Cleaning…' : 'Run cleanup'}
+                  </button>
+                )}
+                {process.env.NODE_ENV === 'development' && (
+                  <button
+                    onClick={runDevMessageCleanup}
+                    disabled={cleanupRunning}
+                    className="inline-flex items-center rounded-full border border-border px-3 py-1 text-xs hover:bg-accent"
+                  >
+                    {cleanupRunning ? 'Cleaning…' : 'Cleanup Old Chats (30d)'}
+                  </button>
+                )}
+              </div>
+            </div>
+          </Card>
         </div>
       )}
 

@@ -64,6 +64,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
   const flushTimerRef = useRef<number | null>(null)
   const lastInputEventTimeRef = useRef<number | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const messageInputRef = useRef<HTMLInputElement>(null)
   const receivedIdsRef = useRef<Set<string>>(new Set())
   const lastImmediateSendRef = useRef<number | null>(null)
   const [latencies, setLatencies] = useState<number[]>([])
@@ -683,12 +684,11 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
 
       setMessages((prev) => prev.filter((msg) => msg.id !== messageId))
     } catch (err) {
-      console.error('Error deleting message:', err)
-      alert('Failed to delete message. Please try again.')
+      try { console.error('Error deleting message:', err) } catch {}
     }
   }
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
       lastInputEventTimeRef.current = performance.now()
@@ -700,6 +700,12 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
     const date = new Date(timestamp)
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   }
+
+  useEffect(() => {
+    if (currentUser && !sending && !uploadingMedia) {
+      try { messageInputRef.current?.focus() } catch {}
+    }
+  }, [currentUser, sending, uploadingMedia])
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -972,11 +978,7 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
         </Dialog.Portal>
       </Dialog.Root>
 
-      {joinError && (
-        <div role="alert" aria-live="polite" className="fixed top-4 left-1/2 -translate-x-1/2 z-[1000] bg-destructive text-destructive-foreground px-4 py-2 rounded-full shadow-lg">
-          {joinError}
-        </div>
-      )}
+      
 
       {/* Messages Container - Mobile responsive */}
       <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-1.5 sm:p-4 md:p-6 space-y-1 sm:space-y-4">
@@ -1037,19 +1039,21 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
 
       {/* Input Section - Mobile responsive */}
       {!currentUser ? (
-        <div className="border-t border-border bg-background p-2 sm:p-4 text-center">
-          <p className="text-foreground/60 mb-1.5 sm:mb-2 text-xs sm:text-base">Sign in or continue as a guest user.</p>
-          <div className="flex items-center justify-center gap-2">
-            <Link href="/auth">
-              <Button size="sm" className="text-xs sm:text-sm h-7 sm:h-9">Sign In</Button>
-            </Link>
-            <Link href="/guest">
-              <Button variant="outline" size="sm" className="h-7 sm:h-9 rounded-full">
-                <MessageCircle className="w-4 h-4 mr-2" />
-                Join as Guest
-              </Button>
-            </Link>
-          </div>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <Card className="w-full max-w-sm bg-card border-border p-4 sm:p-6 text-center">
+            <p className="text-foreground/60 mb-2 text-sm sm:text-base">Sign in or continue as a guest user.</p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
+              <Link href="/auth">
+                <Button size="sm" className="w-full sm:w-auto h-9 rounded-full">Sign In</Button>
+              </Link>
+              <Link href="/guest">
+                <Button variant="outline" size="sm" className="w-full sm:w-auto h-9 rounded-full">
+                  <MessageCircle className="w-4 h-4 mr-2" />
+                  Join as Guest
+                </Button>
+              </Link>
+            </div>
+          </Card>
         </div>
       ) : (
         <div className="border-t border-border bg-background sticky bottom-0 p-2 sm:p-4 md:p-6">
@@ -1126,7 +1130,9 @@ export default function ChatRoom({ params }: { params: Promise<{ id: string }> |
                 placeholder="Type a message..."
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                onKeyPress={handleKeyPress}
+                onKeyDown={handleKeyDown}
+                autoFocus
+                ref={messageInputRef}
                 className="rounded-full px-3 sm:px-6 py-1.5 sm:py-2 text-xs sm:text-base flex-1 min-w-0 h-8 sm:h-10"
                 disabled={sending || uploadingMedia}
               />

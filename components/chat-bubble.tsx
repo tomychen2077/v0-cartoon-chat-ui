@@ -62,7 +62,7 @@ function ChatBubbleComponent({
   }
 
   const handleDelete = () => {
-    if (messageId && onDelete && confirm('Are you sure you want to delete this message?')) {
+    if (messageId && onDelete) {
       onDelete(messageId)
       setShowMenu(false)
     }
